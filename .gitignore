@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*.class
+*.log
+
+# Environment variables
+.env
+
+# Job outputs and temporary runtime files
+jobs/*
+!jobs/.gitkeep
+static/generated_pdfs/*
+!static/generated_pdfs/.gitkeep
+
+# IDEs
+.vscode/
+.idea/
