@@ -7370,9 +7370,12 @@ def render_presentation_viewer(token: str):
 def _route_root():
     return _route_index()
 
+@app.route("/privacy")
+def _route_privacy():
+    return render_template("privacy.html")
+
 @app.route("/favicon.ico")
 def _route_favicon():
-    # Return 204 No Content for favicon to prevent 404 logs
     return "", 204
 
 
