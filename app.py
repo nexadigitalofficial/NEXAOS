@@ -429,23 +429,31 @@ def _extract_search_result_listings(raw_text: str) -> List[ListingSummary]:
 
 def detect_single_listing_id(url: str) -> str:
     """
-    Verilen URL bir TEKİL ilan detay linki mi (…/ilan/<slug>-<ilanNo>/detay),
-    yoksa bir mağaza/liste/arama sonucu linki mi (…/emlak?..., …/satilik-villa/...)?
+    Verilen URL bir TEKİL ilan detay linki mi (/detay veya ilan no içeren),
+    yoksa bir mağaza/liste/kategori/arama linki mi?
 
-    Tekil ilan ise ilan numarasını döner, değilse "" döner — bu da senaryo
-    ayrımının (Senaryo 1 vs Senaryo 2) tek doğruluk kaynağıdır (hem web_app.py
-    hem de CLI main() bu fonksiyonu kullanır, mantık iki yerde ayrı ayrı
-    yaşamaz).
+    Kullanıcı Kuralı:
+    - Linkte '/detay' yazıyorsa veya doğrudan ilan numarası varsa -> TEKİL İLAN (ID döner, Adım 1 atlanır)
+    - Linkte '/detay' yazmıyorsa (örn. /emlak-konut/ankara-akyurt) -> TOPLU İLAN ("" döner, Adım 1 PageSpeed ile taranır)
     """
-    m = ILAN_PATH_RE.search(url or "")
+    if not url:
+        return ""
+
+    # 1) /detay içeren tüm tekil ilan ve proje detay linkleri
+    m_detay = re.search(r"[-/](\d+)/detay", url, re.IGNORECASE)
+    if m_detay:
+        return m_detay.group(1)
+
+    # 2) Standart ILAN_PATH_RE
+    m = ILAN_PATH_RE.search(url)
     if m:
         slug = m.group(1)
-        m2 = re.search(r"(\d{6,})$", slug) or re.search(r"(\d{6,})", slug)
+        m2 = re.search(r"(\d{4,})$", slug) or re.search(r"(\d{4,})", slug)
         if m2:
             return m2.group(1)
 
-    # Manifesto Bölüm 1.3 — kısa/redirect format (/ilan/ öneki yok)
-    m3 = ILAN_REDIRECT_RE.search(url or "")
+    # 3) Manifesto Bölüm 1.3 — kısa/redirect format (/ilan/ öneki yok)
+    m3 = ILAN_REDIRECT_RE.search(url)
     if m3:
         return m3.group(1)
 
@@ -851,31 +859,16 @@ def step1_pagespeed_store(
     headless: bool,
     stop_event=None,
 ) -> Path:
-    _sep("ADIM 1 — Mağaza/Liste sayfası taranıyor")
-    print(f"  Hedef  : {target_url}")
-    out_path = Path(out_html)
-
-    # 1. Öncelikli Yöntem: SeleniumBase UC Mode (Cloudflare Turnstile Bypass)
-    if _SELENIUMBASE:
-        print("  [MOTOR] SeleniumBase UC ile doğrudan çekiliyor (CF Turnstile Korumalı)...")
-        try:
-            engine = CFBypassEngine()
-            html = engine.fetch_page(target_url)
-            if html and len(html) > 15000 and not any(s in html[:3000] for s in CF_SIGNALS):
-                out_path.write_text(html, encoding="utf-8")
-                size_kb = len(html) // 1024
-                print(f"  [OK] Mağaza sayfası kaydedildi: {out_path.name} ({size_kb} KB)")
-                return out_path
-            print("  [WARN] SeleniumBase UC ile beklenen içerik alınamadı, PageSpeed fallback deneniyor...")
-        except Exception as ex:
-            print(f"  [WARN] SeleniumBase UC hatası: {ex}, PageSpeed fallback deneniyor...")
-
-    # 2. İkincil / Fallback: Google PageSpeed
     if not _SELENIUM:
-        raise ImportError("pip install selenium webdriver-manager seleniumbase")
+        raise ImportError("pip install selenium webdriver-manager")
 
-    print(f"  [MOTOR] PageSpeed fallback devrede (Bekleme: {wait_sec} sn | Headless: {headless})")
+    _sep("ADIM 1 — Mağaza/Liste sayfası PageSpeed ile taranıyor")
+    print(f"  Hedef  : {target_url}")
+    print(f"  [MOTOR] Google PageSpeed Insights (PerimeterX Bot Bypass)")
+    print(f"  Bekleme: {wait_sec} sn | Headless: {headless}")
+
     driver = _make_chrome(headless)
+    out_path = Path(out_html)
     try:
         ok = _pagespeed_fetch(
             driver=driver,
@@ -886,10 +879,9 @@ def step1_pagespeed_store(
             cookie_done=False,
             stop_event=stop_event,
         )
-        if not ok or (out_path.exists() and "yüklenemedi" in out_path.read_text(encoding="utf-8", errors="ignore")):
+        if not ok or not out_path.exists() or out_path.stat().st_size < 1000:
             print("  ✗ PageSpeed ile mağaza sayfası alınamadı!")
-            if not out_path.exists() or out_path.stat().st_size < 1000:
-                raise RuntimeError("Mağaza sayfası çekilemedi (URL engellendi veya ulaşılamıyor).")
+            raise RuntimeError("Mağaza sayfası PageSpeed ile çekilemedi.")
     finally:
         driver.quit()
 
@@ -919,6 +911,26 @@ def _build_detail_url(
         + r'/detay)&quot;',
         re.IGNORECASE,
     )
+    m = enc_pattern.search(soup_text)
+
+    # 2) Unescaped link
+    m2 = re.search(
+        r'href=["\']?(https?://(?:www\.)?sahibinden\.com/ilan/[^"\'>\s]+?-'
+        + re.escape(listing_id)
+        + r'/detay)["\']?',
+        soup_text,
+        re.IGNORECASE,
+    )
+
+    # 2.5) Relative link (/ilan/...-ID/detay)
+    m_rel = re.search(
+        r'href=["\']?(/ilan/[^"\'\s>]+?-'
+        + re.escape(listing_id)
+        + r'/detay)["\']?',
+        soup_text,
+        re.IGNORECASE,
+    )
+
     res = ""
     if m:
         res = m.group(1)
