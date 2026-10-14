@@ -6484,6 +6484,81 @@ def _scrape_via_seleniumbase_uc(url: str) -> dict:
         return {"ok": False, "error": str(e)}
 
 
+def _scrape_via_psi_api(url: str) -> dict:
+    """
+    Google PageSpeed Insights v5 REST API kullanarak tekil ilanı çeker.
+    %100 fotoğrafları (x5_ yüksek çözünürlük) ve OCR ile #classified-detail ve
+    #classifiedProperties alanlarını eksiksiz çıkarır.
+    """
+    listing_id = detect_single_listing_id(url)
+    target_url = url if "#" in url else _build_classified_detail_url(url)
+    print(f"    [PSI] PageSpeed REST API çağrılıyor... ({target_url[:65]})")
+    psi_json = _psi_api_fetch(target_url, timeout=60)
+    if not psi_json or "lighthouseResult" not in psi_json:
+        return {"ok": False, "error": "PageSpeed API yanıt vermedi veya lighthouseResult yok"}
+
+    lr = psi_json.get("lighthouseResult", {})
+    net_items = lr.get("audits", {}).get("network-requests", {}).get("details", {}).get("items", [])
+    raw_synthetic = "\n".join(f'<a href="{it.get("url", "")}">{it.get("url", "")}</a>' for it in net_items)
+
+    title = _title_from_detail_url(url, listing_id) or (f"İlan #{listing_id}" if listing_id else "Gayrimenkul İlanı")
+    psi_specs = _extract_psi_specs(raw_synthetic)
+    price = psi_specs.get("Fiyat") or _extract_price_tr(raw_synthetic) or ""
+
+    loc_parts = []
+    for k in ["İl", "Şehir", "İlçe", "Mahalle"]:
+        if k in psi_specs and psi_specs[k] not in loc_parts:
+            loc_parts.append(psi_specs[k])
+    loc_str = " / ".join(loc_parts) if loc_parts else ""
+
+    # %100 Fotoğrafları çek (x5_ tam boy)
+    cj_str = json.dumps(psi_json)
+    psi_photo_pat = re.compile(
+        r'https?://i\d+\.shbdn\.com/photos/(\d+/\d+/\d+)/([a-zA-Z0-9_]+)\.(avif|jpg|jpeg|png|webp)',
+        re.IGNORECASE
+    )
+    seen_keys = set()
+    photos = []
+    for match in psi_photo_pat.finditer(cj_str):
+        folder, fname, ext = match.groups()
+        base_id = re.sub(r'^(x5_|x3_|x2_|x1_|thmb_|lthmb_)', '', fname)
+        if not base_id or "blank" in base_id:
+            continue
+        core_key = f"https://i0.shbdn.com/photos/{folder}/{base_id}"
+        if core_key not in seen_keys:
+            seen_keys.add(core_key)
+            photos.append(f"https://i0.shbdn.com/photos/{folder}/x5_{base_id}.avif")
+
+    # OCR Açıklama ve Özellikler (#classified-detail & #classifiedProperties)
+    ocr_desc, ocr_note = _psi_api_extract_description(target_url, psi_json=psi_json)
+    desc = ocr_desc if ocr_desc else ""
+
+    specs = {}
+    if listing_id:
+        specs["İlan No"] = listing_id
+    if price:
+        specs["Fiyat"] = price
+    if loc_str:
+        specs["Konum"] = loc_str
+    for k, v in psi_specs.items():
+        if k not in specs:
+            specs[k] = v
+
+    return {
+        "ok": True,
+        "source": "psi_api",
+        "url": url,
+        "listing_id": listing_id,
+        "title": title,
+        "price": price,
+        "location": loc_str,
+        "specs": specs,
+        "images": photos,
+        "photo_count": len(photos),
+        "description": desc,
+    }
+
+
 def _scrape_via_pagespeed(url: str) -> dict:
     """
     Sahibinden Scraper Ana Mantığı (4 Kademeli Dayanıklı Altyapı):
