@@ -806,43 +806,83 @@ class CFBypassEngine:
         out_dir.mkdir(exist_ok=True, parents=True)
         paths: List[Path] = []
 
-        try:
-            with SB(**kwargs) as sb:
-                for idx, summary in enumerate(summaries, 1):
-                    if stop_event is not None and stop_event.is_set():
-                        print("    [STOP] Kullanıcı tarafından durduruldu.")
-                        break
+        kwargs: Dict = {"uc": True, "headless": False}
+        if self.proxy_str:
+            kwargs["proxy"] = self.proxy_str
 
-                    target_path = out_dir / f"{summary.listing_id}.html"
-                    print(f"  [{idx:02d}/{len(summaries):02d}] {summary.listing_id} — {summary.title[:45]}")
-                    print(f"    URL: {summary.detail_url}")
+        # 1. Aşama: SeleniumBase UC ile indirmeyi dene
+        if _SELENIUMBASE:
+            try:
+                with SB(**kwargs) as sb:
+                    for idx, summary in enumerate(summaries, 1):
+                        if stop_event is not None and stop_event.is_set():
+                            break
 
-                    try:
-                        sb.uc_open_with_reconnect(summary.detail_url, reconnect_time=5)
+                        target_path = out_dir / f"{summary.listing_id}.html"
+                        print(f"  [{idx:02d}/{len(summaries):02d}] {summary.listing_id} — {summary.title[:45]}")
+                        print(f"    URL: {summary.detail_url}")
+
                         try:
-                            sb.uc_gui_click_captcha()
-                        except Exception:
-                            pass
+                            sb.uc_open_with_reconnect(summary.detail_url, reconnect_time=5)
+                            try:
+                                sb.uc_gui_click_captcha()
+                            except Exception:
+                                pass
 
-                        self._wait_pass(sb, timeout=15)
-                        sb.sleep(1.5)
-                        html = sb.get_page_source()
+                            self._wait_pass(sb, timeout=12)
+                            sb.sleep(1.2)
+                            curr_url = sb.get_current_url() or ""
+                            html = sb.get_page_source()
 
-                        if html and len(html) > 10000:
-                            target_path.write_text(html, encoding="utf-8")
-                            paths.append(target_path)
-                            size_kb = len(html) // 1024
-                            print(f"    [OK] Kaydedildi: {target_path.name} ({size_kb} KB)")
-                        else:
-                            print(f"    [WARN] Detay sayfası yetersiz ({len(html) if html else 0} bytes)")
-                    except Exception as err:
-                        print(f"    [ERR] {summary.listing_id} çekilirken hata: {err}")
+                            if html and len(html) > 10000 and "giris" not in curr_url:
+                                target_path.write_text(html, encoding="utf-8")
+                                paths.append(target_path)
+                                print(f"    [OK] SeleniumBase ile kaydedildi: {target_path.name} ({len(html)//1024} KB)")
+                            else:
+                                print(f"    [WARN] Detay sayfası yetersiz veya login yönlendirmesi var")
+                        except Exception as err:
+                            print(f"    [ERR] {summary.listing_id} SeleniumBase hatası: {err}")
+                            if "session deleted" in str(err).lower() or "invalid session" in str(err).lower():
+                                print("    [WARN] Tarayıcı oturumu koptu, kalan ilanlar PageSpeed Bulut Motoruna devrediliyor...")
+                                break
 
-                    if delay > 0 and idx < len(summaries):
-                        time.sleep(delay)
+                        if delay > 0 and idx < len(summaries):
+                            time.sleep(delay)
+            except Exception as e:
+                print(f"    [ERR] SeleniumBase toplu oturum hatası: {e}")
 
-        except Exception as e:
-            print(f"    [ERR] Toplu SeleniumBase hatası: {e}")
+        # 2. Aşama: Alınamayan veya eksik kalan ilanları PageSpeed API ile tamamla (Self-Healing)
+        saved_ids = {p.stem for p in paths}
+        missing_summaries = [s for s in summaries if s.listing_id not in saved_ids]
+
+        if missing_summaries:
+            print(f"\n  [API] {len(missing_summaries)} eksik ilan PageSpeed Bulut Motoru ile tamamlanıyor...")
+            for s in missing_summaries:
+                if stop_event is not None and stop_event.is_set():
+                    break
+                target_path = out_dir / f"{s.listing_id}.html"
+                target_fetch_url = s.detail_url if "#" in s.detail_url else _build_classified_detail_url(s.detail_url)
+                print(f"    [PSI] {s.listing_id} çekiliyor... ({target_fetch_url[:55]})")
+                psi_data = _psi_api_fetch(target_fetch_url, timeout=35)
+                if psi_data and "lighthouseResult" in psi_data:
+                    lr = psi_data.get("lighthouseResult", {})
+                    net_items = lr.get("audits", {}).get("network-requests", {}).get("details", {}).get("items", [])
+                    html_parts = [
+                        "<!DOCTYPE html><html><head><meta charset='utf-8'>",
+                        f"<title>PageSpeed Insights - {s.listing_id}</title></head><body>",
+                        f"<div id='lh-root'><h1>{target_fetch_url}</h1>",
+                    ]
+                    for it in net_items:
+                        u = it.get("url", "")
+                        html_parts.append(f"<a href=\"{u}\">{u}</a><br>")
+                    html_parts.append("</div></body></html>")
+                    target_path.write_text("\n".join(html_parts), encoding="utf-8")
+                    with open(out_dir / f"{s.listing_id}_psi.json", "w", encoding="utf-8") as jf:
+                        json.dump(psi_data, jf, ensure_ascii=False, indent=2)
+                    paths.append(target_path)
+                    print(f"    [OK] PageSpeed API ile başarıyla kaydedildi: {target_path.name}")
+                else:
+                    print(f"    [WARN] PageSpeed API ile de alınamadı: {s.listing_id}")
 
         return paths
 
@@ -2131,8 +2171,39 @@ def step4_parse_details(
                 cd_map[stem[: -len(CD_FILE_SUFFIX)]] = f
 
     details: List[ListingDetail] = []
+    all_listing_ids = list(summary_map.keys()) if summary_map else list(path_map.keys())
 
-    for listing_id, p in path_map.items():
+    for listing_id in all_listing_ids:
+        p = path_map.get(listing_id)
+        if not p or not p.exists() or p.stat().st_size < 100:
+            summary = summary_map.get(listing_id, ListingSummary(listing_id, "", ""))
+            target_url = summary.detail_url or f"https://www.sahibinden.com/ilan/{listing_id}/detay"
+            print(f"\n  [{listing_id}] Dosya bulunamadı, PageSpeed API ile doğrudan kurtarılıyor...")
+            psi_res = _scrape_via_psi_api(target_url)
+            if psi_res and psi_res.get("ok"):
+                title = psi_res.get("title") or summary.title or f"İlan #{listing_id}"
+                price = psi_res.get("price") or "—"
+                photos = psi_res.get("images") or []
+                specs = psi_res.get("specs") or {}
+                description = psi_res.get("description") or ""
+                det = ListingDetail(
+                    listing_id=listing_id,
+                    title=title,
+                    price=price,
+                    canonical_url=target_url,
+                    thumb_url=photos[0] if photos else summary.thumb_url,
+                    photos=photos,
+                    specs=specs,
+                    description=description,
+                    description_source="PageSpeed API (Direct Fallback)",
+                )
+                details.append(det)
+                print(f"    [OK] Doğrudan kurtarıldı: {title[:50]} | {price} | {len(photos)} foto | {len(specs)} özellik")
+                continue
+            else:
+                print(f"    [WARN] {listing_id} kurtarılamadı.")
+                continue
+
         print(f"\n  [{listing_id}] {p.name}")
         raw_text = p.read_text(encoding="utf-8", errors="ignore")
         soup = BeautifulSoup(html_mod.unescape(raw_text), "lxml")
