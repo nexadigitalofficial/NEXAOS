@@ -15,3 +15,6 @@ static/generated_pdfs/*
 # IDEs
 .vscode/
 .idea/
+downloaded_files/
+dist/
+

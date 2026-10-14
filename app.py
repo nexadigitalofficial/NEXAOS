@@ -31,6 +31,12 @@ import json
 import os
 import re
 import sys
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 import threading
 import time
 import traceback
@@ -539,9 +545,9 @@ def _accept_cookies(driver, timeout: int = 4) -> None:
 
 
 def _sep(label: str) -> None:
-    print(f"\n{'═'*50}")
+    print(f"\n{'='*50}")
     print(f"  {label}")
-    print(f"{'═'*50}")
+    print(f"{'='*50}")
 
 
 def _type_url_robust(driver, target_url: str, max_attempts: int = 4) -> bool:
@@ -637,81 +643,58 @@ def _pagespeed_fetch(
 ) -> bool:
     """
     PageSpeed'e gidip target_url'yi analiz ettirir, HTML'i out_path'e kaydeder.
-    Aynı driver instance'ı tekrar tekrar kullanılır (Chrome oturumu korunur).
-    Başarı durumunu döner.
+    Doğrudan analiz URL'sine yönlendirerek arayüzdeki yazma/geçersiz URL hatalarını engeller.
     """
     try:
-        # Her seferinde ana PageSpeed sayfasına git (temiz başlangıç)
-        driver.get(PAGESPEED_BASE)
-        time.sleep(1.5)  # sayfa JS'inin yüklenmesini bekle
+        encoded_url = urllib.parse.quote(target_url, safe=':/?=')
+        direct_url = f"{PAGESPEED_BASE}/analysis?url={encoded_url}"
+
+        print(f"    [MOTOR] PageSpeed analiz isteği gönderiliyor → {target_url[:65]}")
+        driver.get(direct_url)
+        time.sleep(2)
 
         if not cookie_done:
-            _accept_cookies(driver, timeout=6)
-            time.sleep(0.5)
+            _accept_cookies(driver, timeout=4)
 
-        # Önceki analiz sonucu varsa input'u görmek için biraz bekle
-        try:
-            WebDriverWait(driver, 8).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "input[name='url']"))
-            )
-        except Exception:
-            pass
-
-        # Robust URL girişi
-        if not _type_url_robust(driver, target_url):
-            return False
-
-        # Analiz et / Analyze butonunu bul ve tıkla
-        try:
-            analyze_btn = WebDriverWait(driver, 15).until(
-                EC.element_to_be_clickable((
+        # Eğer doğrudan analiz başlamadıysa input üzerinden gönder
+        if "/analysis/" not in driver.current_url:
+            try:
+                inp = WebDriverWait(driver, 5).until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, "input[name='url']"))
+                )
+                _type_url_robust(driver, target_url)
+                analyze_btn = driver.find_element(
                     By.XPATH,
-                    "//span[normalize-space()='Analiz et' or normalize-space()='Analyze']"
-                    "/ancestor::button[1]",
-                ))
-            )
-        except Exception:
-            # Alternatif: form submit veya Enter tuşu
-            print("    [WARN] Buton bulunamadı, Enter ile gönderiliyor...")
-            from selenium.webdriver.common.keys import Keys
-            inp = driver.find_element(By.CSS_SELECTOR, "input[name='url']")
-            inp.send_keys(Keys.RETURN)
-        else:
-            # Butona tıklamadan önce URL'nin hâlâ doğru olduğunu doğrula
-            inp = driver.find_element(By.CSS_SELECTOR, "input[name='url']")
-            current_val = driver.execute_script("return arguments[0].value;", inp)
-            if current_val != target_url:
-                print(f"    [WARN] Tıklamadan önce URL kayması tespit edildi, düzeltiliyor...")
-                if not _type_url_robust(driver, target_url):
-                    return False
-            time.sleep(0.2)
-            driver.execute_script("arguments[0].click();", analyze_btn)
+                    "//span[normalize-space()='Analiz et' or normalize-space()='Analyze']/ancestor::button[1]",
+                )
+                driver.execute_script("arguments[0].click();", analyze_btn)
+            except Exception:
+                pass
 
-        print(f"    [OK] Analiz başlatıldı → {target_url[:65]}")
-
-        # Sayaçlı bekleme
-        print(f"    [WAIT] Bekleniyor ({wait_sec} sn)", end="", flush=True)
-        for i in range(wait_sec):
-            time.sleep(1)
-            if (i + 1) % 10 == 0:
-                print(f" {wait_sec - i - 1}sn", end="", flush=True)
+        # Sayaçlı bekleme ve lh-root kontrolü
+        print(f"    [WAIT] Analiz bekleniyor (azami {wait_sec} sn)", end="", flush=True)
+        deadline = time.time() + wait_sec
+        success = False
+        while time.time() < deadline:
+            time.sleep(2)
+            print(".", end="", flush=True)
             if stop_event is not None and stop_event.is_set():
                 print(" [durduruldu]", end="", flush=True)
                 break
+            src = driver.page_source
+            if "lh-root" in src:
+                print(" [OK] Analiz tamamlandı!")
+                success = True
+                break
+            if "yüklenemedi" in src or "Geçerli bir URL" in src:
+                print(" [UYARI: URL yüklenemedi]")
+                break
         print()
-
-        # /analysis/ URL'sine geçmesini bekle
-        try:
-            WebDriverWait(driver, 30).until(
-                lambda d: "/analysis/" in d.current_url
-            )
-        except Exception:
-            pass  # zaman aşımı olsa bile kaydet
 
         out_path.write_text(driver.page_source, encoding="utf-8")
         size_kb = out_path.stat().st_size // 1024
         print(f"    [OK] Kaydedildi: {out_path.name} ({size_kb} KB)")
-        return True
+        return success or (size_kb > 500)
 
     except Exception as exc:
         print(f"    ✗ Beklenmedik hata: {exc}")
@@ -795,9 +778,70 @@ class CFBypassEngine:
             print(f"    [ERR] SeleniumBase hatası: {e}")
             return None
 
+    def fetch_pages_bulk(
+        self,
+        summaries: List[ListingSummary],
+        out_dir: Path,
+        delay: float = 2.0,
+        stop_event=None,
+    ) -> List[Path]:
+        """
+        Tüm ilanları tek bir SeleniumBase UC oturumunda sırayla indirir.
+        Tarayıcıyı tekrar tekrar açıp kapatmaz; oturum ve Cloudflare çerezleri korunur.
+        """
+        if not _SELENIUMBASE:
+            raise ImportError("seleniumbase yüklü değil")
+
+        kwargs: Dict = {"uc": True, "headless": False}
+        if self.proxy_str:
+            kwargs["proxy"] = self.proxy_str
+
+        out_dir.mkdir(exist_ok=True, parents=True)
+        paths: List[Path] = []
+
+        try:
+            with SB(**kwargs) as sb:
+                for idx, summary in enumerate(summaries, 1):
+                    if stop_event is not None and stop_event.is_set():
+                        print("    [STOP] Kullanıcı tarafından durduruldu.")
+                        break
+
+                    target_path = out_dir / f"{summary.listing_id}.html"
+                    print(f"  [{idx:02d}/{len(summaries):02d}] {summary.listing_id} — {summary.title[:45]}")
+                    print(f"    URL: {summary.detail_url}")
+
+                    try:
+                        sb.uc_open_with_reconnect(summary.detail_url, reconnect_time=5)
+                        try:
+                            sb.uc_gui_click_captcha()
+                        except Exception:
+                            pass
+
+                        self._wait_pass(sb, timeout=15)
+                        sb.sleep(1.5)
+                        html = sb.get_page_source()
+
+                        if html and len(html) > 10000:
+                            target_path.write_text(html, encoding="utf-8")
+                            paths.append(target_path)
+                            size_kb = len(html) // 1024
+                            print(f"    [OK] Kaydedildi: {target_path.name} ({size_kb} KB)")
+                        else:
+                            print(f"    [WARN] Detay sayfası yetersiz ({len(html) if html else 0} bytes)")
+                    except Exception as err:
+                        print(f"    [ERR] {summary.listing_id} çekilirken hata: {err}")
+
+                    if delay > 0 and idx < len(summaries):
+                        time.sleep(delay)
+
+        except Exception as e:
+            print(f"    [ERR] Toplu SeleniumBase hatası: {e}")
+
+        return paths
+
 
 # ─────────────────────────────────────────────────────────────────────────────
-# ADIM 1 — PageSpeed ile mağaza/liste sayfasını çek
+# ADIM 1 — Mağaza / Liste sayfasını çek (SeleniumBase UC + PageSpeed Fallback)
 # ─────────────────────────────────────────────────────────────────────────────
 
 def step1_pagespeed_store(
@@ -807,15 +851,31 @@ def step1_pagespeed_store(
     headless: bool,
     stop_event=None,
 ) -> Path:
-    if not _SELENIUM:
-        raise ImportError("pip install selenium webdriver-manager")
-
-    _sep("ADIM 1 — Mağaza sayfası → PageSpeed")
+    _sep("ADIM 1 — Mağaza/Liste sayfası taranıyor")
     print(f"  Hedef  : {target_url}")
-    print(f"  Bekleme: {wait_sec} sn | Headless: {headless}")
-
-    driver = _make_chrome(headless)
     out_path = Path(out_html)
+
+    # 1. Öncelikli Yöntem: SeleniumBase UC Mode (Cloudflare Turnstile Bypass)
+    if _SELENIUMBASE:
+        print("  [MOTOR] SeleniumBase UC ile doğrudan çekiliyor (CF Turnstile Korumalı)...")
+        try:
+            engine = CFBypassEngine()
+            html = engine.fetch_page(target_url)
+            if html and len(html) > 15000 and not any(s in html[:3000] for s in CF_SIGNALS):
+                out_path.write_text(html, encoding="utf-8")
+                size_kb = len(html) // 1024
+                print(f"  [OK] Mağaza sayfası kaydedildi: {out_path.name} ({size_kb} KB)")
+                return out_path
+            print("  [WARN] SeleniumBase UC ile beklenen içerik alınamadı, PageSpeed fallback deneniyor...")
+        except Exception as ex:
+            print(f"  [WARN] SeleniumBase UC hatası: {ex}, PageSpeed fallback deneniyor...")
+
+    # 2. İkincil / Fallback: Google PageSpeed
+    if not _SELENIUM:
+        raise ImportError("pip install selenium webdriver-manager seleniumbase")
+
+    print(f"  [MOTOR] PageSpeed fallback devrede (Bekleme: {wait_sec} sn | Headless: {headless})")
+    driver = _make_chrome(headless)
     try:
         ok = _pagespeed_fetch(
             driver=driver,
@@ -826,9 +886,10 @@ def step1_pagespeed_store(
             cookie_done=False,
             stop_event=stop_event,
         )
-        if not ok:
-            print("  ✗ Mağaza sayfası alınamadı!")
-            sys.exit(1)
+        if not ok or (out_path.exists() and "yüklenemedi" in out_path.read_text(encoding="utf-8", errors="ignore")):
+            print("  ✗ PageSpeed ile mağaza sayfası alınamadı!")
+            if not out_path.exists() or out_path.stat().st_size < 1000:
+                raise RuntimeError("Mağaza sayfası çekilemedi (URL engellendi veya ulaşılamıyor).")
     finally:
         driver.quit()
 
@@ -858,32 +919,26 @@ def _build_detail_url(
         + r'/detay)&quot;',
         re.IGNORECASE,
     )
-    m = enc_pattern.search(soup_text)
+    res = ""
     if m:
-        return m.group(1)
-
-    # 2) Unescaped link
-    m2 = re.search(
-        r'href=["\']?(https?://(?:www\.)?sahibinden\.com/ilan/[^"\'>\s]+?-'
-        + re.escape(listing_id)
-        + r'/detay)["\']?',
-        soup_text,
-        re.IGNORECASE,
-    )
-    if m2:
-        return m2.group(1)
-
-    # 3) Manifesto v2.0 fallback: başlıktan + kategoriden doğrudan üret
-    #    (SB_SEARCH_URL'in generic arama sayfasına düşmesinden çok daha güvenilir —
-    #     doğrudan detay sayfasına gider, PageSpeed'in ekstra redirect adımı gerekmez)
-    if title:
+        res = m.group(1)
+    elif m2:
+        res = m2.group(1)
+    elif m_rel:
+        res = f"https://www.sahibinden.com{m_rel.group(1)}"
+    elif title:
         slug = title_to_slug(title)
         kslug = kategori_slug or _detect_kategori_slug(soup_text)
         if slug:
-            return f"https://www.sahibinden.com/ilan/{kslug}-{slug}-{listing_id}/detay"
+            res = f"https://www.sahibinden.com/ilan/{kslug}-{slug}-{listing_id}/detay"
+    else:
+        res = SB_SEARCH_URL.format(id=listing_id)
 
-    # 4) Son çare: sahibinden arama URL'si
-    return SB_SEARCH_URL.format(id=listing_id)
+    if res.startswith("https://sahibinden.com/"):
+        res = res.replace("https://sahibinden.com/", "https://www.sahibinden.com/")
+    elif res.startswith("http://sahibinden.com/"):
+        res = res.replace("http://sahibinden.com/", "https://www.sahibinden.com/")
+    return res
 
 
 def step2_extract_summaries(html_path: Path) -> List[ListingSummary]:
@@ -956,7 +1011,7 @@ def step2_extract_summaries(html_path: Path) -> List[ListingSummary]:
         print(f"\n  [OK] TOPLAM {len(listings)} ilan:\n")
         for s in listings:
             print(f"    [{s.listing_id}] {s.title[:58]}")
-            print(f"    → {s.detail_url[:90]}")
+            print(f"    -> {s.detail_url[:90]}")
             print()
     else:
         print("  ✗ Hiçbir yöntemle ilan bulunamadı (ne mağaza ne arama sonucu formatı eşleşti).")
@@ -993,9 +1048,20 @@ def step3_pagespeed_details(
     out_dir.mkdir(exist_ok=True)
     detail_paths: List[Path] = []
 
+    if skip:
+        print("  ⏭  Adım atlandı, mevcut dosyalar kullanılıyor.\n")
+        for s in summaries:
+            p = out_dir / f"{s.listing_id}.html"
+            if p.exists():
+                detail_paths.append(p)
+                print(f"  [OK] Mevcut: {p.name}")
+            else:
+                print(f"  ✗ Bulunamadı (atlanacak): {p.name}")
+        return detail_paths
+
     # ── Eğer tekil ilan ise PageSpeed'e gerek yok, doğrudan SeleniumBase UC ile çek ──
     is_single = len(summaries) == 1 and bool(detect_single_listing_id(summaries[0].detail_url))
-    if is_single:
+    if is_single and _SELENIUMBASE:
         _sep("TEKİL İLAN MODU (PageSpeed Atlanıyor) — SeleniumBase UC ile çekiliyor")
         summary = summaries[0]
         p = out_dir / f"{summary.listing_id}.html"
@@ -1010,16 +1076,11 @@ def step3_pagespeed_details(
             print("    [ERR] SeleniumBase UC ile tekil ilan sayfası çekilemedi!")
         return detail_paths
 
-    if skip:
-        print("  ⏭  Adım atlandı, mevcut dosyalar kullanılıyor.\n")
-        for s in summaries:
-            p = out_dir / f"{s.listing_id}.html"
-            if p.exists():
-                detail_paths.append(p)
-                print(f"  [OK] Mevcut: {p.name}")
-            else:
-                print(f"  ✗ Bulunamadı (atlanacak): {p.name}")
-        return detail_paths
+    # ── Toplu ilan: SeleniumBase UC ile seri indirme (PageSpeed hatasını ve 429 kotasını atlar) ──
+    if _SELENIUMBASE:
+        _sep(f"TOPLU İLAN MODU ({len(summaries)} İlan) — SeleniumBase UC ile çekiliyor")
+        engine = CFBypassEngine()
+        return engine.fetch_pages_bulk(summaries, out_dir, delay=delay, stop_event=stop_event)
 
     if not _SELENIUM:
         raise ImportError("pip install selenium webdriver-manager")
