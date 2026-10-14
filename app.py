@@ -48,6 +48,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from flask import Flask, jsonify, render_template, request, send_from_directory
+flask_request = request
 
 try:
     from bs4 import BeautifulSoup
@@ -654,8 +655,8 @@ def _pagespeed_fetch(
     Doğrudan analiz URL'sine yönlendirerek arayüzdeki yazma/geçersiz URL hatalarını engeller.
     """
     try:
-        encoded_url = urllib.parse.quote(target_url, safe=':/?=')
-        direct_url = f"{PAGESPEED_BASE}/analysis?url={encoded_url}"
+        encoded_url = urllib.parse.quote(target_url, safe='')
+        direct_url = f"https://pagespeed.web.dev/analysis?url={encoded_url}&hl=tr"
 
         print(f"    [MOTOR] PageSpeed analiz isteği gönderiliyor → {target_url[:65]}")
         driver.get(direct_url)
@@ -834,8 +835,44 @@ class CFBypassEngine:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# ADIM 1 — Mağaza / Liste sayfasını çek (SeleniumBase UC + PageSpeed Fallback)
+# ADIM 1 — Mağaza / Liste sayfasını çek (PageSpeed Cloud API + Selenium Fallback)
 # ─────────────────────────────────────────────────────────────────────────────
+
+def _psi_api_fetch(target_url: str, timeout: int = 60) -> Optional[dict]:
+    """
+    Google PageSpeed Insights v5 API'sini çağırır ve ham JSON'u döner.
+    Google'ın kendi altyapısı sayfayı render eder; Cloudflare/PerimeterX bot engellerini aşar.
+    """
+    if not _REQUESTS:
+        print("    [WARN] 'requests' kurulu değil — PSI API adımı atlanıyor.")
+        return None
+    if not PAGESPEED_API_KEY:
+        print("    [WARN] PAGESPEED_API_KEY tanımlı değil — PSI API adımı atlanıyor.")
+        return None
+
+    params = {
+        "url": target_url,
+        "key": PAGESPEED_API_KEY,
+        "category": "performance",
+        "hl": "tr",
+    }
+    try:
+        resp = _requests.get(PAGESPEED_API_URL, params=params, timeout=timeout)
+    except Exception as exc:
+        print(f"    [WARN] PSI API isteği başarısız: {exc}")
+        return None
+
+    if resp.status_code != 200:
+        snippet = resp.text[:200].replace("\n", " ")
+        print(f"    [WARN] PSI API HTTP {resp.status_code}: {snippet}")
+        return None
+
+    try:
+        return resp.json()
+    except Exception as exc:
+        print(f"    [WARN] PSI API yanıtı JSON değil: {exc}")
+        return None
+
 
 def step1_pagespeed_store(
     target_url: str,
@@ -844,16 +881,51 @@ def step1_pagespeed_store(
     headless: bool,
     stop_event=None,
 ) -> Path:
+    _sep("ADIM 1 — Mağaza/Liste sayfası PageSpeed ile taranıyor")
+    print(f"  Hedef  : {target_url}")
+    print(f"  [MOTOR] Google PageSpeed Insights (PerimeterX/Turnstile Bot Bypass)")
+    print(f"  Bekleme: {wait_sec} sn | Headless: {headless}")
+
+    out_path = Path(out_html)
+    out_dir = out_path.parent
+    out_dir.mkdir(parents=True, exist_ok=True)
+    json_path = out_dir / "pagespeed_result.json"
+
+    # 1. Öncelikli Yöntem: Google PageSpeed Insights v5 REST API (Hızlı bulut render, sıfır bot engeli)
+    print("  [API] Google PageSpeed Insights Bulut Motoru ile taranıyor...")
+    psi_data = _psi_api_fetch(target_url, timeout=max(wait_sec, 60))
+    if psi_data and "lighthouseResult" in psi_data:
+        try:
+            with open(json_path, "w", encoding="utf-8") as f:
+                json.dump(psi_data, f, ensure_ascii=False, indent=2)
+
+            lr = psi_data.get("lighthouseResult", {})
+            final_url = lr.get("finalUrl", target_url)
+            html_content = f"""<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>PageSpeed Analysis - {target_url}</title></head>
+<body>
+<div id="lh-root">
+  <h1>PageSpeed Insights Result</h1>
+  <p>Target URL: {target_url}</p>
+  <p>Final URL: {final_url}</p>
+  <p>Analysis UTC: {psi_data.get('analysisUTCTimestamp', '')}</p>
+</div>
+</body>
+</html>"""
+            out_path.write_text(html_content, encoding="utf-8")
+            size_kb = json_path.stat().st_size // 1024
+            print(f"  [OK] PageSpeed API ile başarıyla çekildi ({size_kb} KB veri kaydedildi)!")
+            return out_path
+        except Exception as e:
+            print(f"  [WARN] PageSpeed API verisi kaydedilemedi: {e}")
+
+    # 2. İkincil Fallback: Selenium ile PageSpeed Arayüzü
+    print("  [FALLBACK] Selenium PageSpeed arayüzü deneniyor...")
     if not _SELENIUM:
         raise ImportError("pip install selenium webdriver-manager")
 
-    _sep("ADIM 1 — Mağaza/Liste sayfası PageSpeed ile taranıyor")
-    print(f"  Hedef  : {target_url}")
-    print(f"  [MOTOR] Google PageSpeed Insights (PerimeterX Bot Bypass)")
-    print(f"  Bekleme: {wait_sec} sn | Headless: {headless}")
-
     driver = _make_chrome(headless)
-    out_path = Path(out_html)
     try:
         ok = _pagespeed_fetch(
             driver=driver,
@@ -941,27 +1013,75 @@ def _build_detail_url(
 def step2_extract_summaries(html_path: Path) -> List[ListingSummary]:
     _sep("ADIM 2 — İlanlar ayıklanıyor")
 
-    text = html_path.read_text(encoding="utf-8", errors="ignore")
+    text = html_path.read_text(encoding="utf-8", errors="ignore") if html_path.exists() else ""
     items: Dict[str, ListingSummary] = {}
 
     # Sayfa genelindeki kategoriyi bir kez tespit et (her iki yöntem de kullanır)
-    page_kategori_slug = _detect_kategori_slug(text)
+    page_kategori_slug = _detect_kategori_slug(text) if text else "emlak-konut-satilik"
+
+    # ── Yöntem 0: PageSpeed API JSON Dosyası Varsa (Network Requests + Resimler) ──
+    json_path = html_path.parent / "pagespeed_result.json"
+    if json_path.exists():
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                psi_data = json.load(f)
+            lr = psi_data.get("lighthouseResult", {})
+            net_items = lr.get("audits", {}).get("network-requests", {}).get("details", {}).get("items", [])
+            for item in net_items:
+                u = item.get("url", "")
+                # Standart ilanlar: photos/XX/XX/XX/lthmb_(\d{6,})
+                m_standard = re.search(r"photos/\d+/\d+/\d+/lthmb_(\d{6,})", u)
+                if m_standard:
+                    lid = m_standard.group(1)
+                    if len(lid) > 10:
+                        lid = lid[:10]
+                    if lid not in items:
+                        detail_url = f"https://www.sahibinden.com/ilan/{lid}/detay"
+                        items[lid] = ListingSummary(
+                            listing_id=lid,
+                            title=f"İlan #{lid}",
+                            thumb_url=u,
+                            detail_url=detail_url
+                        )
+                # Proje ilanları: projects/XX/XX/XX/...
+                m_proj = re.search(r"projects/(\d+/\d+/\d+)/", u)
+                if m_proj:
+                    pid = m_proj.group(1).replace("/", "").lstrip("0")
+                    if pid and pid not in items:
+                        detail_url = f"https://www.sahibinden.com/emlak-projeler/{pid}/detay"
+                        items[pid] = ListingSummary(
+                            listing_id=pid,
+                            title=f"Proje #{pid}",
+                            thumb_url=u,
+                            detail_url=detail_url
+                        )
+            if items:
+                print(f"  [OK] PageSpeed Bulut Verisinden {len(items)} ilan/proje yakalandı.")
+        except Exception as err:
+            print(f"  [WARN] PageSpeed API JSON okunurken hata: {err}")
 
     # ── Yöntem A: Mağaza sayfası formatı (img alt="Başlık #ID") ────────────────
     #    örn. coldwellbankercizgi.sahibinden.com/emlak gibi kişisel mağaza sayfaları
     for img_url, alt in ENC_IMG_RE.findall(text):
         lid, title = _id_and_title(alt)
-        if lid and lid not in items:
+        if lid:
             detail_url = _build_detail_url(text, lid, title=title, kategori_slug=page_kategori_slug)
-            items[lid] = ListingSummary(
-                listing_id=lid,
-                title=title,
-                thumb_url=img_url,
-                detail_url=detail_url,
-            )
+            if lid in items:
+                if title and title != lid:
+                    items[lid].title = title
+                items[lid].detail_url = detail_url
+                if not items[lid].thumb_url:
+                    items[lid].thumb_url = img_url
+            else:
+                items[lid] = ListingSummary(
+                    listing_id=lid,
+                    title=title,
+                    thumb_url=img_url,
+                    detail_url=detail_url,
+                )
 
     # BS4 fallback (aynı Yöntem A, farklı parser yolu)
-    if _BS4:
+    if _BS4 and text:
         soup = BeautifulSoup(html_mod.unescape(text), "lxml")
         for img in soup.select('img[src*="shbdn.com/photos/"]'):
             src = (img.get("src") or "").strip()
@@ -969,49 +1089,54 @@ def step2_extract_summaries(html_path: Path) -> List[ListingSummary]:
             if not src or not alt:
                 continue
             lid, title = _id_and_title(alt)
-            if lid and lid not in items:
+            if lid:
                 detail_url = _build_detail_url(text, lid, title=title, kategori_slug=page_kategori_slug)
-                items[lid] = ListingSummary(
-                    listing_id=lid,
-                    title=title,
-                    thumb_url=src,
-                    detail_url=detail_url,
-                )
+                if lid in items:
+                    if title and title != lid:
+                        items[lid].title = title
+                    items[lid].detail_url = detail_url
+                    if not items[lid].thumb_url:
+                        items[lid].thumb_url = src
+                else:
+                    items[lid] = ListingSummary(
+                        listing_id=lid,
+                        title=title,
+                        thumb_url=src,
+                        detail_url=detail_url,
+                    )
 
     store_found = len(items)
     if store_found:
-        print(f"  [OK] Yöntem A (mağaza sayfası formatı): {store_found} ilan bulundu.")
-    else:
-        print(f"  · Yöntem A (mağaza sayfası formatı): ilan bulunamadı, Yöntem B deneniyor…")
+        print(f"  [OK] Mağaza / PageSpeed analizi: {store_found} ilan hazır.")
 
     # ── Yöntem B: Genel arama/kategori sonucu sayfası formatı ──────────────────
-    #    örn. sahibinden.com/satilik-villa/ankara-camlidere gibi arama sonuçları
-    #    (data-classified-id + ayrı başlık div'i — manifesto v2.0 mantığı,
-    #     bkz. ULTRA_SAHIBINDEN_URL_GENERATOR_ENGINE.md)
-    print(f"  · Yöntem B (arama sonucu formatı) deneniyor... (kategori: {page_kategori_slug})")
-    search_listings = _extract_search_result_listings(text)
-    new_from_b = 0
-    for s in search_listings:
-        if s.listing_id not in items:
-            items[s.listing_id] = s
-            new_from_b += 1
-    if search_listings:
-        print(
-            f"  [OK] Yöntem B (arama sonucu formatı): {len(search_listings)} ilan bulundu"
-            f" ({new_from_b} yeni, {len(search_listings) - new_from_b} zaten Yöntem A'da vardı)."
-        )
-    elif not store_found:
-        print("  · Yöntem B: ilan bulunamadı.")
+    if text:
+        search_listings = _extract_search_result_listings(text)
+        new_from_b = 0
+        for s in search_listings:
+            if s.listing_id in items:
+                if s.title and s.title != s.listing_id:
+                    items[s.listing_id].title = s.title
+                if s.detail_url:
+                    items[s.listing_id].detail_url = s.detail_url
+            else:
+                items[s.listing_id] = s
+                new_from_b += 1
+        if search_listings:
+            print(
+                f"  [OK] Yöntem B (arama sonucu formatı): {len(search_listings)} ilan bulundu"
+                f" ({new_from_b} yeni)."
+            )
 
     listings = list(items.values())
     if listings:
-        print(f"\n  [OK] TOPLAM {len(listings)} ilan:\n")
+        print(f"\n  [OK] TOPLAM {len(listings)} ilan ayıklandı:\n")
         for s in listings:
             print(f"    [{s.listing_id}] {s.title[:58]}")
             print(f"    -> {s.detail_url[:90]}")
             print()
     else:
-        print("  ✗ Hiçbir yöntemle ilan bulunamadı (ne mağaza ne arama sonucu formatı eşleşti).")
+        print("  ✗ Hiçbir yöntemle ilan bulunamadı.")
 
     return listings
 
@@ -1790,47 +1915,7 @@ def _extract_psi_description(raw_text: str) -> str:
     return ""
 
 
-def _psi_api_fetch(target_url: str, timeout: int = 60) -> Optional[dict]:
-    """
-    Google PageSpeed Insights v5 API'sini çağırır ve ham JSON'u döner.
-    Selenium/tarayıcı gerektirmez — Google'ın kendi altyapısı sayfayı render
-    edip fullPageScreenshot (base64 WebP) + nodes (selector→rect eşlemesi)
-    üretir; biz sadece o JSON'u okuruz.
 
-    Hata durumunda (kota, ağ, geçersiz key, vs.) None döner — pipeline'ı
-    durdurmaz, sadece açıklama best-effort boş kalır.
-    """
-    if not _REQUESTS:
-        print("    [WARN] 'requests' kurulu değil (pip install requests) — PSI API adımı atlanıyor.")
-        return None
-    if not PAGESPEED_API_KEY:
-        print("    [WARN] PAGESPEED_API_KEY tanımlı değil — PSI API adımı atlanıyor.")
-        return None
-
-    params = {
-        "url": target_url,
-        "key": PAGESPEED_API_KEY,
-        "category": "performance",
-        "hl": "tr",
-    }
-    try:
-        resp = _requests.get(PAGESPEED_API_URL, params=params, timeout=timeout)
-    except Exception as exc:
-        print(f"    [WARN] PSI API isteği başarısız: {exc}")
-        return None
-
-    if resp.status_code != 200:
-        # Yaygın nedenler: 400 (geçersiz URL), 403 (key kısıtlaması/kota),
-        # 429 (rate limit). Detayı logla, akışı durdurma.
-        snippet = resp.text[:200].replace("\n", " ")
-        print(f"    [WARN] PSI API HTTP {resp.status_code}: {snippet}")
-        return None
-
-    try:
-        return resp.json()
-    except Exception as exc:
-        print(f"    [WARN] PSI API yanıtı JSON değil: {exc}")
-        return None
 
 
 def _psi_api_find_desc_rect(psi_json: dict) -> Optional[Dict[str, float]]:
