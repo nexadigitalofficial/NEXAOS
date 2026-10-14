@@ -1181,22 +1181,52 @@ def step3_pagespeed_details(
                 print(f"  ✗ Bulunamadı (atlanacak): {p.name}")
         return detail_paths
 
-    # ── Eğer tekil ilan ise PageSpeed'e gerek yok, doğrudan SeleniumBase UC ile çek ──
+    # ── Eğer tekil ilan ise: Önce SeleniumBase UC dene, CF takılırsa PageSpeed Bulut Motoru ile çek ──
     is_single = len(summaries) == 1 and bool(detect_single_listing_id(summaries[0].detail_url))
-    if is_single and _SELENIUMBASE:
-        _sep("TEKİL İLAN MODU (PageSpeed Atlanıyor) — SeleniumBase UC ile çekiliyor")
+    if is_single:
         summary = summaries[0]
         p = out_dir / f"{summary.listing_id}.html"
-        print(f"  Hedef: {summary.detail_url}")
-        engine = CFBypassEngine()
-        html = engine.fetch_page(summary.detail_url)
-        if html:
-            p.write_text(html, encoding="utf-8")
-            print(f"    [OK] Kaydedildi: {p.name} ({len(html)//1024} KB)")
+        html = None
+
+        if _SELENIUMBASE:
+            _sep("TEKİL İLAN MODU — SeleniumBase UC ile deneniyor")
+            print(f"  Hedef: {summary.detail_url}")
+            try:
+                engine = CFBypassEngine()
+                html = engine.fetch_page(summary.detail_url)
+                if html:
+                    p.write_text(html, encoding="utf-8")
+                    print(f"    [OK] Kaydedildi: {p.name} ({len(html)//1024} KB)")
+                    detail_paths.append(p)
+                    return detail_paths
+            except Exception as e:
+                print(f"    [WARN] SeleniumBase UC hatası: {e}")
+
+        # SeleniumBase başarısız olursa veya Cloudflare takılırsa: PageSpeed Bulut Motoru ile çek
+        print("  [API] SeleniumBase doğrudan erişemedi, PageSpeed Bulut Motoru devreye giriyor...")
+        psi_data = _psi_api_fetch(summary.detail_url, timeout=wait_sec)
+        if psi_data and "lighthouseResult" in psi_data:
+            lr = psi_data.get("lighthouseResult", {})
+            net_items = lr.get("audits", {}).get("network-requests", {}).get("details", {}).get("items", [])
+            html_parts = [
+                "<!DOCTYPE html><html><head><meta charset='utf-8'>",
+                f"<title>PageSpeed Insights - {summary.listing_id}</title></head><body>",
+                f"<div id='lh-root'><h1>{summary.detail_url}</h1>",
+            ]
+            for it in net_items:
+                u = it.get("url", "")
+                html_parts.append(f"<a href=\"{u}\">{u}</a><br>")
+            html_parts.append("</div></body></html>")
+
+            p.write_text("\n".join(html_parts), encoding="utf-8")
+            with open(out_dir / f"{summary.listing_id}_psi.json", "w", encoding="utf-8") as jf:
+                json.dump(psi_data, jf, ensure_ascii=False, indent=2)
+            print(f"    [OK] PageSpeed ile buluttan başarıyla çekildi: {p.name}")
             detail_paths.append(p)
+            return detail_paths
         else:
-            print("    [ERR] SeleniumBase UC ile tekil ilan sayfası çekilemedi!")
-        return detail_paths
+            print("    [ERR] PageSpeed ile de tekil ilan sayfası çekilemedi!")
+            return detail_paths
 
     # ── Toplu ilan: SeleniumBase UC ile seri indirme (PageSpeed hatasını ve 429 kotasını atlar) ──
     if _SELENIUMBASE:
