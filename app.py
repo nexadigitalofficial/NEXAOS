@@ -1068,6 +1068,18 @@ def step2_extract_summaries(html_path: Path) -> List[ListingSummary]:
                             thumb_url=u,
                             detail_url=detail_url
                         )
+            # Node labels ve alt metinlerden başlıkları ve box URL'lerini yakala
+            psi_text = json.dumps(lr, ensure_ascii=False)
+            for m_nl in re.finditer(r'([^\n\r"\'<>]+?)\s*#(\d{6,})', psi_text):
+                t_cand, lid_cand = m_nl.group(1).strip(), m_nl.group(2)
+                if lid_cand in items and t_cand and len(t_cand) > 3 and not t_cand.startswith("http"):
+                    items[lid_cand].title = t_cand
+
+            for m_url in re.finditer(r'https?://(?:www\.)?sahibinden\.com/ilan/([a-zA-Z0-9_\-]+?)-(\d{6,})/detay', psi_text):
+                slug, lid_cand = m_url.group(1), m_url.group(2)
+                if lid_cand in items:
+                    items[lid_cand].detail_url = f"https://www.sahibinden.com/ilan/{slug}-{lid_cand}/detay"
+
             if items:
                 print(f"  [OK] PageSpeed Bulut Verisinden {len(items)} ilan/proje yakalandı.")
         except Exception as err:
@@ -2355,6 +2367,27 @@ def step4_parse_details(
             or soup.find(class_="classifiedDescription")
         )
         description = desc_el.get_text(strip=True) if desc_el else ""
+
+        # ── Self-Healing Fallback (Eğer Selenium login sayfasına takıldıysa veya veriler eksikse) ──
+        if (not photos or len(photos) <= 1) or len(specs) == 0 or price == "—":
+            try:
+                print(f"    [FALLBACK] {listing_id} için HTML eksik (giris yönlendirmesi tespit edildi), PageSpeed API ile tamamlanıyor...")
+                target_url = canonical_url or f"https://www.sahibinden.com/ilan/{listing_id}/detay"
+                psi_res = _scrape_via_psi_api(target_url)
+                if psi_res and psi_res.get("ok"):
+                    if (not title or title == listing_id) and psi_res.get("title"):
+                        title = psi_res.get("title")
+                    if price == "—" and psi_res.get("price"):
+                        price = psi_res.get("price")
+                    if psi_res.get("images"):
+                        photos = psi_res.get("images")
+                    if psi_res.get("specs"):
+                        specs = psi_res.get("specs")
+                    if not description and psi_res.get("description"):
+                        description = psi_res.get("description")
+                    print(f"    [OK] PageSpeed API ile kurtarıldı: {len(photos)} foto, {len(specs)} özellik, Fiyat: {price}")
+            except Exception as fb_err:
+                print(f"    [WARN] PageSpeed API fallback hatası: {fb_err}")
 
         det = ListingDetail(
             listing_id=listing_id,
