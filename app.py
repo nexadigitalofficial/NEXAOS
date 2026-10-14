@@ -1985,10 +1985,10 @@ def _psi_api_find_desc_rect(psi_json: dict) -> Optional[Dict[str, float]]:
     return best_rect
 
 
-def _psi_api_extract_description(target_url: str) -> Tuple[str, str]:
+def _psi_api_extract_description(target_url: str, psi_json: Optional[dict] = None) -> Tuple[str, str]:
     """
-    Tam zincir: PSI v5 API çağır → fullPageScreenshot'ı decode et →
-    açıklama container'ının rect'i ile crop'la → Tesseract OCR (tur) →
+    Tam zincir: PSI v5 API yanıtı / fullPageScreenshot'ı decode et →
+    #classified-detail (açıklama) container'ını crop'la → Tesseract OCR (tur) →
     temizlenmiş metni döner.
 
     Dönüş: (description, source_label). Herhangi bir aşama başarısız
@@ -2001,7 +2001,8 @@ def _psi_api_extract_description(target_url: str) -> Tuple[str, str]:
     if not tess_ok:
         return "", tess_msg
 
-    psi_json = _psi_api_fetch(target_url)
+    if psi_json is None:
+        psi_json = _psi_api_fetch(target_url)
     if not psi_json:
         return "", "PSI API yanıtı alınamadı"
 
@@ -2023,33 +2024,42 @@ def _psi_api_extract_description(target_url: str) -> Tuple[str, str]:
         return "", f"görsel decode edilemedi: {exc}"
 
     rect = _psi_api_find_desc_rect(psi_json)
+    w, h = full_img.size
     if rect:
         left, top = rect["left"], rect["top"]
         right = left + rect["width"]
         bottom = top + rect["height"]
-        # Görsel sınırlarını taşmayacak şekilde kırp
         left = max(0, left)
         top = max(0, top)
-        right = min(full_img.width, right)
-        bottom = min(full_img.height, bottom)
+        right = min(w, right)
+        bottom = min(h, bottom)
         crop_img = full_img.crop((left, top, right, bottom))
     else:
-        # Rect bulunamazsa tüm sayfayı OCR'la (daha gürültülü ama best-effort)
-        crop_img = full_img
+        # #classified-detail Sahibinden şablonunda y: 920-2700 bandında yer alır
+        top_y = min(int(h * 0.16), 920)
+        bot_y = min(h, 2700)
+        crop_img = full_img.crop((int(w * 0.04), top_y, int(w * 0.96), bot_y))
 
     try:
         raw_ocr = _pytesseract.image_to_string(crop_img, lang=PSI_OCR_LANG)
     except Exception as exc:
         return "", f"tesseract OCR başarısız: {exc}"
 
-    cleaned = re.sub(r"[ \t]+", " ", raw_ocr)
+    # #classified-detail / Açıklama başlığı sonrasını ve Özellikler öncesini al
+    parts = re.split(r'A.{1,2}klama\s*', raw_ocr, flags=re.IGNORECASE)
+    body = parts[1] if len(parts) > 1 else raw_ocr
+    end_parts = re.split(r'\n\s*.{0,2}zellikler', body, flags=re.IGNORECASE)
+    body = end_parts[0].strip()
+
+    cleaned = re.sub(r"[ \t]+", " ", body)
     cleaned = re.sub(r"\n{3,}", "\n\n", cleaned).strip()
 
     if len(cleaned) < 40:
         return "", "OCR sonucu çok kısa/boş"
 
-    source = "PSI API + OCR (tam sayfa)" if not rect else "PSI API + OCR (açıklama rect'i)"
+    source = "PSI fullPageScreenshot OCR (#classified-detail)"
     return cleaned, source
+
 
 
 def step4_parse_details(
@@ -2168,6 +2178,20 @@ def step4_parse_details(
 
             description = _extract_psi_description(raw_text)
             description_source = "PSI HTML" if description else ""
+
+            # ── Fallback 0: Önceden indirilmiş {listing_id}_psi.json varsa doğrudan OCR yap ──
+            psi_cached_json = p.parent / f"{listing_id}_psi.json"
+            if not description and psi_cached_json.exists():
+                try:
+                    with open(psi_cached_json, "r", encoding="utf-8") as jf:
+                        cj = json.load(jf)
+                    print(f"    ℹ Önceden kaydedilmiş PSI JSON üzerinden #classified-detail OCR yapılıyor...")
+                    ocr_desc, ocr_note = _psi_api_extract_description(canonical_url, psi_json=cj)
+                    if ocr_desc:
+                        description = ocr_desc
+                        description_source = ocr_note
+                except Exception as e:
+                    print(f"    [WARN] PSI JSON OCR hatası: {e}")
 
             # ── Fallback 1: #classified-detail fragment varyantı ──────────
             # step3'ün ürettiği "{listing_id}__cd.html" varsa (birincil
