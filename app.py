@@ -1835,7 +1835,13 @@ def _merge_photo_variants(psi_photos: List[Dict[str, str]]) -> List[str]:
             best[core]["url"] = url
             best[core]["rank"] = rank
 
-    return [best[c]["url"] for c in order]
+    res = []
+    for c in order:
+        u = best[c]["url"]
+        # Thumbnail veya küçük formatları tam boyut x5_ kalitesine yükselt
+        highres_u = re.sub(r'/(?:x3_|x2_|x1_|thmb_|lthmb_)', '/x5_', u)
+        res.append(highres_u)
+    return res
 
 
 def _parse_specs(soup: BeautifulSoup) -> Dict[str, str]:
@@ -2200,19 +2206,39 @@ def step4_parse_details(
             description = _extract_psi_description(raw_text)
             description_source = "PSI HTML" if description else ""
 
-            # ── Fallback 0: Önceden indirilmiş {listing_id}_psi.json varsa doğrudan OCR yap ──
+            # ── Fallback 0: Önceden indirilmiş {listing_id}_psi.json varsa doğrudan OCR ve tüm fotoğrafları çek ──
             psi_cached_json = p.parent / f"{listing_id}_psi.json"
-            if not description and psi_cached_json.exists():
+            if psi_cached_json.exists():
                 try:
                     with open(psi_cached_json, "r", encoding="utf-8") as jf:
                         cj = json.load(jf)
-                    print(f"    ℹ Önceden kaydedilmiş PSI JSON üzerinden #classified-detail OCR yapılıyor...")
-                    ocr_desc, ocr_note = _psi_api_extract_description(canonical_url, psi_json=cj)
-                    if ocr_desc:
-                        description = ocr_desc
-                        description_source = ocr_note
+                    if not description:
+                        print(f"    ℹ Önceden kaydedilmiş PSI JSON üzerinden #classified-detail OCR yapılıyor...")
+                        ocr_desc, ocr_note = _psi_api_extract_description(canonical_url, psi_json=cj)
+                        if ocr_desc:
+                            description = ocr_desc
+                            description_source = ocr_note
+
+                    # Tüm JSON payload'ından eksiksiz tüm fotoğrafları topla
+                    cj_str = json.dumps(cj)
+                    psi_photo_pat = re.compile(
+                        r'https?://i\d+\.shbdn\.com/photos/(\d+/\d+/\d+)/([a-zA-Z0-9_]+)\.(avif|jpg|jpeg|png|webp)',
+                        re.IGNORECASE
+                    )
+                    seen_photo_keys = {re.sub(r'/(?:x5_|x3_|x2_|x1_|thmb_|lthmb_)', '/', ph) for ph in photos}
+                    for match in psi_photo_pat.finditer(cj_str):
+                        folder, fname, ext = match.groups()
+                        base_id = re.sub(r'^(x5_|x3_|x2_|x1_|thmb_|lthmb_)', '', fname)
+                        if not base_id or "blank" in base_id:
+                            continue
+                        core_key = f"https://i0.shbdn.com/photos/{folder}/{base_id}"
+                        if core_key not in seen_photo_keys:
+                            seen_photo_keys.add(core_key)
+                            highres_url = f"https://i0.shbdn.com/photos/{folder}/x5_{base_id}.avif"
+                            photos.append(highres_url)
                 except Exception as e:
-                    print(f"    [WARN] PSI JSON OCR hatası: {e}")
+                    print(f"    [WARN] PSI JSON OCR/Fotoğraf ayrıştırma hatası: {e}")
+
 
             # ── Fallback 1: #classified-detail fragment varyantı ──────────
             # step3'ün ürettiği "{listing_id}__cd.html" varsa (birincil
