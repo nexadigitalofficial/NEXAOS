@@ -664,21 +664,6 @@ def _pagespeed_fetch(
         if not cookie_done:
             _accept_cookies(driver, timeout=4)
 
-        # Eğer doğrudan analiz başlamadıysa input üzerinden gönder
-        if "/analysis/" not in driver.current_url:
-            try:
-                inp = WebDriverWait(driver, 5).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, "input[name='url']"))
-                )
-                _type_url_robust(driver, target_url)
-                analyze_btn = driver.find_element(
-                    By.XPATH,
-                    "//span[normalize-space()='Analiz et' or normalize-space()='Analyze']/ancestor::button[1]",
-                )
-                driver.execute_script("arguments[0].click();", analyze_btn)
-            except Exception:
-                pass
-
         # Sayaçlı bekleme ve lh-root kontrolü
         print(f"    [WAIT] Analiz bekleniyor (azami {wait_sec} sn)", end="", flush=True)
         deadline = time.time() + wait_sec
