@@ -225,6 +225,9 @@ PSI_OCR_LANG = os.environ.get("PSI_OCR_LANG", "tur")
 CLASSIFIED_DETAIL_FRAGMENT = "classified-detail"
 CD_FILE_SUFFIX = "__cd"  # {listing_id}__cd.html olarak kaydedilir
 
+CLASSIFIED_PROPERTIES_FRAGMENT = "classifiedProperties"
+PROP_FILE_SUFFIX = "__prop"  # {listing_id}__prop.html olarak kaydedilir
+
 
 def _strip_fragment(url: str) -> str:
     return url.split("#", 1)[0]
@@ -238,6 +241,16 @@ def _build_classified_detail_url(base_url: str) -> str:
     """
     clean = _strip_fragment(base_url).rstrip("/")
     return f"{clean}/#{CLASSIFIED_DETAIL_FRAGMENT}"
+
+
+def _build_classified_properties_url(base_url: str) -> str:
+    """
+    Verilen detay URL'sine (varsa mevcut fragment'i temizleyip)
+    '#classifiedProperties' fragment'ini ekler.
+    ".../detay" veya ".../detay/" → ".../detay/#classifiedProperties"
+    """
+    clean = _strip_fragment(base_url).rstrip("/")
+    return f"{clean}/#{CLASSIFIED_PROPERTIES_FRAGMENT}"
 
 # Sahibinden detay URL formatı  (ID'den otomatik türetilemezse bu search URL'si kullanılır)
 SB_SEARCH_URL  = "https://www.sahibinden.com/arama?query_text={id}"
@@ -1203,15 +1216,22 @@ def step3_pagespeed_details(
                 print(f"    [WARN] SeleniumBase UC hatası: {e}")
 
         # SeleniumBase başarısız olursa veya Cloudflare takılırsa: PageSpeed Bulut Motoru ile çek
+        # Kullanıcı kuralı: Tekil ilanlarda #classified-detail ve #classifiedProperties hedeflenir
         print("  [API] SeleniumBase doğrudan erişemedi, PageSpeed Bulut Motoru devreye giriyor...")
-        psi_data = _psi_api_fetch(summary.detail_url, timeout=wait_sec)
+        target_fetch_url = (
+            summary.detail_url
+            if "#" in summary.detail_url
+            else _build_classified_detail_url(summary.detail_url)
+        )
+        print(f"  [API] Hedef URL: {target_fetch_url}")
+        psi_data = _psi_api_fetch(target_fetch_url, timeout=wait_sec)
         if psi_data and "lighthouseResult" in psi_data:
             lr = psi_data.get("lighthouseResult", {})
             net_items = lr.get("audits", {}).get("network-requests", {}).get("details", {}).get("items", [])
             html_parts = [
                 "<!DOCTYPE html><html><head><meta charset='utf-8'>",
                 f"<title>PageSpeed Insights - {summary.listing_id}</title></head><body>",
-                f"<div id='lh-root'><h1>{summary.detail_url}</h1>",
+                f"<div id='lh-root'><h1>{target_fetch_url}</h1>",
             ]
             for it in net_items:
                 u = it.get("url", "")
@@ -1227,6 +1247,7 @@ def step3_pagespeed_details(
         else:
             print("    [ERR] PageSpeed ile de tekil ilan sayfası çekilemedi!")
             return detail_paths
+
 
     # ── Toplu ilan: SeleniumBase UC ile seri indirme (PageSpeed hatasını ve 429 kotasını atlar) ──
     if _SELENIUMBASE:
