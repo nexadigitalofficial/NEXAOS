@@ -1847,37 +1847,43 @@ def _merge_photo_variants(psi_photos: List[Dict[str, str]]) -> List[str]:
 def _parse_specs(soup: BeautifulSoup) -> Dict[str, str]:
     specs: Dict[str, str] = {}
     
-    # Try ul format
-    ul = soup.find("ul", class_=lambda c: c and "classifiedInfoList" in c if c else False)
-    if ul:
-        for li in ul.find_all("li"):
-            key_el = li.find("strong")
-            val_el = li.find("span")
-            if key_el and val_el:
-                key = key_el.get_text(strip=True).strip(" :")
-                val = val_el.get_text(strip=True)
-                if key and val:
-                    specs[key] = val
-                    
-    # Try table format if empty
+    # 1. Sahibinden modern dl / classifiedInfoItem format (dt/dd)
+    for item in soup.select(".classifiedInfoList .classifiedInfoItem, .classifiedInfoList div"):
+        dt = item.find("dt")
+        dd = item.find("dd")
+        if dt and dd:
+            key = dt.get_text(strip=True).strip(" :")
+            val = dd.get_text(strip=True)
+            if key and val:
+                specs[key] = val
+
+    # 2. Sahibinden ul format (li strong/span)
     if not specs:
-        for row in soup.select("table.classifiedInfoTable tr"):
-            cells = row.find_all("td")
-            if len(cells) >= 2:
-                key = cells[0].get_text(strip=True).strip(" :")
-                val = cells[1].get_text(strip=True)
-                if key and val:
-                    specs[key] = val
+        ul = soup.find("ul", class_=lambda c: c and "classifiedInfoList" in c if c else False)
+        if ul:
+            for li in ul.find_all("li"):
+                key_el = li.find("strong")
+                val_el = li.find("span")
+                if key_el and val_el:
+                    key = key_el.get_text(strip=True).strip(" :")
+                    val = val_el.get_text(strip=True)
+                    if key and val:
+                        specs[key] = val
                     
-    # Try generic classifiedInfoTable
+    # 3. Table format if empty
     if not specs:
-        for row in soup.select(".classifiedInfoTable tr"):
+        for row in soup.select("table.classifiedInfoTable tr, .classifiedInfoTable tr"):
             cells = row.find_all(["td", "th"])
             if len(cells) >= 2:
                 key = cells[0].get_text(strip=True).strip(" :")
                 val = cells[1].get_text(strip=True)
                 if key and val:
                     specs[key] = val
+
+    # 4. Donanım / Özellikler (#classifiedProperties)
+    props = [li.get_text(strip=True) for li in soup.select("#classifiedProperties li, .classified-prop-item") if li.get_text(strip=True)]
+    if props:
+        specs["İlan Özellikleri"] = ", ".join(props[:15])
                     
     return specs
 
@@ -2308,11 +2314,11 @@ def step4_parse_details(
 
         # ── Fiyat ──
         price = "—"
-        for sel in [".classified-price-wrapper", ".sticky-header-attribute.price"]:
+        for sel in [".classified-price-wrapper .price", ".price", ".classified-price-wrapper", ".sticky-header-attribute.price"]:
             el = soup.select_one(sel)
             if el:
                 txt = el.get_text(strip=True)
-                if txt and len(txt) < 50:
+                if txt and len(txt) < 50 and ("TL" in txt or "₺" in txt or any(c.isdigit() for c in txt)):
                     price = txt
                     break
 
@@ -3060,7 +3066,7 @@ function openModal(id) {{
   const aiWrap = document.getElementById('mAiWrap');
   if (AI_ON && d.analysis_ok && d.analysis) {{
     document.getElementById('mAiLabel').innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-top:-2px"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> ` + MODEL_NAME;
-    document.getElementById('mAiText').innerHTML = typeof marked !== 'undefined' ? marked.parse(d.analysis) : d.analysis.replace(/\n/g, '<br>');
+    document.getElementById('mAiText').innerHTML = typeof marked !== 'undefined' ? marked.parse(d.analysis) : d.analysis.split('\n').join('<br>');
     aiWrap.style.display = '';
   }} else if (AI_ON && d.analysis_reason) {{
     document.getElementById('mAiLabel').textContent = 'ℹ️ AI yorum üretilemedi';
@@ -4308,7 +4314,7 @@ def build_luxury_card_html(detail: Dict, standalone: bool = True, anchor_id: str
 <div class="nexa-footer">Bu sayfa <b>NEXA.OS</b> tarafından otomatik üretilmiştir · Gayrimenkul Mühendisi</div>
 
 <div class="lightbox" id="lightbox" onclick="if(event.target===this) closeLightbox()">
-  <span class="close" onclick="closeLightbox()">[ERR]</span>
+  <span class="close" onclick="closeLightbox()">&times;</span>
   <span class="nav prev" onclick="lbStep(-1)">‹</span>
   <img id="lb-img" src="">
   <span class="nav next" onclick="lbStep(1)">›</span>
@@ -4372,7 +4378,7 @@ def build_luxury_cards_page(details: List[Dict]) -> str:
 {merged_body}
 <div class="nexa-footer">Bu sayfa <b>NEXA.OS</b> tarafından otomatik üretilmiştir · {len(details)} ilan · Gayrimenkul Mühendisi</div>
 <div class="lightbox" id="lightbox" onclick="if(event.target===this) closeLightbox()">
-  <span class="close" onclick="closeLightbox()">[ERR]</span>
+  <span class="close" onclick="closeLightbox()">&times;</span>
   <span class="nav prev" onclick="lbStep(-1)">‹</span>
   <img id="lb-img" src="">
   <span class="nav next" onclick="lbStep(1)">›</span>
@@ -4613,7 +4619,7 @@ def main() -> None:
             ai_enabled = False
 
     # Adım 6
-    step6_build_html(details, args.model, ai_enabled, args.out)
+    step6_build_html_luxury(details, args.model, ai_enabled, args.out)
 
     print("\n╔════════════════════════════════════════════════╗")
     print("║  ✅  TAMAMLANDI                                 ║")
