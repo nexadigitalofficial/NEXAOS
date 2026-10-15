@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="tr"><head><meta charset="UTF-8">
+<title>NEXA.OS · 5 Ultra Luxury İlan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="NEXA.OS — 5 Ultra Luxury İlan">
+<meta property="og:image" content="https://i0.shbdn.com/photos/39/66/72/x5_1345396672kke.avif">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cpolygon points=%2716,2 30,16 16,30 2,16%27 fill=%27%23c9a45c%27/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><style>
+:root{
+  --bg-0:#0a0a0b;
+  --bg-1:#131315;
+  --bg-2:#1a1a1d;
+  --bg-3:#202023;
+  --line:#28282c;
+  --line-soft:#1e1e21;
+  --gold:#c9a45c;
+  --gold-soft:#e8cd93;
+  --gold-dim:rgba(201,164,92,.35);
+  --text-0:#f5f4f1;
+  --text-1:#cbcac6;
+  --text-2:#8f8e8a;
+  --radius:16px;
+  --shadow:0 30px 70px -25px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+html,body{margin:0;padding:0;background:
+  radial-gradient(ellipse 1200px 600px at 50% -10%, rgba(201,164,92,.06), transparent 60%),
+  var(--bg-0);
+  color:var(--text-0);
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;}
+body{padding-bottom:60px;}
+h1,h2,h3,.serif{font-family:'Playfair Display',Georgia,'Times New Roman',serif;}
+::selection{background:var(--gold-dim);color:#fff;}
+a{color:inherit;}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+
+/* ---------- TOP NAV ---------- */
+.nexa-nav{position:sticky;top:0;z-index:50;background:rgba(10,10,11,.86);
+  backdrop-filter:blur(14px);border-bottom:1px solid var(--line-soft);}
+.nexa-nav .inner{max-width:1180px;margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.nexa-brand{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;
+  font-size:16px;letter-spacing:.04em;color:var(--text-0);text-decoration:none;}
+.nexa-brand .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 10px var(--gold);}
+.nexa-brand b{color:var(--gold-soft);}
+.nexa-actions{display:flex;align-items:center;gap:8px;}
+.nexa-btn{display:inline-flex;align-items:center;gap:6px;background:var(--bg-2);
+  border:1px solid var(--line);color:var(--text-1);font-size:12.5px;padding:8px 14px;
+  border-radius:20px;cursor:pointer;text-decoration:none;transition:all .2s ease;
+  font-family:inherit;}
+.nexa-btn:hover{border-color:var(--gold-dim);color:var(--gold-soft);background:var(--bg-3);}
+.nexa-jump{position:relative;}
+.nexa-jump select{appearance:none;background:var(--bg-2);border:1px solid var(--line);
+  color:var(--text-1);font-size:12.5px;padding:8px 30px 8px 14px;border-radius:20px;
+  cursor:pointer;font-family:inherit;}
+
+/* ---------- HERO / GALLERY ---------- */
+.listing-anchor{scroll-margin-top:70px;}
+.card{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;margin:40px 0;box-shadow:var(--shadow);position:relative;
+  animation:cardIn .6s ease both;}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+
+.ribbon{position:absolute;top:18px;right:-42px;background:linear-gradient(120deg,var(--gold),var(--gold-soft));
+  color:#1a1408;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  padding:5px 50px;transform:rotate(45deg);z-index:5;box-shadow:0 4px 14px rgba(0,0,0,.35);}
+
+.gallery{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:4px;
+  aspect-ratio:16/8;background:var(--bg-2);}
+.gallery .g-main{grid-row:1/3;}
+.gallery figure{margin:0;position:relative;overflow:hidden;cursor:pointer;background:#111;}
+.gallery img{width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .6s cubic-bezier(.2,.8,.2,1);}
+.gallery figure:hover img{transform:scale(1.05);}
+.gallery .g-count{position:absolute;right:12px;bottom:12px;background:rgba(0,0,0,.6);
+  color:#fff;font-size:12px;letter-spacing:.04em;padding:6px 12px;border-radius:20px;
+  backdrop-filter:blur(4px);}
+.gallery .g-badge{position:absolute;left:16px;top:16px;background:rgba(0,0,0,.55);
+  color:var(--gold-soft);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  padding:6px 12px;border-radius:20px;backdrop-filter:blur(4px);border:1px solid var(--gold-dim);}
+.gallery .g-all{position:absolute;right:12px;top:12px;background:rgba(0,0,0,.6);color:#fff;
+  font-size:11.5px;padding:6px 12px;border-radius:20px;backdrop-filter:blur(4px);}
+
+.filmstrip{display:flex;gap:4px;padding:4px;background:var(--bg-2);overflow-x:auto;}
+.filmstrip img{width:84px;height:60px;object-fit:cover;border-radius:6px;flex:0 0 auto;
+  cursor:pointer;opacity:.65;transition:opacity .2s ease,transform .2s ease;}
+.filmstrip img:hover{opacity:1;transform:translateY(-2px);}
+
+/* ---------- HEADER ---------- */
+.head{padding:32px 40px 24px;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap;}
+.head .loc{color:var(--gold);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.head h1{font-size:27px;font-weight:600;line-height:1.35;margin:0 0 8px;color:var(--text-0);
+  max-width:640px;}
+.head .no{color:var(--text-2);font-size:12px;letter-spacing:.05em;}
+.price{text-align:right;white-space:nowrap;}
+.price .amt{font-family:'Playfair Display',serif;font-size:33px;color:var(--gold-soft);
+  font-weight:600;}
+.price .tag{display:block;font-size:11px;color:var(--text-2);letter-spacing:.1em;
+  text-transform:uppercase;margin-top:4px;}
+.price .m2{display:block;font-size:11.5px;color:var(--text-2);margin-top:6px;}
+
+/* ---------- QUICK FACTS ---------- */
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:1px;background:var(--line);border-bottom:1px solid var(--line);}
+.facts .f{background:var(--bg-1);padding:18px 20px;transition:background .2s ease;}
+.facts .f:hover{background:var(--bg-2);}
+.facts .f .v{font-size:18px;font-weight:600;color:var(--text-0);}
+.facts .f .k{font-size:11px;color:var(--text-2);text-transform:uppercase;
+  letter-spacing:.08em;margin-top:3px;}
+
+/* ---------- BODY GRID ---------- */
+.body-grid{display:grid;grid-template-columns:1fr 320px;gap:0;}
+@media (max-width:820px){.body-grid{grid-template-columns:1fr;} .main-col{border-right:none!important;}}
+.main-col{padding:32px 40px;border-right:1px solid var(--line);}
+.side-col{padding:32px 28px;background:var(--bg-2);}
+
+.section-title{font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold);margin:0 0 16px;display:flex;align-items:center;gap:10px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--line);}
+
+.narrative p{color:var(--text-1);line-height:1.85;font-size:15px;margin:0 0 16px;}
+
+.highlights{list-style:none;margin:0 0 32px;padding:0;display:grid;gap:10px;}
+.highlights li{position:relative;padding-left:26px;color:var(--text-1);
+  font-size:14.5px;line-height:1.6;}
+.highlights li::before{content:'[OK]';position:absolute;left:0;top:0;color:var(--gold);
+  font-weight:700;}
+
+/* ---------- AI BOX ---------- */
+.ai-box {
+  background: linear-gradient(135deg, rgba(201, 164, 92, 0.08) 0%, rgba(19, 19, 21, 0.6) 100%);
+  border: 1px solid var(--gold-dim);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.05), 0 10px 30px rgba(0,0,0,0.25);
+  position: relative;
+  overflow: hidden;
+}
+.ai-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--gold), var(--gold-soft));
+}
+.ai-box .ai-h {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--gold-soft);
+  font-size: 13px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+.ai-box p {
+  color: var(--text-1);
+  font-size: 14.5px;
+  line-height: 1.8;
+  margin: 0 0 14px;
+}
+.ai-item {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.ai-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+.ai-number {
+  flex: 0 0 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--gold-dim);
+  border: 1px solid var(--gold);
+  color: var(--gold-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 0 8px rgba(201,164,92,0.15);
+}
+.ai-content {
+  color: var(--text-1);
+  font-size: 14.5px;
+  line-height: 1.8;
+  flex: 1;
+}
+.ai-content strong {
+  color: var(--text-0);
+  font-weight: 600;
+}
+
+/* ---------- CMA WIDGET ---------- */
+.cma-widget {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 28px;
+}
+.cma-widget .widget-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--gold-soft);
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.cma-widget .chart-container {
+  background: var(--bg-0);
+  border-radius: 8px;
+  padding: 15px 10px;
+  border: 1px solid var(--line-soft);
+}
+.cma-widget .cma-summary {
+  font-size: 13.5px;
+  color: var(--text-1);
+  margin-top: 14px;
+}
+.cma-widget .cma-summary.below strong {
+  color: var(--green);
+}
+.cma-widget .cma-summary.above strong {
+  color: var(--gold-soft);
+}
+
+/* ---------- BROKER PLAYBOOK ---------- */
+.broker-playbook {
+  background: rgba(201, 164, 92, 0.04);
+  border: 1px dashed var(--gold);
+  border-radius: 12px;
+  padding: 22px;
+  margin-top: 28px;
+  margin-bottom: 28px;
+}
+.broker-playbook .playbook-title {
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--gold-soft);
+  margin-bottom: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.broker-playbook ul {
+  margin: 0;
+  padding: 0 0 0 20px;
+  color: var(--text-1);
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+.broker-playbook li {
+  margin-bottom: 8px;
+}
+.broker-playbook li:last-child {
+  margin-bottom: 0;
+}
+
+/* Custom list items for Pros/Cons based on child index */
+.ai-item:nth-of-type(3) li::before {
+  content: '✓ ';
+  color: var(--green);
+  font-weight: bold;
+}
+.ai-item:nth-of-type(4) li::before {
+  content: '⚠️ ';
+  color: var(--red);
+  font-weight: bold;
+}
+
+
+/* ---------- AMENITY CHIPS ---------- */
+.amenity-group{margin-bottom:20px;}
+.amenity-group h4{font-size:12px;color:var(--text-2);text-transform:uppercase;
+  letter-spacing:.08em;margin:0 0 10px;font-weight:600;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{background:var(--bg-1);border:1px solid var(--line);color:var(--text-1);
+  font-size:12.5px;padding:6px 12px;border-radius:20px;transition:border-color .2s ease;}
+.chip:hover{border-color:var(--gold-dim);color:var(--gold-soft);}
+
+/* ---------- SIDE INFO ---------- */
+.contact{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;
+  padding:22px;margin-bottom:20px;}
+.contact .brandline{display:flex;align-items:center;gap:8px;margin-bottom:16px;
+  padding-bottom:14px;border-bottom:1px solid var(--line);}
+.contact .brandline .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 10px var(--gold);}
+.contact .brandline span{font-family:'Playfair Display',serif;font-size:14px;color:var(--gold-soft);}
+.contact .k{color:var(--text-2);font-size:11px;text-transform:uppercase;letter-spacing:.08em;}
+.contact .v{color:var(--text-0);font-size:14px;margin:2px 0 12px;}
+.src-badge{display:inline-block;font-size:10.5px;color:var(--text-2);
+  border:1px solid var(--line);border-radius:20px;padding:4px 10px;margin-top:6px;}
+.share-row{display:flex;gap:8px;margin-top:14px;}
+.share-btn{flex:1;text-align:center;background:var(--bg-3);border:1px solid var(--line);
+  color:var(--text-1);font-size:12px;padding:10px;border-radius:10px;cursor:pointer;
+  text-decoration:none;transition:all .2s ease;font-family:inherit;}
+.share-btn:hover{border-color:var(--gold-dim);color:var(--gold-soft);}
+
+/* ---------- DEV PANEL ---------- */
+details.dev{margin-top:24px;}
+details.dev summary{cursor:pointer;color:var(--text-2);font-size:11.5px;
+  letter-spacing:.06em;text-transform:uppercase;}
+details.dev .dev-body{font-size:12px;color:var(--text-2);margin-top:10px;
+  line-height:1.7;}
+
+/* ---------- FOOTER ---------- */
+.nexa-footer{text-align:center;padding:36px 20px 10px;color:var(--text-2);font-size:11.5px;
+  letter-spacing:.06em;}
+.nexa-footer b{color:var(--gold-soft);}
+
+/* ---------- LIGHTBOX ---------- */
+.lightbox{position:fixed;inset:0;background:rgba(6,6,7,.94);display:none;
+  align-items:center;justify-content:center;z-index:999;backdrop-filter:blur(8px);}
+.lightbox.open{display:flex;}
+.lightbox img{max-width:92vw;max-height:86vh;object-fit:contain;border-radius:6px;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);}
+.lightbox .nav{position:absolute;top:0;bottom:0;width:15%;display:flex;
+  align-items:center;justify-content:center;color:rgba(255,255,255,.6);font-size:34px;
+  cursor:pointer;user-select:none;transition:color .2s ease;}
+.lightbox .nav:hover{color:var(--gold-soft);}
+.lightbox .nav.prev{left:0;} .lightbox .nav.next{right:0;}
+.lightbox .close{position:absolute;top:22px;right:28px;color:#fff;font-size:26px;
+  cursor:pointer;opacity:.8;}
+.lightbox .close:hover{opacity:1;color:var(--gold-soft);}
+.lightbox .count{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);
+  color:rgba(255,255,255,.7);font-size:13px;letter-spacing:.05em;}
+
+/* ---------- TOAST ---------- */
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--bg-3);border:1px solid var(--gold-dim);color:var(--gold-soft);
+  padding:10px 20px;border-radius:20px;font-size:13px;z-index:1000;opacity:0;
+  pointer-events:none;transition:all .3s ease;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ---------- PRINT ---------- */
+@media print{
+  .nexa-nav,.lightbox,.share-row,.filmstrip,.ribbon{display:none!important;}
+  body{background:#fff;color:#000;}
+  .card{box-shadow:none;border:1px solid #ccc;}
+  .side-col{background:#f7f7f7;}
+}
+</style></head>
+<body>
+<nav class="nexa-nav"><div class="inner">
+  <a class="nexa-brand" href="#"><span class="dot"></span>NEXA<b>.OS</b></a>
+  <div class="nexa-actions">
+    <div class="nexa-jump">
+      <select onchange="jumpTo(this.value)">
+        <option value="">↳ 5 ilan arasında atla…</option>
+        <option value="ilan-1345396672">Kavaklıdere&#x27;de Satılık Daire | Merkez — 7.500.000 ₺</option><option value="ilan-1344666845">GOP - Koza sokak&#x27;ta | Tamamı Kiracılı — 270.000.000 ₺</option><option value="ilan-1334772434">Beytepe Site İçerisinde Geniş Satılık Lüks — 67.000.000 ₺</option><option value="ilan-1343336397">Cinnah Cadde Üzerinde Atakule&#x27;ye Komş — 235.000 ₺</option><option value="ilan-1316861991">Çayyolu Bordo Yaşamda Kiralık 1+1 | Köşe D — 30.850 ₺</option>
+      </select>
+    </div>
+    <button class="nexa-btn" onclick="copyLink()">🔗 Paylaş</button>
+    <button class="nexa-btn" onclick="window.print()">🖨 Yazdır</button>
+  </div>
+</div></nav>
+<div class="wrap">
+  <div class="card listing-anchor" id="ilan-1345396672">
+    <div class="ribbon">NEXA VIP</div>
+    <div class="gallery"><figure class="g-main" onclick="openLightbox(LISTING_PHOTOS_1345396672, 0)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_1345396672kke.avif" alt="Kavaklıdere&#x27;de Satılık Daire | Merkezi Konum" loading="eager" fetchpriority="high"><span class="g-badge">Ultra Luxury</span></figure><figure onclick="openLightbox(LISTING_PHOTOS_1345396672, 1)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_1345396672w4p.avif" alt="Kavaklıdere&#x27;de Satılık Daire | Merkezi Konum" loading="lazy"></figure><figure onclick="openLightbox(LISTING_PHOTOS_1345396672, 2)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_1345396672ct8.avif" alt="Kavaklıdere&#x27;de Satılık Daire | Merkezi Konum" loading="lazy"><span class="g-count">+12 fotoğraf</span></figure></div><div class="filmstrip"><img src="https://i0.shbdn.com/photos/39/66/72/x5_1345396672kke.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1345396672, 0)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_1345396672w4p.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1345396672, 1)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_1345396672ct8.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1345396672, 2)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_1345396672h51.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1345396672, 3)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_1345396672wru.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1345396672, 4)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_1345396672j5s.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1345396672, 5)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_134539667208b.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1345396672, 6)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_1345396672yij.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1345396672, 7)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_1345396672yju.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1345396672, 8)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_1345396672jwf.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1345396672, 9)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_13453966723y2.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1345396672, 10)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_1345396672216.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1345396672, 11)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_1345396672p7k.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1345396672, 12)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_1345396672lnt.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1345396672, 13)"><img src="https://i0.shbdn.com/photos/39/66/72/x5_134539667291i.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1345396672, 14)"></div>
+
+    <div class="head">
+      <div>
+        <div class="loc">📍 Ankara · Çankaya · Kavaklıdere</div>
+        <h1>Kavaklıdere&#x27;de Satılık Daire | Merkezi Konum</h1>
+        <div class="no">İlan No 1345396672</div>
+      </div>
+      <div class="price">
+        <span class="amt">7.500.000 ₺</span>
+        <span class="tag">Satılık</span>
+        
+      </div>
+    </div>
+
+    
+
+    <div class="body-grid">
+      <div class="main-col">
+        
+        <div class="ai-box"><div class="ai-h">[BOT] Uzman Değerlendirmesi <span style="color:var(--text-2);font-weight:400;text-transform:none;letter-spacing:0;">&nbsp;· NEXA-Llama3-RealEstate</span></div><p><strong>NEXA Portföy Değerlendirmesi:</strong><br><li><strong>Lokasyon Avantajı:</strong> Ankara / Çankaya / Kavaklıdere bölgesinde yüksek talep gören stratejik lokasyon.</li><br><li><strong>Yatırım Potansiyeli:</strong> Fiyat (7.500.000 ₺) bölgedeki emsal kurumsal portföylerle karşılaştırıldığında yüksek likidite ve getiri vadediyor.</li><br><li><strong>Hedef Kitle:</strong> Kurumsal yatırımcılar, üst segment konut alıcıları ve nitelikli kiracı profili için uygundur.</li></p></div>
+        
+    <div class="broker-playbook">
+      <div class="playbook-title">💡 Broker Görüşme & Müzakere Tüyoları (Sadece Danışman İçin)</div>
+      <ul><li>Mülkün kira getiri çarpanını ve amortisman süresini yatırımcı adaylarına özellikle vurgulayın.</li><li>Bölgedeki imar durumu veya değer artış trendi raporunu görüşme öncesinde mutlaka inceleyin.</li></ul>
+    </div>
+    
+        <div class="section-title">Açıklama</div>
+        <div class="narrative"><p>İlan No: 1345396672</p><p>Fiyat: 7.500.000 ₺</p><p>Konum: Ankara / Çankaya / Kavaklıdere</p><p>Kategori 1: Emlak</p><p>Kategori 2: Konut</p><p>Marka: Satılık</p><p>Seri: Daire</p><p>Arama Menüsü: Yepyeni-std</p><p>Ülke: Türkiye</p><p>Şehir: Ankara</p><p>İlçe: Çankaya</p><p>Mahalle: Kavaklıdere</p><p>Mahalle (detay): Kavaklıdere Mh.</p><p>Kimden: Emlak Ofisinden</p><p>Takas: Hayır</p><p>Fiyat (Sayısal): 7500000</p><p>Satıcı Tipi: Kurumsal</p><p>YETKİLİ DANIŞMAN: CEMRE AYDINLAR GÜRKAN | 0534 868 2787</p><p>BESTEKAR SOKAK&#x27;TA | AKILLI DAİRE KONSEPTİ | 141 SATILIK DAİRE</p><p>Ankara&#x27;nın sosyal yaşamı ve merkezi konumuyla öne çıkan bölgelerinden Bestekar Sokak&#x27;ta, Beykoz Sokak kesişiminde yer alan 141 daireler satışa sunulmuştur.</p><p>Modern akıllı bina konsepti, Lüks malzeme/İşçilik ve merkezi konumuyla öne çıkan bu portföy, şehir yaşamının sunduğu olanaklara yakın olmak isteyenler için niteli</p><p>kli bir alternatif sunmaktadır.</p><p>Binanın 31 Aralık 2026 tarihinde teslim edilmesi planlanmaktadır.</p><p>MERKEZİ KONUMDA MODERN BİR YAŞAM ALTERNATİFİ</p><p>Şehir yaşamının içinde olmak, sosyal olanaklara yakın yaşamak ve modern bina konseptini tercih etmek isteyenler için Bestekar&#x27;daki bu portföy, merkezi konumu v</p><p>€ seçkin malzemeleriyle öne çıkmaktadır.</p><p>DAİRE VE BİNA ÖZELLİKLERİ</p><p>- Sıfır bina</p><p>LOKASYON AVANTAJI</p><p>Bestekar, Tunalı Hilmi ve Kavaklıdere aksına yakın konumuyla Ankara&#x27;nın hareketli sosyal yaşamını ve şehir içi ulaşım olanaklarını bir araya getiren bölgelerden biri</p><p>dir.</p><p>Dairelerin konumu sayesinde;</p><p>Beykoz Sokak ile Bestekar Sokak&#x27;ın kesişimindeki köşe konumu, merkezi lokasyonda yaşamayı tercih edenler için önemli bir avantaj sağlamaktadır.</p><p>Detaylı bilgi ve yerinde sunum için benimle iletişime geçebilirsiniz.</p><p>Cemre Aydınlar Gürkan</p><p>05348682787</p><p>Coldwell Banker VIP</p></div>
+        <div class="section-title">Öne Çıkanlar</div><ul class="highlights"><li>Modern akıllı daire konsepti</li><li>Beykoz Sokak - Bestekar Sokak kesişiminde köşe konum</li><li>31 Aralık 2026 teslim tarihi</li><li>Restoran ve kafelere</li><li>Market ve mağazalara</li><li>Toplu taşıma duraklarına</li><li>Günlük ihtiyaç noktalarına kolay erişim imkânı sunulmaktadır.</li></ul>
+        
+        <details class="dev"><summary>Teknik / geliştirici bilgisi</summary><div class="dev-body">Açıklama kaynağı: Coldwell Banker VIP / NEXA.OS PSI Motoru<br>Lighthouse: ✅ — · ❌ — · [WARN] — · ℹ —</div></details>
+      </div>
+      <div class="side-col">
+        <div class="contact">
+          <div class="brandline"><span class="dot"></span><span>NEXA · Gayrimenkul Mühendisi</span></div>
+          <div class="k">İlan No</div><div class="v">1345396672</div>
+          <div class="k">Konum</div><div class="v">Ankara · Çankaya · Kavaklıdere</div>
+          <div class="k">Fiyat</div><div class="v">7.500.000 ₺</div>
+          <span class="src-badge">Coldwell Banker VIP / NEXA.OS PSI Motoru</span>
+          <div class="share-row">
+            <a class="share-btn" href="javascript:void(0)" onclick="shareWhatsApp('Kavaklıdere&#x27;de Satılık Daire | Merkezi Konum')">WhatsApp</a>
+            <a class="share-btn" href="javascript:void(0)" onclick="copyLink()">Linki Kopyala</a>
+            <a class="share-btn" href="javascript:void(0)" onclick="window.print()">Yazdır</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr style='border:none;border-top:1px solid #28282c;margin:0;'>
+<div class="wrap">
+  <div class="card listing-anchor" id="ilan-1344666845">
+    <div class="ribbon">NEXA VIP</div>
+    <div class="gallery"><figure class="g-main" onclick="openLightbox(LISTING_PHOTOS_1344666845, 0)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_13446668452dh.avif" alt="GOP - Koza sokak&#x27;ta | Tamamı Kiracılı | Satılık Bina" loading="eager" fetchpriority="high"><span class="g-badge">Ultra Luxury</span></figure><figure onclick="openLightbox(LISTING_PHOTOS_1344666845, 1)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845y9w.avif" alt="GOP - Koza sokak&#x27;ta | Tamamı Kiracılı | Satılık Bina" loading="lazy"></figure><figure onclick="openLightbox(LISTING_PHOTOS_1344666845, 2)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845ag5.avif" alt="GOP - Koza sokak&#x27;ta | Tamamı Kiracılı | Satılık Bina" loading="lazy"><span class="g-count">+21 fotoğraf</span></figure></div><div class="filmstrip"><img src="https://i0.shbdn.com/photos/66/68/45/x5_13446668452dh.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 0)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845y9w.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 1)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845ag5.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 2)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_13446668457dj.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 3)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845d8o.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 4)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_13446668458l5.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 5)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845vky.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 6)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_13446668455az.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 7)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_13446668453j1.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 8)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_13446668458bd.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 9)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845mrp.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 10)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845c1d.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 11)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845eet.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 12)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845lne.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 13)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845k2v.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 14)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845wtb.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 15)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845rki.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 16)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845uy1.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 17)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845i2z.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 18)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845da2.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 19)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845ey9.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 20)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_13446668455gi.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 21)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_134466684544a.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 22)"><img src="https://i0.shbdn.com/photos/66/68/45/x5_1344666845nrj.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1344666845, 23)"></div>
+
+    <div class="head">
+      <div>
+        <div class="loc">📍 Ankara · Çankaya · Gaziosmanpaşa(Gop)</div>
+        <h1>GOP - Koza sokak&#x27;ta | Tamamı Kiracılı | Satılık Bina</h1>
+        <div class="no">İlan No 1344666845</div>
+      </div>
+      <div class="price">
+        <span class="amt">270.000.000 ₺</span>
+        <span class="tag">Satılık</span>
+        
+      </div>
+    </div>
+
+    
+
+    <div class="body-grid">
+      <div class="main-col">
+        
+        <div class="ai-box"><div class="ai-h">[BOT] Uzman Değerlendirmesi <span style="color:var(--text-2);font-weight:400;text-transform:none;letter-spacing:0;">&nbsp;· NEXA-Llama3-RealEstate</span></div><p><strong>NEXA Portföy Değerlendirmesi:</strong><br><li><strong>Lokasyon Avantajı:</strong> Ankara / Çankaya / Gaziosmanpaşa(Gop) bölgesinde yüksek talep gören stratejik lokasyon.</li><br><li><strong>Yatırım Potansiyeli:</strong> Fiyat (270.000.000 ₺) bölgedeki emsal kurumsal portföylerle karşılaştırıldığında yüksek likidite ve getiri vadediyor.</li><br><li><strong>Hedef Kitle:</strong> Kurumsal yatırımcılar, üst segment konut alıcıları ve nitelikli kiracı profili için uygundur.</li></p></div>
+        
+    <div class="broker-playbook">
+      <div class="playbook-title">💡 Broker Görüşme & Müzakere Tüyoları (Sadece Danışman İçin)</div>
+      <ul><li>Mülkün kira getiri çarpanını ve amortisman süresini yatırımcı adaylarına özellikle vurgulayın.</li><li>Bölgedeki imar durumu veya değer artış trendi raporunu görüşme öncesinde mutlaka inceleyin.</li></ul>
+    </div>
+    
+        <div class="section-title">Açıklama</div>
+        <div class="narrative"><p>İlan No: 1344666845</p><p>Fiyat: 270.000.000 ₺</p><p>Konum: Ankara / Çankaya / Gaziosmanpaşa(Gop)</p><p>Kategori 1: Emlak</p><p>Kategori 2: Bina</p><p>Marka: Satılık</p><p>Arama Menüsü: Yepyeni-std</p><p>Ülke: Türkiye</p><p>Şehir: Ankara</p><p>İlçe: Çankaya</p><p>Mahalle: Gaziosmanpaşa(Gop)</p><p>Mahalle (detay): Büyükesat Mh.</p><p>Kimden: Emlak Ofisinden</p><p>Takas: Hayır</p><p>Fiyat (Sayısal): 270000000</p><p>Satıcı Tipi: Kurumsal</p><p>Sayfa Türü: İlan Detay</p><p>CEMRE AYDINLAR GÜRKAN - 05348682787</p><p>&#x27;TİCARİ VE LÜKS KONUT GAYRİMENKUL DANIŞMANI</p><p>GAZİOSMANPAŞA KOZA SOKAK&#x27;TA, YÜKSEK KİRA GETİRİLİ KOMPLE SATILIK BİNA</p><p>Ankara&#x27;nın prestijli yerleşim bölgelerinden Çankaya - Gaziosmanpaşa - Büyükesat&#x27;ta, Koza Sokak üzerinde konumlanan bu modern bina; hazır kiracılı yapısı ve</p><p>düzenli kira geliri ile yatırımcıya doğrudan gelir üreten bir gayrimenkul fırsatı sunmaktadır.</p><p>Bina, mevcut konsepti sayesinde yatırımcısına yeniden dekorasyon, eşyalandırma vey;</p><p>38 bağımsız bölümün aynı bina içer</p><p>letmeye alma süreciyle zaman kaybettirmeden direk gelir üretmektedir.</p><p>racıya bağlı kalmamasını ve gelirin farklı bağımsız bölümlere dağılarak</p><p>çeşitlenmesini sağlar.</p><p>BİNA HAKKINDA</p><p>Oturum alanı: 547 m?</p><p>Toplam kapalı alan: 2.400 m?</p><p>Tüm daireler full eşyalı olarak tasarlanmıştır.</p><p>Dairelerde beyaz eşya ve günlük kullanıma yönelik tüm temel ekipmanlar mevcuttur.</p><p>Kullanılan malzemeler ve ürünler, üst segment markalardan tercih edilmiştir.</p><p>Yerden ısıtma sistemi</p><p>Çift asansör</p><p>Kapalı ve açık otopark</p><p>Güvenlik kamera sistemi</p><p>Audio görüntülü diyafon sistemi</p><p>Su deposu</p><p>YATIRIM VE KİRA GELİRİ</p><p>Bu portföyün en önemli avantajlarından biri, çok sayıda bağımsız bölümden oluşan düzenli kira geliridir.</p><p>NEDEN KOZA SOKAK?</p><p>Gaziosmanpaşa - Bi</p><p>Ükesat, Ankara&#x27;da merkezi konumu, prestijli konut dokusu ve güçlü kiracı profiliyle öne çıkan bölgelerden biridi</p><p>Koza Sokak&#x27;ın;</p><p>yakın konumu, bölgedeki kiralık konut talebini destekleyen önemli unsurlardandır.</p><p>Merkezi konumuyla şehir hayatına erişim sağlarken, bölgenin sakin ve nitelikli yerleşim karakterini de korumaktadır.</p><p>YATIRIMIN ÖNE ÇIKAN NOKTALARI</p><p>V Çok sayıda bağımsız bölümden oluşan ölçekli yatırım</p><p>V Hazır kiracılı ve gelir üreten yapı</p><p>V Full eşyalı daire konsepti</p><p>V Güçlü ve merkezi lokasyon</p><p>v 857 m arsa üzerinde 2.400 m” kapalı alan</p><p>V Farklı bağımsız bölümlere dağılan kira geliri</p><p>130 ay amortisman süresi</p><p>V Bina yaşı: 2</p><p>Detaylı finansal bilgiler, kira dağılımı ve portföye ilişkin diğer bilgiler ciddi yatırımcılarla paylaşılacaktır.</p><p>Yer Gösterimleri Randevulu ve yer gösterim belgesi ile yapılacaktır</p><p>COLDWELL BANKER VIP GAYRİMENKUL ADINA Cemre Aydınlar Gürkan münhasıran Tek yetkilidir.</p><p>CEMRE AYDINLAR GÜRKAN</p><p>TİCARİ VE LÜKS KONUT GAYRİMENKUL DANIŞMANI</p><p>05348682787</p></div>
+        <div class="section-title">Öne Çıkanlar</div><ul class="highlights"><li>Arsa alanı: 857 m?</li><li>Kiracılı daire sayısı: TAMAMI</li><li>Amortisman süresi: 130 ay</li><li>Kira konsepti: HERŞEY DAHİLKİRALAMA</li><li>Elçilik ve konsolosluklara,</li><li>Çankaya&#x27;nın merkezi akslarına,</li><li>İş ve yaşam merkezlerine,</li><li>Restoran, kafe ve sosyal yaşam alanlarına,</li><li>Eğitim ve sağlık hizmetlerine</li></ul>
+        
+        <details class="dev"><summary>Teknik / geliştirici bilgisi</summary><div class="dev-body">Açıklama kaynağı: Coldwell Banker VIP / NEXA.OS PSI Motoru<br>Lighthouse: ✅ — · ❌ — · [WARN] — · ℹ —</div></details>
+      </div>
+      <div class="side-col">
+        <div class="contact">
+          <div class="brandline"><span class="dot"></span><span>NEXA · Gayrimenkul Mühendisi</span></div>
+          <div class="k">İlan No</div><div class="v">1344666845</div>
+          <div class="k">Konum</div><div class="v">Ankara · Çankaya · Gaziosmanpaşa(Gop)</div>
+          <div class="k">Fiyat</div><div class="v">270.000.000 ₺</div>
+          <span class="src-badge">Coldwell Banker VIP / NEXA.OS PSI Motoru</span>
+          <div class="share-row">
+            <a class="share-btn" href="javascript:void(0)" onclick="shareWhatsApp('GOP - Koza sokak&#x27;ta | Tamamı Kiracılı | Satılık Bina')">WhatsApp</a>
+            <a class="share-btn" href="javascript:void(0)" onclick="copyLink()">Linki Kopyala</a>
+            <a class="share-btn" href="javascript:void(0)" onclick="window.print()">Yazdır</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr style='border:none;border-top:1px solid #28282c;margin:0;'>
+<div class="wrap">
+  <div class="card listing-anchor" id="ilan-1334772434">
+    <div class="ribbon">NEXA VIP</div>
+    <div class="gallery"><figure class="g-main" onclick="openLightbox(LISTING_PHOTOS_1334772434, 0)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434d0k.avif" alt="Beytepe Site İçerisinde Geniş Satılık Lüks 3+1" loading="eager" fetchpriority="high"><span class="g-badge">Ultra Luxury</span></figure><figure onclick="openLightbox(LISTING_PHOTOS_1334772434, 1)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434jyf.avif" alt="Beytepe Site İçerisinde Geniş Satılık Lüks 3+1" loading="lazy"></figure><figure onclick="openLightbox(LISTING_PHOTOS_1334772434, 2)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434v8d.avif" alt="Beytepe Site İçerisinde Geniş Satılık Lüks 3+1" loading="lazy"><span class="g-count">+36 fotoğraf</span></figure></div><div class="filmstrip"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434d0k.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 0)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434jyf.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 1)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434v8d.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 2)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434m5b.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 3)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434agx.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 4)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434mrn.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 5)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_13347724342ky.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 6)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_13347724347lm.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 7)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434nee.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 8)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_133477243474t.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 9)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434aui.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 10)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434w4y.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 11)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434e51.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 12)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434olc.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 13)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434kka.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 14)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434ohn.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 15)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434sta.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 16)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_13347724343xg.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 17)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434kmu.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 18)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434j5l.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 19)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434kw3.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 20)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434bxb.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 21)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_13347724340pk.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 22)"><img src="https://i0.shbdn.com/photos/77/24/34/x5_1334772434wba.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1334772434, 23)"></div>
+
+    <div class="head">
+      <div>
+        <div class="loc">📍 Ankara · Çankaya · Merkez</div>
+        <h1>Beytepe Site İçerisinde Geniş Satılık Lüks 3+1</h1>
+        <div class="no">İlan No 1334772434</div>
+      </div>
+      <div class="price">
+        <span class="amt">67.000.000 ₺</span>
+        <span class="tag">Satılık</span>
+        
+      </div>
+    </div>
+
+    
+
+    <div class="body-grid">
+      <div class="main-col">
+        
+        <div class="ai-box"><div class="ai-h">[BOT] Uzman Değerlendirmesi <span style="color:var(--text-2);font-weight:400;text-transform:none;letter-spacing:0;">&nbsp;· NEXA-Llama3-RealEstate</span></div><p><strong>NEXA Portföy Değerlendirmesi:</strong><br><li><strong>Lokasyon Avantajı:</strong> Ankara / Çankaya / Merkez bölgesinde yüksek talep gören stratejik lokasyon.</li><br><li><strong>Yatırım Potansiyeli:</strong> Fiyat (67.000.000 ₺) bölgedeki emsal kurumsal portföylerle karşılaştırıldığında yüksek likidite ve getiri vadediyor.</li><br><li><strong>Hedef Kitle:</strong> Kurumsal yatırımcılar, üst segment konut alıcıları ve nitelikli kiracı profili için uygundur.</li></p></div>
+        
+    <div class="broker-playbook">
+      <div class="playbook-title">💡 Broker Görüşme & Müzakere Tüyoları (Sadece Danışman İçin)</div>
+      <ul><li>Mülkün kira getiri çarpanını ve amortisman süresini yatırımcı adaylarına özellikle vurgulayın.</li><li>Tabela değeri, prestij ve stopaj avantajı gibi ticari mülk argümanlarını görüşmede hazır bulundurun.</li></ul>
+    </div>
+    
+        <div class="section-title">Açıklama</div>
+        <div class="narrative"><p>İlan No: 1334772434</p><p>Fiyat: 67.000.000 ₺</p><p>Konum: Ankara / Çankaya / Merkez</p><p>Kategori 1: Emlak</p><p>Kategori 2: Konut</p><p>Marka: Satılık</p><p>Seri: Villa</p><p>Arama Menüsü: Yepyeni-std</p><p>Ülke: Türkiye</p><p>Şehir: Ankara</p><p>İlçe: Çankaya</p><p>Mahalle: Merkez</p><p>Mahalle (detay): Beytepe Mah.</p><p>Kimden: Emlak Ofisinden</p><p>Takas: Hayır</p><p>Fiyat (Sayısal): 67000000</p><p>Satıcı Tipi: Kurumsal</p><p>Yetkili Danışman : Cemre Aydınlar Gürkan - 0534 868 27 87</p><p>Beytepe&#x27;</p><p>in en değerli akslarından biri olan üzerind</p><p>çeken bu özel villa; sahip olduğu e kişiselleşi</p><p>görülmesi gereken bir mülk.</p><p>(a kadar önü açık konumuyla dikkat</p><p>meye hazır yapısıyla mutlaka yerinde</p><p>Beytepe&#x27;de kendi yaşam alanını baştan sona kendi zevkinize göre tasarlama fırsatı sunan bu özel villa, sunduğu alan ve yapısal özellikleri ile ön plana</p><p>çıkıyor.</p><p>Yapının taşıyıcı sistemi ve teknik altyapısı önemli ölçüde tamamlanmış olup, iç mekânların yeni malikinin zevkine ve kullanım ihtiyaçlarına göre</p><p>şekillendirilebileceği kişiselleştirilmeye hazır bir villa niteliğindedir.</p><p>YAPISAL VE TEKNİK ÖZELLİKLER</p><p>- 493 m? arsa</p><p>- 500 m? toplam kapalı alan</p><p>- EN 1090-EXC 3 normuna göre imal edilmiş yapısal çelik konstrüksiyon</p><p>- Sinterflex, Tyvek, taş yünü, seramik ve kompozit malzemelerle oluşturulmuş dış cephe sistemi</p><p>- İtalyan Giacomini kollektörlü, otomasyona uygun yerden ısıtma altyapısı</p><p>- Sıhhi tesisat tamamlanmış</p><p>KAT PLANLARI</p><p>BAHÇE KATI</p><p>GİRİŞ KATI</p><p>1.KAT</p><p>ÇATI KATI</p><p>Bu villa; geniş yaşam alanı, özel bahçe kullanımı, kapalı otoparkı, asansörü ve tamamlanmış teknik altyapısıylastandart bir villa arayışının ötesinde, kendi yaşam</p><p>alanını sıfırdan tasarlamak isteyenler için değerlendirilebilecek özel bir fırsat sunmaktadır.</p><p>İç mekânların tamamlanması ve dekorasyonu, yeni sahibinin ihtiyaçları ve estetik tercihleri doğrultusunda şekillendirilebilir.</p><p>Bu mülkü yalnızca fotoğraflar üzerinden değerlendirmek yerine, mevcut yapıyı ve tamamlanma potansiyelini yerinde görmenizi öneririm. Detaylı bilgi almak ve</p><p>villayı yerinde değerlendirmek için benimle iletişime geçebilirsiniz.</p><p>Cemre Aydınlar Gürkan</p><p>Gayrimenkul Danışmanı</p><p>05348682787</p></div>
+        <div class="section-title">Öne Çıkanlar</div><ul class="highlights"><li>4 katlı villa</li><li>Radye temel</li><li>4 duraklı Schindler marka asansör</li><li>Kenetli sac imalatlı çatı</li><li>Özel ilave taş yünü izolasyonu</li><li>Sapa (Norveç) marka pencereler</li><li>Temperli cam ve içten jaluzili cam sistemleri</li><li>Ytong duvarlar</li><li>Elektrik tesisatı altyapısı tamamlanmış</li><li>Legrand marka elektrik imalatları</li><li>Öznur Kablo kullanılmış elektrik altyapısı</li><li>Sessiz borulama sistemi</li><li>Kazan ve makine dairesi altyapısı tamamlanmış</li><li>Bahçe otomatik sulama altyapısı ve yürüyüş yolları tamamlanmış</li><li>2 araçlık kapalı otopark</li><li>Kazan dairesi</li><li>Salon ve açık mutfak</li><li>2oda</li><li>Geniş banyo/WC</li><li>Geniş kullanımlı bahçe</li><li>Giriş holü</li><li>Salon</li><li>Mutfak ve yemek odası</li><li>WC/lavabo</li><li>Mutfaktan çıkışı bulunan geniş bahçe</li><li>Otomatik sulama sistemi ve yürüyüş yolu</li><li>Galeri holü</li><li>Balkonlu ebeveyn yatak odası</li><li>Giyinme odası</li><li>Ebeveyn banyosu</li><li>2 adet WC/banyolu oda</li><li>Çamaşır odası</li><li>Çok amaçlı salon</li><li>WC/banyo</li><li>Çamaşır odası</li><li>Çok amaçlı geniş teras</li><li>Çatı içerisinde geniş depo alanı</li></ul>
+        
+        <details class="dev"><summary>Teknik / geliştirici bilgisi</summary><div class="dev-body">Açıklama kaynağı: Coldwell Banker VIP / NEXA.OS PSI Motoru<br>Lighthouse: ✅ — · ❌ — · [WARN] — · ℹ —</div></details>
+      </div>
+      <div class="side-col">
+        <div class="contact">
+          <div class="brandline"><span class="dot"></span><span>NEXA · Gayrimenkul Mühendisi</span></div>
+          <div class="k">İlan No</div><div class="v">1334772434</div>
+          <div class="k">Konum</div><div class="v">Ankara · Çankaya · Merkez</div>
+          <div class="k">Fiyat</div><div class="v">67.000.000 ₺</div>
+          <span class="src-badge">Coldwell Banker VIP / NEXA.OS PSI Motoru</span>
+          <div class="share-row">
+            <a class="share-btn" href="javascript:void(0)" onclick="shareWhatsApp('Beytepe Site İçerisinde Geniş Satılık Lüks 3+1')">WhatsApp</a>
+            <a class="share-btn" href="javascript:void(0)" onclick="copyLink()">Linki Kopyala</a>
+            <a class="share-btn" href="javascript:void(0)" onclick="window.print()">Yazdır</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr style='border:none;border-top:1px solid #28282c;margin:0;'>
+<div class="wrap">
+  <div class="card listing-anchor" id="ilan-1343336397">
+    <div class="ribbon">NEXA VIP</div>
+    <div class="gallery"><figure class="g-main" onclick="openLightbox(LISTING_PHOTOS_1343336397, 0)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397pf5.avif" alt="Cinnah Cadde Üzerinde Atakule&#x27;ye Komşu 2+1 Kiralık" loading="eager" fetchpriority="high"><span class="g-badge">Ultra Luxury</span></figure><figure onclick="openLightbox(LISTING_PHOTOS_1343336397, 1)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397uwb.avif" alt="Cinnah Cadde Üzerinde Atakule&#x27;ye Komşu 2+1 Kiralık" loading="lazy"></figure><figure onclick="openLightbox(LISTING_PHOTOS_1343336397, 2)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397e5j.avif" alt="Cinnah Cadde Üzerinde Atakule&#x27;ye Komşu 2+1 Kiralık" loading="lazy"><span class="g-count">+32 fotoğraf</span></figure></div><div class="filmstrip"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397pf5.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 0)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397uwb.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 1)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397e5j.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 2)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397b57.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 3)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_13433363970hu.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 4)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397wvv.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 5)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397ije.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 6)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_13433363979h3.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 7)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397yov.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 8)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397dy7.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 9)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_13433363970be.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 10)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397sc2.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 11)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397j9y.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 12)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397jt1.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 13)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397adu.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 14)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397xpo.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 15)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397fju.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 16)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397u3d.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 17)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397snn.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 18)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397iyi.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 19)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397rce.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 20)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397t91.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 21)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397e7i.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 22)"><img src="https://i0.shbdn.com/photos/33/63/97/x5_1343336397y5t.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1343336397, 23)"></div>
+
+    <div class="head">
+      <div>
+        <div class="loc">📍 Ankara · Yenimahalle</div>
+        <h1>Cinnah Cadde Üzerinde Atakule&#x27;ye Komşu 2+1 Kiralık</h1>
+        <div class="no">İlan No 1343336397</div>
+      </div>
+      <div class="price">
+        <span class="amt">235.000 ₺</span>
+        <span class="tag">Satılık</span>
+        
+      </div>
+    </div>
+
+    
+
+    <div class="body-grid">
+      <div class="main-col">
+        
+        <div class="ai-box"><div class="ai-h">[BOT] Uzman Değerlendirmesi <span style="color:var(--text-2);font-weight:400;text-transform:none;letter-spacing:0;">&nbsp;· NEXA-Llama3-RealEstate</span></div><p><strong>NEXA Portföy Değerlendirmesi:</strong><br><li><strong>Lokasyon Avantajı:</strong> Ankara / Yenimahalle bölgesinde yüksek talep gören stratejik lokasyon.</li><br><li><strong>Yatırım Potansiyeli:</strong> Fiyat (235.000 ₺) bölgedeki emsal kurumsal portföylerle karşılaştırıldığında yüksek likidite ve getiri vadediyor.</li><br><li><strong>Hedef Kitle:</strong> Kurumsal yatırımcılar, üst segment konut alıcıları ve nitelikli kiracı profili için uygundur.</li></p></div>
+        
+    <div class="broker-playbook">
+      <div class="playbook-title">💡 Broker Görüşme & Müzakere Tüyoları (Sadece Danışman İçin)</div>
+      <ul><li>Mülkün kira getiri çarpanını ve amortisman süresini yatırımcı adaylarına özellikle vurgulayın.</li><li>Bölgedeki imar durumu veya değer artış trendi raporunu görüşme öncesinde mutlaka inceleyin.</li></ul>
+    </div>
+    
+        <div class="section-title">Açıklama</div>
+        <div class="narrative"><p>İlan No: 1343336397</p><p>Fiyat: 235.000 ₺</p><p>Konum: Ankara / Yenimahalle</p><p>Kategori 1: Emlak</p><p>Kategori 2: İş Yeri</p><p>Marka: Kiralık</p><p>Seri: Plaza Katı &amp; Ofisi</p><p>Arama Menüsü: Yepyeni-std</p><p>Ülke: Türkiye</p><p>Şehir: Ankara</p><p>İlçe: Yenimahalle</p><p>Mahalle: Yenimahalle</p><p>Mahalle (detay): Beştepe Mh.</p><p>Kimden: Emlak Ofisinden</p><p>Fiyat (Sayısal): 235000</p><p>Satıcı Tipi: Kurumsal</p><p>Sayfa Türü: İlan Detay</p><p>İYETKİLİ DANIŞMAN : CEMRE AYDINLAR GÜRKAN 0534 868 2787|</p><p>BEŞTEPE ÇAKIROĞLU PLAZA&#x27;DA | 240 M” KULLANIM ALANLI | KULLİYE MANZARALI | 3 CEPHELİ PRESTİJLİ OFİSİ</p><p>Beştepe&#x27;nin merkezi ve prestijli iş aksında, Çakıroğlu Plaza&#x27;da yer alan bu özel ofis; geniş kullanım alanı, üç cepheli konumu, Külliye manzarası ve yüksek</p><p>standartta dekorasyonuyla dikkat çekmektedir.</p><p>Toplam 240 m?kullanım alanına sahip olan ofisin 210 m”&#x27;si kapalı alan, 30 m”&#x27;si ise</p><p>ikonlardan oluşmaktadır.</p><p>OFİSİN ÖNE ÇIKAN ÖZELLİKLERİ</p><p>-30 m? toplam balkon alanı</p><p>-3 cepheli konum</p><p>LİNİK VE OFİS KULLANIMINA UYGU!</p><p>ilk tasarım aşamasında klinik kullanımının ihtiyaçları gözetilerek oluşturulmuştur.</p><p>Ofisin mevcut mimari kurgusu,</p><p>Bu nedenle başta;</p><p>olmak üzere sağlık sektöründeki farklı kullanım senaryolarına oldukça uygundur.</p><p>Bununla birlikte ofisin geniş ve esnek kullanım alanı sayesinde finans ve danışmanlık şirketleri, mimarlık ve tasarım ofisleri, şirket merkezleri ve farklı kurumsal</p><p>işletmeler tarafından da değerlendirilebilir.</p><p>ONUM AVANTAJI</p><p>Beştepe, Ankara&#x27;nın önemli iş ve ulaşım akslarının kesiştiği, merkezi konumuyla öne çıkan bölgelerinden biridir.</p><p>Çakıroğlu Plaza&#x27;nın konumu sayesinde ofisiniz;</p><p>- İş merkezlerine</p><p>: Sosyal ve ticari olanaklara</p><p>kolay ulaşım imkânı sunmaktadır.</p><p>PRESTİJLİ BİR İş ADRESİ ARAYANLARA</p><p>Bu portföyü yalnızca metrekare üzerinden değerlendirmemek gerekir.</p><p>Üç cepheli yapısı, 30 m” balkon alanı, Külliye manzarası, hazır dekorasyonu ve geniş kullanım alanıyla; çalışanlarınız ve müşterileriniz için nitelikli bir çalışma</p><p>ortamı sunarken markanızın kurumsal imajını da destekleyecek bir iş adresidir.</p><p>Beştepe&#x27;de, hazır dekorasyonlu, geniş ve prestijli bir ofis arıyorsanız bu portföyü yerinde görmenizi öneriyorum.</p><p>Detaylı bilgi ve yerinde sunum için benimle iletişime geçebilirsiniz.</p><p>Cemre Aydınlar Gürkan</p><p>05348682787</p><p>Coldwell Banker VIP</p></div>
+        <div class="section-title">Öne Çıkanlar</div><ul class="highlights"><li>240 m? toplam kullanım alanı</li><li>210 m? kapalı alan</li><li>Her cephede balkon</li><li>Gün boyu doğal ışık alan ferah çalışma ortamı</li><li>Beştepe Külliyesi&#x27;ni gören manzara</li><li>Birinci sınıf malzemelerle özenle dekore edilmiş hazır ofis</li><li>4 adetbanyo</li><li>Şık ve modern iç mimari</li><li>Ek tadilat ve dekorasyon ihtiyacı olmadan kullanıma uygun</li><li>Muayenehane ve klinikler</li><li>Diş klinikleri</li><li>Estetik ve güzellik merkezleri</li><li>Psikoloji ve danışmanlık merkezleri</li><li>Sağlık profesyonelleri</li><li>Çevre yollarına ve şehir içi bağlantı noktalarına</li></ul>
+        
+        <details class="dev"><summary>Teknik / geliştirici bilgisi</summary><div class="dev-body">Açıklama kaynağı: Coldwell Banker VIP / NEXA.OS PSI Motoru<br>Lighthouse: ✅ — · ❌ — · [WARN] — · ℹ —</div></details>
+      </div>
+      <div class="side-col">
+        <div class="contact">
+          <div class="brandline"><span class="dot"></span><span>NEXA · Gayrimenkul Mühendisi</span></div>
+          <div class="k">İlan No</div><div class="v">1343336397</div>
+          <div class="k">Konum</div><div class="v">Ankara · Yenimahalle</div>
+          <div class="k">Fiyat</div><div class="v">235.000 ₺</div>
+          <span class="src-badge">Coldwell Banker VIP / NEXA.OS PSI Motoru</span>
+          <div class="share-row">
+            <a class="share-btn" href="javascript:void(0)" onclick="shareWhatsApp('Cinnah Cadde Üzerinde Atakule&#x27;ye Komşu 2+1 Kiralık')">WhatsApp</a>
+            <a class="share-btn" href="javascript:void(0)" onclick="copyLink()">Linki Kopyala</a>
+            <a class="share-btn" href="javascript:void(0)" onclick="window.print()">Yazdır</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr style='border:none;border-top:1px solid #28282c;margin:0;'>
+<div class="wrap">
+  <div class="card listing-anchor" id="ilan-1316861991">
+    <div class="ribbon">NEXA VIP</div>
+    <div class="gallery"><figure class="g-main" onclick="openLightbox(LISTING_PHOTOS_1316861991, 0)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991o2k.avif" alt="Çayyolu Bordo Yaşamda Kiralık 1+1 | Köşe Daire | Çift Cephe" loading="eager" fetchpriority="high"><span class="g-badge">Ultra Luxury</span></figure><figure onclick="openLightbox(LISTING_PHOTOS_1316861991, 1)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991lgg.avif" alt="Çayyolu Bordo Yaşamda Kiralık 1+1 | Köşe Daire | Çift Cephe" loading="lazy"></figure><figure onclick="openLightbox(LISTING_PHOTOS_1316861991, 2)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991zxl.avif" alt="Çayyolu Bordo Yaşamda Kiralık 1+1 | Köşe Daire | Çift Cephe" loading="lazy"><span class="g-count">+25 fotoğraf</span></figure></div><div class="filmstrip"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991o2k.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 0)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991lgg.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 1)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991zxl.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 2)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_13168619914yp.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 3)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991xk6.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 4)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_13168619916uc.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 5)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991srk.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 6)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991t5v.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 7)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991bk3.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 8)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991ayv.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 9)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991pb5.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 10)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991foz.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 11)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991cva.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 12)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_13168619917ld.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 13)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_13168619919nw.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 14)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991wpt.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 15)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991fvm.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 16)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991zsb.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 17)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991hb5.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 18)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991nx1.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 19)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991mf3.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 20)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991hng.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 21)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_13168619919n0.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 22)"><img src="https://i0.shbdn.com/photos/86/19/91/x5_1316861991edh.avif" alt="" loading="lazy" onclick="openLightbox(LISTING_PHOTOS_1316861991, 23)"></div>
+
+    <div class="head">
+      <div>
+        <div class="loc">📍 Ankara · Çankaya · Çayyolu</div>
+        <h1>Çayyolu Bordo Yaşamda Kiralık 1+1 | Köşe Daire | Çift Cephe</h1>
+        <div class="no">İlan No 1316861991</div>
+      </div>
+      <div class="price">
+        <span class="amt">30.850 ₺</span>
+        <span class="tag">Satılık</span>
+        
+      </div>
+    </div>
+
+    
+
+    <div class="body-grid">
+      <div class="main-col">
+        
+        <div class="ai-box"><div class="ai-h">[BOT] Uzman Değerlendirmesi <span style="color:var(--text-2);font-weight:400;text-transform:none;letter-spacing:0;">&nbsp;· NEXA-Llama3-RealEstate</span></div><p><strong>NEXA Portföy Değerlendirmesi:</strong><br><li><strong>Lokasyon Avantajı:</strong> Ankara / Çankaya / Çayyolu/Ümitköy bölgesinde yüksek talep gören stratejik lokasyon.</li><br><li><strong>Yatırım Potansiyeli:</strong> Fiyat (30.850 ₺) bölgedeki emsal kurumsal portföylerle karşılaştırıldığında yüksek likidite ve getiri vadediyor.</li><br><li><strong>Hedef Kitle:</strong> Kurumsal yatırımcılar, üst segment konut alıcıları ve nitelikli kiracı profili için uygundur.</li></p></div>
+        
+    <div class="broker-playbook">
+      <div class="playbook-title">💡 Broker Görüşme & Müzakere Tüyoları (Sadece Danışman İçin)</div>
+      <ul><li>Mülkün kira getiri çarpanını ve amortisman süresini yatırımcı adaylarına özellikle vurgulayın.</li><li>Bölgedeki imar durumu veya değer artış trendi raporunu görüşme öncesinde mutlaka inceleyin.</li></ul>
+    </div>
+    
+        <div class="section-title">Açıklama</div>
+        <div class="narrative"><p>İlan No: 1316861991</p><p>Fiyat: 30.850 ₺</p><p>Konum: Ankara / Çankaya / Çayyolu/Ümitköy</p><p>Kategori 1: Emlak</p><p>Kategori 2: Konut</p><p>Marka: Kiralık</p><p>Seri: Daire</p><p>Arama Menüsü: Yepyeni-std</p><p>Ülke: Türkiye</p><p>Şehir: Ankara</p><p>İlçe: Çankaya</p><p>Mahalle: Çayyolu/Ümitköy</p><p>Mahalle (detay): Alacaatlı Mh.</p><p>Kimden: Emlak Ofisinden</p><p>Fiyat (Sayısal): 30850</p><p>Satıcı Tipi: Kurumsal</p><p>Sayfa Türü: İlan Detay</p><p>Yetkili Danışman : Cemre Aydınlar Gürkan</p><p>05348682787</p><p>Ankara&#x27;nın en hızlı değer kazanan bölgelerinden Yaşamkent / Çayyolu&#x27;nda yer alan Bordo Yaşam Sitesi&#x27;nde, modern mimarisi ve sosyal yaşam olanaklarıyla öne</p><p>çıkan hiç oturulmamış 141 kiralık dairemiz sizleri bekliyor.</p><p>Standart 1*1&#x27;lere göre çok daha kullanışlı olan bu plan, doğal ışık avantajı ile konforlu bir yaşam sağlar.</p><p>Açık mutfaklı modern tasarımı, geniş balkonu ve doğa manzarasıyla keyifli bir yaşam alanı sunan dairemizde merkezi sistem yerden ısıtma bulunmaktadır.</p><p>DAİRE ÖZELLİKLERİ</p><p>- 17.Kat</p><p>-PVC doğrama</p><p>SİTE ÖZELLİKLERİ</p><p>Modern şehir yaşamını konfor ve güvenlikle buluşturan Bordo Yaşam Sitesi&#x27;nde:</p><p>Ayrıca site içerisinde bulunan cadde mağazaları sayesinde günlük ihtiyaçlarınıza kolayca ulaşabilirsiniz.</p><p>LOKASYON</p><p>Detaylı bilgi ve randevu için işime geçebilirsiniz.</p><p>Cemre Aydınlar Gürkan</p><p>Gayrimenkul Danışmanı</p><p>05348682787</p></div>
+        <div class="section-title">Öne Çıkanlar</div><ul class="highlights"><li>Hem Bordo yaşam, hep çevre sitelerin peysajını görmektedir.</li><li>141 açık mutfaklı plan</li><li>40 m? Net / 49 m*Brütkullanım alanı</li><li>Geniş balkon (iki odadan çıkış)</li><li>Doğa manzaralı ferah cephe</li><li>Merkezi sistem yerden ısıtma (ısı pay ölçerli)</li><li>Siemens 3&#x27;lü ankastre set (ocak, fırın, aspiratör)</li><li>Hilton banyo &amp; duşakabin</li><li>Laminat parke zemin</li><li>Amerikan kapılar</li><li>Daire hiç kullanılmamıştır ve hemen taşınmaya hazırdır.</li><li>7/24 güvenlik ve kamera sistemi</li><li>Açık ve kapalı otopark</li><li>Kapalı yüzme havuzu</li><li>Fitness salonu</li><li>Sauna</li><li>Çocuk oyun alanları</li><li>Geniş peyzaj alanları</li><li>3 adet asansör (yük asansörü dahil)</li><li>Jeneratör &amp; su deposu</li><li>Koru Metro İstasyonu&#x27;na yakın</li><li>Başkent Üniversitesi ve Çankaya Üniversitesi&#x27;ne kolay ulaşım</li><li>Toplu taşıma duraklarına yürüme mesafesi</li><li>Market, eczane ve sosyal alanlara yakın</li></ul>
+        
+        <details class="dev"><summary>Teknik / geliştirici bilgisi</summary><div class="dev-body">Açıklama kaynağı: Coldwell Banker VIP / NEXA.OS PSI Motoru<br>Lighthouse: ✅ — · ❌ — · [WARN] — · ℹ —</div></details>
+      </div>
+      <div class="side-col">
+        <div class="contact">
+          <div class="brandline"><span class="dot"></span><span>NEXA · Gayrimenkul Mühendisi</span></div>
+          <div class="k">İlan No</div><div class="v">1316861991</div>
+          <div class="k">Konum</div><div class="v">Ankara · Çankaya · Çayyolu</div>
+          <div class="k">Fiyat</div><div class="v">30.850 ₺</div>
+          <span class="src-badge">Coldwell Banker VIP / NEXA.OS PSI Motoru</span>
+          <div class="share-row">
+            <a class="share-btn" href="javascript:void(0)" onclick="shareWhatsApp('Çayyolu Bordo Yaşamda Kiralık 1+1 | Köşe Daire | Çift Cephe')">WhatsApp</a>
+            <a class="share-btn" href="javascript:void(0)" onclick="copyLink()">Linki Kopyala</a>
+            <a class="share-btn" href="javascript:void(0)" onclick="window.print()">Yazdır</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="nexa-footer">Bu sayfa <b>NEXA.OS</b> tarafından otomatik üretilmiştir · 5 ilan · Gayrimenkul Mühendisi</div>
+<div class="lightbox" id="lightbox" onclick="if(event.target===this) closeLightbox()">
+  <span class="close" onclick="closeLightbox()">&times;</span>
+  <span class="nav prev" onclick="lbStep(-1)">‹</span>
+  <img id="lb-img" src="">
+  <span class="nav next" onclick="lbStep(1)">›</span>
+  <span class="count" id="lb-count"></span>
+</div>
+<div class="toast" id="nexa-toast"></div>
+<script>
+let __lbPhotos = [];
+let __lbIdx = 0;
+function openLightbox(photos, idx){
+  __lbPhotos = photos; __lbIdx = idx;
+  document.getElementById('lb-img').src = photos[idx];
+  document.getElementById('lb-count').textContent = (idx+1) + ' / ' + photos.length;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){ document.getElementById('lightbox').classList.remove('open'); }
+function lbStep(delta){
+  if(!__lbPhotos.length) return;
+  __lbIdx = (__lbIdx + delta + __lbPhotos.length) % __lbPhotos.length;
+  document.getElementById('lb-img').src = __lbPhotos[__lbIdx];
+  document.getElementById('lb-count').textContent = (__lbIdx+1) + ' / ' + __lbPhotos.length;
+}
+document.addEventListener('keydown', (e) => {
+  if(!document.getElementById('lightbox').classList.contains('open')) return;
+  if(e.key === 'Escape') closeLightbox();
+  if(e.key === 'ArrowRight') lbStep(1);
+  if(e.key === 'ArrowLeft') lbStep(-1);
+});
+function showToast(msg){
+  const t = document.getElementById('nexa-toast');
+  if(!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+function copyLink(){
+  navigator.clipboard.writeText(window.location.href).then(() => showToast('Bağlantı kopyalandı [OK]'));
+}
+function shareWhatsApp(title){
+  const url = 'https://wa.me/?text=' + encodeURIComponent(title + ' — ' + window.location.href);
+  window.open(url, '_blank');
+}
+function jumpTo(id){
+  if(!id) return;
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+</script>
+</body></html>

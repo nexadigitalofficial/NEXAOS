@@ -1,0 +1,569 @@
+{
+  "VIP ÜNİVERSİTE": {
+    "price_display": "1.350.000 TL",
+    "price_min": 1350000,
+    "price_max": 1350000,
+    "price_numeric": 1350000,
+    "down_payment": "825.000 TL (%50)",
+    "installment_terms": "24 Ay x 34.375 TL",
+    "monthly_installment": 34375,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1 (45 m²)"
+    ],
+    "description": "Garantili öğrenci/akademisyen kiralama talebi, yerden ısıtma, 3lü ankastre."
+  },
+  "WM - PRIME": {
+    "price_display": "1.799.000 TL",
+    "price_min": 1799000,
+    "price_max": 1799000,
+    "price_numeric": 1799000,
+    "down_payment": "950.000 TL",
+    "installment_terms": "30 Ay x 49.999 TL",
+    "monthly_installment": 49999,
+    "delivery_months": 30,
+    "delivery_display": "30 Ay Teslim",
+    "rooms": [
+      "1+1 (50 m²)"
+    ],
+    "description": "Konut yapı kooperatifi güvencesi, 30 ay sabit taksit, tramvay durağı 3 dk."
+  },
+  "ANGİM BEYTEPE": {
+    "price_display": "6.350.000 - 22.890.000 TL",
+    "price_min": 6350000,
+    "price_max": 22890000,
+    "price_numeric": 6350000,
+    "down_payment": "3.175.000 TL (%50)",
+    "installment_terms": "24-36 Ay Faizsiz Taksit",
+    "monthly_installment": 132000,
+    "delivery_months": 48,
+    "delivery_display": "48 Ay Teslim",
+    "rooms": [
+      "2+1",
+      "3+1",
+      "4+1",
+      "5+1",
+      "6+1"
+    ],
+    "description": "12 Blok, 84.000 m² yeşil alan, her daireye 2 kapalı otopark, lüks rezidans."
+  },
+  "ANKAPORT - SARAY": {
+    "price_display": "3.040.000 - 8.350.000 TL",
+    "price_min": 3040000,
+    "price_max": 8350000,
+    "price_numeric": 3040000,
+    "down_payment": "1.520.000 TL (%50)",
+    "installment_terms": "24 Ay Vade",
+    "monthly_installment": 63300,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1",
+      "3+1"
+    ],
+    "description": "1050 Konut, 150 Ofis, 70.000 m² AVM ve Cadde Mağazaları, sosyal tesisler."
+  },
+  "EVART YALIKAVAK": {
+    "price_display": "4.500.000 - 6.000.000 TL",
+    "price_min": 4500000,
+    "price_max": 6000000,
+    "price_numeric": 4500000,
+    "down_payment": "2.250.000 TL (%50)",
+    "installment_terms": "20 Ay Taksit",
+    "monthly_installment": 112500,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1 Dubleks Loft (45 m²)"
+    ],
+    "description": "Bodrum Gündoğan'da 1+1 (45 m²) Dubleks Loftlar. Çatı Dubleks 4.500.000 TL (125.000-150.000 €), Bahçe Dubleks 6.000.000 TL (160.000-200.000 €). %50 peşinat, 20 ay faizsiz taksit."
+  },
+  "GRANDE YAŞAMKENT": {
+    "price_display": "3.000.000 - 4.000.000 TL",
+    "price_min": 3000000,
+    "price_max": 4000000,
+    "price_numeric": 3000000,
+    "down_payment": "1.500.000 TL (%50)",
+    "installment_terms": "24-36 Ay Taksit",
+    "monthly_installment": 41600,
+    "delivery_months": 42,
+    "delivery_display": "42 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1"
+    ],
+    "description": "5 Blok mega proje, takas ve kaparo seçenekleri, geniş peyzaj alanları."
+  },
+  "GÖKDEMİR İMZA": {
+    "price_display": "3.900.000 - 8.000.000 TL",
+    "price_min": 3900000,
+    "price_max": 8000000,
+    "price_numeric": 3900000,
+    "down_payment": "1.950.000 TL (%50)",
+    "installment_terms": "20 Ay x 97.500 TL",
+    "monthly_installment": 97500,
+    "delivery_months": 36,
+    "delivery_display": "36 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1",
+      "3+1 (A-F 6 Blok)"
+    ],
+    "description": "6 Blok 25 katlı kuleler, A dan F ye blok bazlı bağımsız fiyatlandırma, 20 ay taksit."
+  },
+  "VIP YAŞAMKENT - GÖKDEMİR STAR": {
+    "price_display": "2.100.000 - 3.925.000 TL",
+    "price_min": 2100000,
+    "price_max": 3925000,
+    "price_numeric": 2100000,
+    "down_payment": "1.050.000 TL (%50)",
+    "installment_terms": "24-30 Ay Taksit",
+    "monthly_installment": 43750,
+    "delivery_months": 30,
+    "delivery_display": "30 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1",
+      "4+1"
+    ],
+    "description": "1232 Konutluk yaşam vadisi, 8-14. kat arası avantajlı daire seçenekleri."
+  },
+  "IDEA - START BRAVO": {
+    "price_display": "2.100.000 - 3.200.000 TL",
+    "price_min": 2100000,
+    "price_max": 3200000,
+    "price_numeric": 2100000,
+    "down_payment": "1.050.000 TL (%50)",
+    "installment_terms": "15 Ay x 70.000 TL",
+    "monthly_installment": 70000,
+    "delivery_months": 15,
+    "delivery_display": "15 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1"
+    ],
+    "description": "208 Dairelik butik konsept, 15 ay faizsiz ödeme kolaylığı, merkezi konum."
+  },
+  "MONZA MOON": {
+    "price_display": "2.650.000 - 3.750.000 TL",
+    "price_min": 2650000,
+    "price_max": 3750000,
+    "price_numeric": 2650000,
+    "down_payment": "1.325.000 TL (%50)",
+    "installment_terms": "15 Ay x 88.000 TL",
+    "monthly_installment": 88000,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1"
+    ],
+    "description": "Çankaya Üniversitesine yürüme mesafesinde, %10 nakit peşin indirimi, tapu devir güvencesi."
+  },
+  "NARÇİN RONYA CITY - 1": {
+    "price_display": "3.200.000 - 4.600.000 TL",
+    "price_min": 3200000,
+    "price_max": 4600000,
+    "price_numeric": 3200000,
+    "down_payment": "1.600.000 TL (%50)",
+    "installment_terms": "12-24 Ay Taksit",
+    "monthly_installment": 66000,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1"
+    ],
+    "description": "Güneş enerjisi (GES) ile sıfır aidat hedefi, kapalı yüzme havuzu, fitness."
+  },
+  "NEVA - START BRAVO": {
+    "price_display": "4.900.000 - 6.550.000 TL",
+    "price_min": 4900000,
+    "price_max": 6550000,
+    "price_numeric": 4900000,
+    "down_payment": "2.450.000 TL (%50)",
+    "installment_terms": "12 Ay x 204.000 TL",
+    "monthly_installment": 204000,
+    "delivery_months": 18,
+    "delivery_display": "18 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1"
+    ],
+    "description": "Metro ve Onkoloji Hastanesi yanında, yüksek kira çarpanlı premium kule."
+  },
+  "S POINT - VIP SARAY": {
+    "price_display": "1.990.000 - 4.000.000 TL",
+    "price_min": 1990000,
+    "price_max": 4000000,
+    "price_numeric": 1990000,
+    "down_payment": "995.000 TL (%50) veya %0 Peşinatsız",
+    "installment_terms": "18 Ay x 55.270 TL",
+    "monthly_installment": 55270,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1"
+    ],
+    "description": "Tek blokta 149 seçkin daire, peşinatsız 18 ay taksit veya %50 peşinat seçeneği."
+  },
+  "TRIOLE YAŞAM": {
+    "price_display": "2.950.000 - 4.200.000 TL",
+    "price_min": 2950000,
+    "price_max": 4200000,
+    "price_numeric": 2950000,
+    "down_payment": "2.000.000 TL",
+    "installment_terms": "36 Ay x 50.500 TL",
+    "monthly_installment": 50500,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1"
+    ],
+    "description": "A Blok 15 kat, B ve C Blok 14 kat, 36 ay uzun vadeli taksit, cadde dükkanları."
+  },
+  "VERDE MONA": {
+    "price_display": "3.200.000 - 5.800.000 TL",
+    "price_min": 3200000,
+    "price_max": 5800000,
+    "price_numeric": 3200000,
+    "down_payment": "1.600.000 TL (%50)",
+    "installment_terms": "18-24 Ay Taksit",
+    "monthly_installment": 66000,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1",
+      "3+1",
+      "4+1",
+      "6+1"
+    ],
+    "description": "Geniş daire tipleri, ferah kat planları, peyzaj ve çocuk oyun alanları."
+  },
+  "VIP AKADEMİ": {
+    "price_display": "2.421.000 - 2.740.000 TL",
+    "price_min": 2421000,
+    "price_max": 2740000,
+    "price_numeric": 2421000,
+    "down_payment": "1.345.000 TL (%50)",
+    "installment_terms": "10 Ay x 134.500 TL",
+    "monthly_installment": 134500,
+    "delivery_months": 12,
+    "delivery_display": "12 Ay Teslim",
+    "rooms": [
+      "1+1 (45 m²)"
+    ],
+    "description": "260 Dairelik yatay mimari, %10 peşin indirimi, 10 ay vade farksız taksit."
+  },
+  "VIP AKADEMİ 2": {
+    "price_display": "1.990.000 - 2.490.000 TL",
+    "price_min": 1990000,
+    "price_max": 2490000,
+    "price_numeric": 1990000,
+    "down_payment": "995.000 TL (%50)",
+    "installment_terms": "12-18 Ay Taksit",
+    "monthly_installment": 55000,
+    "delivery_months": 18,
+    "delivery_display": "18 Ay Teslim",
+    "rooms": [
+      "1+1 (45 m²)"
+    ],
+    "description": "AYBÜ Külliyesi çevresi, garantili kiracı potansiyeli, tapu devir hazır."
+  },
+  "VIP MARIN": {
+    "price_display": "4.100.000 - 5.935.000 TL",
+    "price_min": 4100000,
+    "price_max": 5935000,
+    "price_numeric": 4100000,
+    "down_payment": "2.600.000 TL",
+    "installment_terms": "24 Ay x 64.000 TL",
+    "monthly_installment": 64000,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1 Bahçe Dubleks & Çatı Loft"
+    ],
+    "description": "İncekum plajına 5 dk, açık/kapalı havuzlar, Türk hamamı, sauna, deniz manzaralı."
+  },
+  "VIP YENİKENT": {
+    "price_display": "2.450.000 - 3.850.000 TL",
+    "price_min": 2450000,
+    "price_max": 3850000,
+    "price_numeric": 2450000,
+    "down_payment": "1.225.000 TL (%50)",
+    "installment_terms": "18-24 Ay Taksit",
+    "monthly_installment": 51000,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1"
+    ],
+    "description": "Sincan Yenikent merkezde, modern mimari ve esnek taksit seçenekleri."
+  },
+  "VIP ÇAKIRLAR": {
+    "price_display": "2.800.000 - 3.900.000 TL",
+    "price_min": 2800000,
+    "price_max": 3900000,
+    "price_numeric": 2800000,
+    "down_payment": "1.400.000 TL (%50)",
+    "installment_terms": "12-18 Ay Taksit",
+    "monthly_installment": 77000,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1"
+    ],
+    "description": "Çakırlar kavşağı yakınında, metroya kolay erişimli seçkin kule."
+  },
+  "VIVA - START BRAVO": {
+    "price_display": "2.100.000 - 3.300.000 TL",
+    "price_min": 2100000,
+    "price_max": 3300000,
+    "price_numeric": 2100000,
+    "down_payment": "1.050.000 TL (%50)",
+    "installment_terms": "12-18 Ay Taksit",
+    "monthly_installment": 58000,
+    "delivery_months": 18,
+    "delivery_display": "18 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1"
+    ],
+    "description": "Protokol yolu üzerinde, havalimanı ve üniversite aksı arasında yüksek primli."
+  },
+  "BORDO YAŞAM": {
+    "price_display": "2.450.000 - 3.850.000 TL",
+    "price_min": 2450000,
+    "price_max": 3850000,
+    "price_numeric": 2450000,
+    "down_payment": "1.225.000 TL (%50)",
+    "installment_terms": "24 Ay Taksit",
+    "monthly_installment": 51000,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1"
+    ],
+    "description": "Batıkent metrosuna yakın, modern iç donanım, ferah peyzaj."
+  },
+  "EXCELANCE VADİ": {
+    "price_display": "6.200.000 - 12.500.000 TL",
+    "price_min": 6200000,
+    "price_max": 12500000,
+    "price_numeric": 6200000,
+    "down_payment": "3.100.000 TL (%50)",
+    "installment_terms": "24 Ay Taksit",
+    "monthly_installment": 129000,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "2+1",
+      "3+1",
+      "4+1"
+    ],
+    "description": "Dikmen Vadisine bakan eşsiz manzara, akıllı ev otomasyonu, lüks lobi."
+  },
+  "EXCELANCE BEYTEPE": {
+    "price_display": "7.500.000 - 16.000.000 TL",
+    "price_min": 7500000,
+    "price_max": 16000000,
+    "price_numeric": 7500000,
+    "down_payment": "3.750.000 TL (%50)",
+    "installment_terms": "24-30 Ay Taksit",
+    "monthly_installment": 156000,
+    "delivery_months": 30,
+    "delivery_display": "30 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1",
+      "4+1"
+    ],
+    "description": "Beytepe bulvarı üzerinde, geniş balkonlar, yerden ısıtma ve kapalı otopark."
+  },
+  "JOVEN PORT": {
+    "price_display": "2.850.000 - 4.100.000 TL",
+    "price_min": 2850000,
+    "price_max": 4100000,
+    "price_numeric": 2850000,
+    "down_payment": "1.425.000 TL (%50)",
+    "installment_terms": "24 Ay Taksit",
+    "monthly_installment": 59000,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1"
+    ],
+    "description": "Havalimanına 5 dakika mesafede, yüksek kira getirili yatırım projesi."
+  },
+  "JOVEN KAMPÜS": {
+    "price_display": "1.950.000 - 2.800.000 TL",
+    "price_min": 1950000,
+    "price_max": 2800000,
+    "price_numeric": 1950000,
+    "down_payment": "975.000 TL (%50)",
+    "installment_terms": "18-24 Ay Taksit",
+    "monthly_installment": 40600,
+    "delivery_months": 18,
+    "delivery_display": "18 Ay Teslim",
+    "rooms": [
+      "1+1 (45 m²)"
+    ],
+    "description": "Yıldırım Beyazıt Üniversitesi yerleşkesine komşu, 18 ayda teslim garantisi."
+  },
+  "NEST İNCEK": {
+    "price_display": "5.500.000 - 9.800.000 TL",
+    "price_min": 5500000,
+    "price_max": 9800000,
+    "price_numeric": 5500000,
+    "down_payment": "2.750.000 TL (%50)",
+    "installment_terms": "24 Ay Taksit",
+    "monthly_installment": 114500,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "2+1",
+      "3+1",
+      "4+1 Villa & Bahçe Katı"
+    ],
+    "description": "İncekin kalbinde, geniş teras ve müstakil bahçe kullanımına sahip lüks daireler."
+  },
+  "NATURA GOLF": {
+    "price_display": "6.050.000 - 6.550.000 TL",
+    "price_min": 6050000,
+    "price_max": 6550000,
+    "price_numeric": 6050000,
+    "down_payment": "3.025.000 TL (%50)",
+    "installment_terms": "18 Ay Taksit",
+    "monthly_installment": 168000,
+    "delivery_months": 18,
+    "delivery_display": "18 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1"
+    ],
+    "description": "Çayyolu golf sahası çevresinde, doğayla iç içe lüks konut projesi."
+  },
+  "SMD TWIN": {
+    "price_display": "3.600.000 - 5.200.000 TL",
+    "price_min": 3600000,
+    "price_max": 5200000,
+    "price_numeric": 3600000,
+    "down_payment": "1.800.000 TL (%50)",
+    "installment_terms": "24 Ay Taksit",
+    "monthly_installment": 75000,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1 İkiz Kuleler"
+    ],
+    "description": "Pursaklar Saray kavşağında ikiz kule mimarisi, panoramik Ankara manzarası."
+  },
+  "SMD PROTOKOL": {
+    "price_display": "4.200.000 - 6.800.000 TL",
+    "price_min": 4200000,
+    "price_max": 6800000,
+    "price_numeric": 4200000,
+    "down_payment": "2.100.000 TL (%50)",
+    "installment_terms": "24 Ay Taksit",
+    "monthly_installment": 87500,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1",
+      "3+1"
+    ],
+    "description": "Protokol yolu cepheli, ticari dükkanlar ve yüksek standartlı konutlar."
+  },
+  "CONCEPT BULVAR": {
+    "price_display": "3.200.000 - 4.800.000 TL",
+    "price_min": 3200000,
+    "price_max": 4800000,
+    "price_numeric": 3200000,
+    "down_payment": "1.600.000 TL (%50)",
+    "installment_terms": "24 Ay Taksit",
+    "monthly_installment": 66600,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1"
+    ],
+    "description": "Bağlıca Bulvarı üzerinde, alışveriş ve ulaşım akslarına sıfır konum."
+  },
+  "SARITAŞ MAS LORA - YAŞAMKENT": {
+    "price_display": "2.650.000 - 3.850.000 TL",
+    "price_min": 2650000,
+    "price_max": 3850000,
+    "price_numeric": 2650000,
+    "down_payment": "1.325.000 TL (%50)",
+    "installment_terms": "24-30 Ay Taksit",
+    "monthly_installment": 55000,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1"
+    ],
+    "description": "Çankaya Üniversitesi ve Eskişehir Yolu yönü, açık otopark, Bina Tamamlama Sigortalı ve resmi sözleşme güvenceli."
+  },
+  "MAS YAŞAMKENT": {
+    "price_display": "2.990.000 - 14.000.000 TL",
+    "price_min": 2990000,
+    "price_max": 14000000,
+    "price_numeric": 2990000,
+    "down_payment": "1.495.000 TL (%50)",
+    "installment_terms": "24-36 Ay Vade",
+    "monthly_installment": 62500,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1",
+      "4+1"
+    ],
+    "description": "Yaşamkent merkezinde, peşin ve vadeli ödeme seçenekleri, cadde cepheli seçkin rezidans projesi."
+  },
+  "MIOSTELLA": {
+    "price_display": "2.850.000 - 4.500.000 TL",
+    "price_min": 2850000,
+    "price_max": 4500000,
+    "price_numeric": 2850000,
+    "down_payment": "1.425.000 TL (%50)",
+    "installment_terms": "24-36 Ay Vade",
+    "monthly_installment": 59375,
+    "delivery_months": 24,
+    "delivery_display": "24 Ay Teslim",
+    "rooms": [
+      "1+1",
+      "2+1"
+    ],
+    "description": "MioStella Diplomatico; Yargıtay, Anayasa Mahkemesi ve üniversitelere 8-11 dk, 23 katlı kule, 14 adet villa tipi mağaza."
+  },
+  "VIP KIRIKKALE - MÜSTAKİL": {
+    "price_display": "432.000 - 488.000 TL",
+    "price_min": 432000,
+    "price_max": 488000,
+    "price_numeric": 432000,
+    "down_payment": "216.000 TL (%50)",
+    "installment_terms": "12-24 Ay Sabit Taksit",
+    "monthly_installment": 18000,
+    "delivery_months": 12,
+    "delivery_display": "12 Ay Teslim",
+    "rooms": [
+      "Müstakil Parsel / Villa Arsası"
+    ],
+    "description": "Hemen tapu teslim, bağımsız müstakil parsel villa arsaları, altyapısı hazır yüksek prim potansiyeli."
+  }
+}

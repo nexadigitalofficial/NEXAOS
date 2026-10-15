@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <title>NEXA.OS — Unified PropTech Command Center</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#050608">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cpolygon points=%2716,2 30,16 16,30 2,16%27 fill=%27%23c9a45c%27/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,12 +29,13 @@
   --text-1:#b9b8b4;
   --text-2:#71716d;
 }
-*{box-sizing:border-box;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{margin:0;padding:0;background:
     radial-gradient(ellipse 1000px 500px at 15% -10%, rgba(201,164,92,.06), transparent 60%),
     radial-gradient(ellipse 900px 500px at 100% 0%, rgba(61,220,132,.04), transparent 55%),
     var(--bg-0);
-  color:var(--text-0); font-family:'Inter',system-ui,sans-serif; min-height:100vh;}
+  color:var(--text-0); font-family:'Inter',system-ui,sans-serif; min-height:100vh;
+  touch-action:manipulation; overscroll-behavior-y:contain;}
 .mono{font-family:'JetBrains Mono',ui-monospace,monospace;}
 .serif{font-family:'Playfair Display',Georgia,serif;}
 
@@ -74,6 +79,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .urlrow input[type=text], .urlrow select{flex:1;min-width:240px;background:var(--bg-2);border:1px solid var(--line);
   color:var(--text-0);padding:14px 16px;border-radius:10px;font-size:14px;
   transition:border-color .2s ease, box-shadow .2s ease;}
+input::placeholder, textarea::placeholder { color: #8a8d93 !important; opacity: 1 !important; }
 .urlrow input[type=text]:focus, .urlrow select:focus{outline:none;border-color:var(--gold-dim);
   box-shadow:0 0 0 3px rgba(201,164,92,.12);}
 .btn{border:none;border-radius:10px;padding:14px 24px;font-size:13.5px;font-weight:600;
@@ -191,20 +197,113 @@ footer b{color:var(--gold-soft);}
         <div class="sub">Unified PropTech Command Center · v5.0</div>
       </div>
     </div>
-    <div class="badge-live"><span class="pulse"></span> System online</div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="/site" target="_blank" class="btn btn-ghost" style="padding:7px 14px;font-size:12px;border-radius:20px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;border-color:var(--line);">
+        🌐 Gayrimenkul Mühendisi Web Sitesi ↗
+      </a>
+      <div class="badge-live"><span class="pulse"></span> System online</div>
+    </div>
   </header>
 
   <!-- Tabs Navigation -->
   <div class="tabs-nav">
-    <button class="tab-btn active" id="tabBtn-sahibinden" onclick="switchTab('sahibinden')">◆ Sahibinden Scraper</button>
+    <button class="tab-btn active" id="tabBtn-criteria" onclick="switchTab('criteria')" style="background:rgba(201,164,92,.12);border-color:var(--gold);color:var(--gold-soft);font-weight:700;">★ Kritere Göre Ara (NLP & Gemini)</button>
+    <button class="tab-btn" id="tabBtn-sahibinden" onclick="switchTab('sahibinden')">◆ Sahibinden Scraper</button>
     <button class="tab-btn" id="tabBtn-cb" onclick="switchTab('cb')">◆ CB Scraper</button>
     <button class="tab-btn" id="tabBtn-whatsapp" onclick="switchTab('whatsapp')">◆ WhatsApp Parser</button>
     <button class="tab-btn" id="tabBtn-match" onclick="switchTab('match')">◆ AI Matcher Engine</button>
     <button class="tab-btn" id="tabBtn-pdf" onclick="switchTab('pdf')" style="background:rgba(201,164,92,.08);border-color:rgba(201,164,92,.3);color:var(--gold-soft);">✦ URL → PDF Sunum</button>
   </div>
 
+  <!-- Tab: Kritere Göre Ara (NLP & Gemini Engine) -->
+  <div class="tab-pane active" id="pane-criteria">
+    <div class="panel">
+      <h2>★ Doğal Dil ile Kriter Bazlı Portföy Arama & Otomatik Vitrin (Gemini & NLP)</h2>
+      
+      <p style="font-size:13px;color:var(--text-1);margin:0 0 16px;line-height:1.5;">
+        Aramak istediğiniz mülkü günlük Türkçe ile tarif edin. 
+        <strong style="color:var(--gold-soft);">NEXA.OS Doğal Dil Motoru & Gemini API</strong>, Türkiye'nin 
+        <span style="color:var(--gold);">81 İli, 973 İlçesi ve 32.279 Mahallesini</span> tarayarak kriterleri anında hatasız bir Sahibinden arama linkine dönüştürür ve dilediğinizde tek tıkla canlı vitrinini oluşturur.
+      </p>
+
+      <!-- Prompt Input -->
+      <div style="margin-bottom:14px;">
+        <label style="display:block;font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:600;">
+          Aranan Mülk Tanımı & Kriterler (Doğal Dil)
+        </label>
+        <textarea id="crit_prompt" rows="3" style="width:100%;background:var(--bg-2);border:1px solid var(--line);color:var(--text-0);padding:14px 16px;border-radius:10px;font-size:14px;font-family:inherit;resize:vertical;" placeholder="Örnek: Ankara Çankaya Alacaatlı'da 20 milyon ile 40 milyon arası 4+1 satılık villa getir fiyata göre artan..."></textarea>
+      </div>
+
+      <!-- Quick Preset Pills -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+        <span style="font-size:11px;color:var(--text-2);align-self:center;text-transform:uppercase;letter-spacing:.05em;">Hızlı Örnekler:</span>
+        <button type="button" class="btn btn-ghost" style="padding:6px 12px;font-size:12px;border-radius:20px;" onclick="setCritPrompt('Ankara Çankaya Alacaatlı\'da 20 milyon ile 40 milyon arası 4+1 satılık villa getir fiyata göre artan')">🏡 Alacaatlı 4+1 Villa (Artan Fiyat)</button>
+        <button type="button" class="btn btn-ghost" style="padding:6px 12px;font-size:12px;border-radius:20px;" onclick="setCritPrompt('İzmir Aliağa Bozburunadaları hisseli tapu ada 100-105 parsel 5-6 satılık arsa en yeni ilanlar')">🌾 Aliağa Hisseli Arsa (En Yeni)</button>
+        <button type="button" class="btn btn-ghost" style="padding:6px 12px;font-size:12px;border-radius:20px;" onclick="setCritPrompt('Antalya Döşemealtı Çığlık Ayanlar kiralık daire fiyata göre azalan')">🏢 Döşemealtı Kiralık Daire (Azalan)</button>
+        <button type="button" class="btn btn-ghost" style="padding:6px 12px;font-size:12px;border-radius:20px;" onclick="setCritPrompt('Ankara bankadan satılık konut 2 milyon ile 5 milyon arası 4+1 2 yaşında 100-200 metrekare')">🏛️ Bankadan Satılık Konut</button>
+      </div>
+
+      <!-- Advanced Filter Grid -->
+      <div class="adv-grid" style="margin-bottom:20px;">
+        <div class="field" style="grid-column: span 2;">
+          <label>Gemini API Key (İsteğe Bağlı · Boş bırakılırsa yerel 32.279 mahalle motoru devrededir)</label>
+          <input type="password" id="crit_gemini_api_key" placeholder="AI anlamsal zenginleştirme için Gemini API Anahtarı girin…">
+        </div>
+        <div class="field">
+          <label>Sıralama (Sorgudan Algılanamazsa veya Ezmek İçin)</label>
+          <select id="crit_sorting">
+            <option value="">Otomatik (NLP'den Algıla)</option>
+            <option value="price_asc">Fiyata Göre Artan (En Ucuz)</option>
+            <option value="price_desc">Fiyata Göre Azalan (En Yüksek)</option>
+            <option value="date_desc">Tarihe Göre En Yeni</option>
+            <option value="date_asc">Tarihe Göre En Eski</option>
+            <option value="m2_asc">m²'ye Göre Artan</option>
+            <option value="m2_desc">m²'ye Göre Azalan</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>İlan Sınırı (0 = Tümü)</label>
+          <input type="number" id="crit_limit" value="10" min="0">
+        </div>
+      </div>
+
+      <!-- Dual Action Buttons -->
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
+        <button class="btn btn-gold" id="btnCritSearchScrape" onclick="executeCriteriaSearch(true)" style="padding:14px 28px;font-size:14px;">
+          🚀 LINK OLUŞTUR & DOĞRUDAN VİTRİNİ TARA
+        </button>
+        <button class="btn btn-ghost" id="btnCritParseOnly" onclick="executeCriteriaSearch(false)" style="padding:14px 24px;font-size:14px;">
+          🔗 SADECE LINK OLUŞTUR
+        </button>
+      </div>
+
+      <!-- Result / Breakdown Preview Card (Initially hidden) -->
+      <div id="crit_result_card" style="display:none;background:var(--bg-2);border:1px solid var(--gold-dim);border-radius:12px;padding:20px;margin-top:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:10px;flex-wrap:wrap;gap:10px;">
+          <div style="font-size:13px;font-weight:700;color:var(--gold-soft);display:flex;align-items:center;gap:8px;">
+            <span>✓ ÇÖZÜMLENEN KRİTERLER VE HEDEF URL</span>
+          </div>
+          <span id="crit_engine_pill" style="font-size:11px;padding:4px 12px;border-radius:15px;background:rgba(201,164,92,.15);color:var(--gold-soft);border:1px solid var(--gold-dim);"></span>
+        </div>
+
+        <!-- URL Container with copy and open buttons -->
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;background:var(--bg-1);padding:10px 14px;border-radius:8px;border:1px solid var(--line);flex-wrap:wrap;">
+          <input type="text" id="crit_generated_url" readonly class="mono" style="flex:1;background:transparent;border:none;color:var(--gold);font-size:13px;outline:none;" value="">
+          <button type="button" class="btn btn-ghost" style="padding:7px 14px;font-size:12px;" onclick="copyCritUrl()">📋 Kopyala</button>
+          <a id="crit_open_link" href="#" target="_blank" class="btn btn-ghost" style="padding:7px 14px;font-size:12px;text-decoration:none;">↗ Yeni Sekmede Aç</a>
+        </div>
+
+        <!-- Entity Chips Grid -->
+        <div id="crit_chips_grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">
+          <!-- Chips injected dynamically -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Tab: Sahibinden Scraper -->
-  <div class="tab-pane active" id="pane-sahibinden">
+  <div class="tab-pane" id="pane-sahibinden" style="display:none;">
     <div class="panel">
       <h2>① Sahibinden Scraper Settings</h2>
       <div class="urlrow">
@@ -590,6 +689,112 @@ function switchTab(tabId) {
   
   document.getElementById(`tabBtn-${tabId}`).classList.add('active');
   document.getElementById(`pane-${tabId}`).style.display = 'block';
+}
+
+function setCritPrompt(text) {
+  document.getElementById('crit_prompt').value = text;
+}
+
+function copyCritUrl() {
+  const urlEl = document.getElementById('crit_generated_url');
+  if(!urlEl || !urlEl.value) return;
+  navigator.clipboard.writeText(urlEl.value);
+  alert('Sahibinden Arama URL\'i panoya kopyalandı:\n' + urlEl.value);
+}
+
+function executeCriteriaSearch(autoScrape) {
+  const prompt = document.getElementById('crit_prompt').value.trim();
+  if(!prompt) {
+    alert('Lütfen aramak istediğiniz gayrimenkulün kriterlerini veya tanımını yazın.');
+    return;
+  }
+
+  const geminiApiKey = document.getElementById('crit_gemini_api_key').value.trim();
+  const sorting = document.getElementById('crit_sorting').value;
+  const limit = parseInt(document.getElementById('crit_limit').value) || 0;
+
+  const btnScrape = document.getElementById('btnCritSearchScrape');
+  const btnParse = document.getElementById('btnCritParseOnly');
+  btnScrape.disabled = true;
+  btnParse.disabled = true;
+  btnScrape.innerText = '⏳ AI ve Harita Çözümleniyor...';
+
+  fetch('/api/nlp-search/parse', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      prompt: prompt,
+      gemini_api_key: geminiApiKey,
+      sorting: sorting
+    })
+  })
+  .then(r => r.json())
+  .then(data => {
+    btnScrape.disabled = false;
+    btnParse.disabled = false;
+    btnScrape.innerText = '🚀 LINK OLUŞTUR & DOĞRUDAN VİTRİNİ TARA';
+
+    if(data.error) {
+      alert('HATA: ' + data.error);
+      return;
+    }
+
+    // Display result card
+    const card = document.getElementById('crit_result_card');
+    card.style.display = 'block';
+    document.getElementById('crit_generated_url').value = data.url;
+    document.getElementById('crit_open_link').href = data.url;
+    document.getElementById('crit_engine_pill').innerText = data.engine_used;
+
+    // Render chips
+    const grid = document.getElementById('crit_chips_grid');
+    grid.innerHTML = '';
+    const details = data.details || {};
+    
+    const chipItems = [
+      { label: 'Kategori', val: details.category },
+      { label: 'Lokasyon Yolu', val: details.location_path },
+      { label: 'Fiyat Aralığı', val: (details.price_min || details.price_max) ? `${(details.price_min || 0).toLocaleString('tr-TR')} ₺ - ${details.price_max ? details.price_max.toLocaleString('tr-TR') + ' ₺' : 'Sınırsız'}` : null },
+      { label: 'm² Aralığı', val: (details.m2_min || details.m2_max) ? `${details.m2_min || 0} - ${details.m2_max || 'Maks'} m²` : null },
+      { label: 'Oda Sayısı', val: (details.rooms && details.rooms.length) ? details.rooms.join(', ') : null },
+      { label: 'Bina Yaşı', val: (details.building_age && details.building_age.length) ? details.building_age.join(', ') : null },
+      { label: 'Sıralama', val: details.sorting || 'Varsayılan' },
+      { label: 'Kimden', val: details.kimden },
+      { label: 'Tapu Durumu', val: details.tapu_durumu },
+      { label: 'Ada / Parsel', val: (details.ada_min || details.parsel_min) ? `Ada: ${details.ada_min || '-'}-${details.ada_max || '-'} | Parsel: ${details.parsel_min || '-'}-${details.parsel_max || '-'}` : null }
+    ];
+
+    chipItems.forEach(item => {
+      if(item.val) {
+        const div = document.createElement('div');
+        div.style.background = 'var(--bg-3)';
+        div.style.border = '1px solid var(--line)';
+        div.style.borderRadius = '8px';
+        div.style.padding = '8px 12px';
+        div.innerHTML = `<span style="display:block;font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;">${esc(item.label)}</span><span style="font-size:12.5px;font-weight:600;color:var(--gold-soft);">${esc(item.val)}</span>`;
+        grid.appendChild(div);
+      }
+    });
+
+    if(autoScrape) {
+      // Sync into Sahibinden scraper fields and trigger job
+      document.getElementById('sh_url').value = data.url;
+      document.getElementById('sh_limit').value = limit;
+      if(geminiApiKey) {
+        document.getElementById('sh_gemini_api_key').value = geminiApiKey;
+      }
+      
+      // Start job and scroll to progress
+      startJob('sahibinden');
+      document.getElementById('progressPanel').scrollIntoView({ behavior: 'smooth' });
+    }
+  })
+  .catch(err => {
+    btnScrape.disabled = false;
+    btnParse.disabled = false;
+    btnScrape.innerText = '🚀 LINK OLUŞTUR & DOĞRUDAN VİTRİNİ TARA';
+    alert('Sunucu iletişim hatası: ' + err);
+  });
 }
 
 function startJob(jobType) {

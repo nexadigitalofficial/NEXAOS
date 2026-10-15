@@ -1,20 +1,72 @@
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-*.class
+*$py.class
+
+# Output directories & scratch
+scratch/
+downloaded_files/
+scraper_output/
+matcher_output/
+jobs/
+detay_html/
+cache_cb_danisman/
+cache_bayat/
+
+# Logs and temporary databases
 *.log
+*.sqlite3
+*.jsonl
+logs/
+3/logs/
+watch_state.json
+nexa_database.db
+nexa_embedding_cache.json
 
-# Environment variables
-.env
+# Test & Scrape HTML / PDF artifacts
+*.pdf
+ilan_*.html
+pagespeed_*.html
+pagespeed_result.*
+otomatik_magaza_testi.html
+test_*.html
+test_*.pdf
+test_pw.pdf
+cb_store_screenshot.jpg
+*.tmp
+*.bak
 
-# Job outputs and temporary runtime files
-jobs/*
-!jobs/.gitkeep
-static/generated_pdfs/*
-!static/generated_pdfs/.gitkeep
+# Heavy local assets (kept local, not deployed)
+static/img/pdf_previews/
+static/projeler/
+projeler/
+
+# Presentations generated pdfs
+static/generated_pdfs/
 
 # IDEs
 .vscode/
 .idea/
-downloaded_files/
 dist/
 
+# Google OAuth & Security Secrets (Never commit credentials)
+client_secret*.json
+token*.json
+*_token.json
+nexascout/client_secret*.json
+nexascout/token*.json
+
+# Windows Duplicate Artifacts
+* - Kopya*
+*- Kopya*
+*- Kopya.*
+*-Kopya*

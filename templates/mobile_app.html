@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>NEXA OS | Gayrimenkul Mühendisi</title>
+  
+  <!-- PWA & Native App Meta -->
+  <meta name="theme-color" content="#070D18" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="NEXA OS" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" type="image/png" href="https://i.ibb.co/ksPFvjCt/Yigit-Bey1.png" />
+  <link rel="apple-touch-icon" href="https://i.ibb.co/ksPFvjCt/Yigit-Bey1.png" />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ── RESET & DESIGN TOKENS ── */
+    :root {
+      --bg-app: #070D18;
+      --bg-surface: #0E182A;
+      --bg-elevated: #162540;
+      --bg-glass: rgba(14, 24, 42, 0.88);
+      
+      --gold: #D4AF37;
+      --gold-glow: rgba(212, 175, 55, 0.35);
+      --gold-light: #F4E4A6;
+      --blue-accent: #2563EB;
+      --blue-glow: rgba(37, 99, 235, 0.28);
+      
+      --text-primary: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-gold: rgba(212, 175, 55, 0.28);
+      
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 22px;
+      --radius-sheet: 26px;
+      
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 16px);
+      --header-h: 56px;
+      --bottom-bar-h: 68px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    input, textarea {
+      user-select: auto;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-app);
+      color: var(--text-primary);
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+    }
+
+    /* ── APP SHELL LAYOUT ── */
+    #app-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── DYNAMIC APP HEADER ── */
+    .app-header {
+      height: calc(var(--header-h) + var(--safe-top));
+      padding-top: var(--safe-top);
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 16px;
+      padding-right: 16px;
+      z-index: 1000;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .app-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .brand-avatar-wrap {
+      position: relative;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--gold);
+      overflow: hidden;
+    }
+
+    .brand-avatar {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .brand-status-dot {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #10B981;
+      border: 1.5px solid var(--bg-app);
+    }
+
+    .brand-text h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      color: var(--text-primary);
+      line-height: 1.1;
+    }
+
+    .brand-text p {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .header-btn:active {
+      transform: scale(0.92);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    /* ── TAB VIEWPORT ── */
+    .tab-viewport {
+      flex: 1;
+      margin-top: calc(var(--header-h) + var(--safe-top));
+      margin-bottom: calc(var(--bottom-bar-h) + var(--safe-bottom));
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      position: relative;
+    }
+
+    .tab-pane {
+      display: none;
+      padding: 14px 16px 28px 16px;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── PERSISTENT BOTTOM TAB BAR ── */
+    .bottom-tab-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: calc(var(--bottom-bar-h) + var(--safe-bottom));
+      padding-bottom: var(--safe-bottom);
+      background: var(--bg-glass);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 1000;
+      box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: var(--text-secondary);
+      font-size: 10.5px;
+      font-weight: 500;
+      cursor: pointer;
+      min-height: 48px;
+      transition: transform 0.12s ease, color 0.15s ease;
+      position: relative;
+    }
+
+    .tab-item:active {
+      transform: scale(0.92);
+    }
+
+    .tab-item i {
+      font-size: 19px;
+      transition: color 0.15s ease;
+    }
+
+    .tab-item.active {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .tab-item.active i {
+      color: var(--gold);
+      text-shadow: 0 0 12px var(--gold-glow);
+    }
+
+    .tab-item.active::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      width: 14px;
+      height: 3px;
+      background: var(--gold);
+      border-radius: 99px;
+      box-shadow: 0 0 8px var(--gold);
+    }
+
+    /* ── LUXURY UI CARDS ── */
+    .app-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-card.gold-bordered {
+      border: 1px solid var(--border-gold);
+      background: linear-gradient(145deg, #0E182A 0%, #152238 100%);
+    }
+
+    /* ── FEED / HOME SECTION ── */
+    .ticker-pill {
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid var(--border-gold);
+      padding: 6px 12px;
+      border-radius: 99px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gold-light);
+      margin-bottom: 12px;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10B981;
+      animation: blink 1.8s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero-greeting {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #FFFFFF 40%, var(--gold-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    /* ── METRIC TILES ── */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .metric-tile {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 8px;
+      text-align: center;
+    }
+
+    .metric-tile .val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .metric-tile .lbl {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ── HORIZONTAL SNAP SCROLLER ── */
+    .section-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .sec-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sec-link {
+      font-size: 11px;
+      color: var(--gold);
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .snap-scroller {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 8px;
+      -webkit-overflow-scrolling: touch;
+      margin-left: -16px;
+      margin-right: -16px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .snap-scroller::-webkit-scrollbar { display: none; }
+
+    .snap-card {
+      flex: 0 0 240px;
+      scroll-snap-align: start;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .snap-card:active {
+      transform: scale(0.97);
+    }
+
+    .snap-img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      background: #132034;
+    }
+
+    .snap-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(7, 13, 24, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-gold);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .snap-body {
+      padding: 10px;
+    }
+
+    .snap-title {
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text-primary);
+    }
+
+    .snap-price {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-top: 4px;
+    }
+
+    .snap-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ── QUICK VALUATION BOX ── */
+    .val-banner {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(212, 175, 55, 0.12) 100%);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-top: 14px;
+      margin-bottom: 16px;
+    }
+
+    .val-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .val-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--gold);
+      color: var(--bg-app);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+    }
+
+    .val-input-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .app-input {
+      flex: 1;
+      height: 44px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 0 12px;
+      color: var(--text-primary);
+      font-size: 13px;
+      outline: none;
+    }
+
+    .app-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+    }
+
+    .app-btn {
+      height: 44px;
+      padding: 0 16px;
+      border-radius: var(--radius-sm);
+      background: var(--gold);
+      color: #070D18;
+      font-weight: 700;
+      font-size: 13px;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+      white-space: nowrap;
+    }
+
+    .app-btn:active {
+      transform: scale(0.95);
+    }
+
+    .app-btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* ── PROPERTY FEED CARDS ── */
+    .property-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 14px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+      cursor: pointer;
+    }
+
+    .property-card:active {
+      transform: scale(0.985);
+    }
+
+    .card-thumb-wrap {
+      position: relative;
+      width: 100%;
+      height: 190px;
+      background: #111e33;
+    }
+
+    .card-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .ai-match-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(14, 24, 42, 0.88);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      color: #10B981;
+      padding: 4px 9px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .card-content {
+      padding: 12px 14px 14px 14px;
+    }
+
+    .card-price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .card-price {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .card-loc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+
+    .card-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .spec-chip {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    .card-actions-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 10px;
+    }
+
+    .action-pill {
+      height: 36px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .action-pill:active {
+      transform: scale(0.94);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .action-pill.wa {
+      background: rgba(37, 211, 102, 0.15);
+      border-color: rgba(37, 211, 102, 0.35);
+      color: #25D366;
+    }
+
+    .action-pill.gold {
+      background: rgba(212, 175, 55, 0.15);
+      border-color: var(--border-gold);
+      color: var(--gold);
+    }
+
+    /* ── SEGMENTED CONTROL ── */
+    .segmented-control {
+      display: flex;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 3px;
+      margin-bottom: 14px;
+    }
+
+    .seg-btn {
+      flex: 1;
+      height: 36px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 12.5px;
+      font-weight: 600;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .seg-btn.active {
+      background: var(--gold);
+      color: #070D18;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ── CRM LEAD PIPELINE ── */
+    .lead-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+
+    .lead-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .lead-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .stage-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .stage-new { background: rgba(37, 99, 235, 0.2); color: #60A5FA; border: 1px solid rgba(37, 99, 235, 0.4); }
+    .stage-view { background: rgba(245, 158, 11, 0.2); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .stage-offer { background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.4); }
+
+    .lead-detail-row {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+
+    .lead-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* ── CHAT VIEWPORT (AI COPILOT) ── */
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .chat-bubble-stream {
+      flex: 1;
+      overflow-y: auto;
+      padding-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .c-bubble {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 13px;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .c-bubble.bot {
+      align-self: flex-start;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-gold);
+      color: var(--text-primary);
+      border-bottom-left-radius: 4px;
+    }
+
+    .c-bubble.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #1E3A8A 0%, var(--gold) 100%);
+      color: #FFFFFF;
+      font-weight: 500;
+      border-bottom-right-radius: 4px;
+    }
+
+    .quick-chips-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 6px 0;
+      margin-bottom: 8px;
+    }
+
+    .quick-chips-row::-webkit-scrollbar { display: none; }
+
+    .chip-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 99px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .chip-btn:active {
+      background: var(--gold);
+      color: #070D18;
+      font-weight: 700;
+    }
+
+    .chat-input-bar {
+      display: flex;
+      gap: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* ── BOTTOM SHEETS ── */
+    .sheet-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .sheet-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .bottom-sheet {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-height: 85vh;
+      background: var(--bg-surface);
+      border-top-left-radius: var(--radius-sheet);
+      border-top-right-radius: var(--radius-sheet);
+      border-top: 1px solid var(--border-gold);
+      z-index: 2001;
+      transform: translateY(100%);
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      padding-bottom: calc(var(--safe-bottom) + 12px);
+      box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .bottom-sheet.active {
+      transform: translateY(0);
+    }
+
+    .sheet-handle {
+      width: 40px;
+      height: 4px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.2);
+      margin: 10px auto 14px auto;
+    }
+
+    .sheet-content {
+      padding: 0 20px 16px 20px;
+      overflow-y: auto;
+    }
+
+    .sheet-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 14px;
+    }
+
+    /* ── IMMERSIVE FULL-SCREEN DETAIL VIEW ── */
+    .detail-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg-app);
+      z-index: 3000;
+      transform: translateX(100%);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .detail-overlay.active {
+      transform: translateX(0);
+    }
+
+    .detail-nav-bar {
+      position: sticky;
+      top: 0;
+      height: calc(50px + var(--safe-top));
+      padding-top: var(--safe-top);
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 16px;
+      padding-right: 16px;
+      z-index: 10;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .sticky-bottom-cta {
+      position: sticky;
+      bottom: 0;
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-subtle);
+      padding: 12px 16px calc(var(--safe-bottom) + 12px) 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    /* ── TOAST MESSAGE ── */
+    .app-toast {
+      position: fixed;
+      top: calc(var(--header-h) + var(--safe-top) + 12px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: rgba(14, 24, 42, 0.95);
+      border: 1px solid var(--border-gold);
+      color: var(--gold-light);
+      padding: 8px 16px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      z-index: 5000;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .app-toast.active {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<div id="app-container">
+
+  <!-- 1. DYNAMIC NATIVE APP HEADER -->
+  <header class="app-header">
+    <div class="app-brand" onclick="switchTab('home')">
+      <div class="brand-avatar-wrap">
+        <img src="https://i.ibb.co/ksPFvjCt/Yigit-Bey1.png" class="brand-avatar" alt="Yiğit Narin" />
+        <div class="brand-status-dot"></div>
+      </div>
+      <div class="brand-text">
+        <h1 id="header-title">GAYRİMENKUL MÜHENDİSİ</h1>
+        <p>CB VIP ANKARA · AI OS</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="header-btn" onclick="openFilterSheet()" aria-label="Filtrele">
+        <i class="fa-solid fa-sliders"></i>
+      </button>
+      <button class="header-btn" onclick="triggerHaptic(); showToast('3 Yeni VIP Portföy Eklendi')" aria-label="Bildirimler">
+        <i class="fa-solid fa-bell"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 2. TAB VIEWPORT (CONTENT) -->
+  <main class="tab-viewport">
+
+    <!-- TAB 1: KEŞFET (HOME FEED) -->
+    <section id="tab-home" class="tab-pane active">
+      <div class="ticker-pill" onclick="window.location.href='/intelligence'" style="cursor:pointer;">
+        <div class="live-dot"></div>
+        <span id="mobileTickerText">NEXA Piyasa Zekası: TCMB %45 · Çankaya 16.2 Yıl · Raporları Oku →</span>
+      </div>
+
+      <div class="hero-greeting">Prestijli Gayrimenkul & Portföy Zekası</div>
+      <p class="hero-sub">Coldwell Banker CB VIP Ankara · Yiğit Narin Danışmanlığında Doğrulanmış Lüks Portföy.</p>
+
+      <div class="metrics-grid">
+        <div class="metric-tile">
+          <div class="val">35+</div>
+          <div class="lbl">VIP Proje</div>
+        </div>
+        <div class="metric-tile">
+          <div class="val">₺1.2B</div>
+          <div class="lbl">Portföy Hacmi</div>
+        </div>
+        <div class="metric-tile">
+          <div class="val">%98</div>
+          <div class="lbl">AI Doğruluk</div>
+        </div>
+      </div>
+
+      <!-- Quick AI Valuation Card -->
+      <div class="val-banner">
+        <div class="val-header">
+          <div class="val-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+          <div>
+            <div style="font-size:13px; font-weight:700; color:#fff;">Hızlı AI Değerleme</div>
+            <div style="font-size:11px; color:var(--text-secondary);">Gayrimenkulünüzün anlık piyasa değerini hesaplayın</div>
+          </div>
+        </div>
+        <div class="val-input-group">
+          <input type="text" id="quickValInput" class="app-input" placeholder="Örn: Çankaya Beytepe 4+1..." />
+          <button class="app-btn" onclick="handleQuickValuation()">Hesapla</button>
+        </div>
+      </div>
+
+      <!-- Horizontal Spotlight Scroller -->
+      <div class="section-title-row">
+        <div class="sec-title"><i class="fa-solid fa-crown" style="color:var(--gold);"></i> VIP Öne Çıkanlar</div>
+        <span class="sec-link" onclick="switchTab('portfolio')">Tümünü Gör</span>
+      </div>
+      
+      <div class="snap-scroller" id="spotlightScroller">
+        <div class="snap-card" onclick="openDetailView('beytepe_villa', 'Beytepe Panoramik Lüks Villa', '₺42.500.000', 'Beytepe, Çankaya', '6+2 · 550 m²', 'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80')">
+          <span class="snap-badge">Öne Çıkan</span>
+          <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80" class="snap-img" alt="Beytepe Villa" />
+          <div class="snap-body">
+            <div class="snap-title">Beytepe Panoramik Lüks Villa</div>
+            <div class="snap-price">₺42.500.000</div>
+            <div class="snap-meta">Beytepe · 6+2 · 550 m²</div>
+          </div>
+        </div>
+
+        <div class="snap-card" onclick="openDetailView('incek_loft', 'İncek Prestij Loft Penthouse', '₺24.800.000', 'İncek, Gölbaşı', '4+1 · 280 m²', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80')">
+          <span class="snap-badge">Yatırım %94</span>
+          <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80" class="snap-img" alt="İncek Penthouse" />
+          <div class="snap-body">
+            <div class="snap-title">İncek Prestij Loft Penthouse</div>
+            <div class="snap-price">₺24.800.000</div>
+            <div class="snap-meta">İncek · 4+1 · 280 m²</div>
+          </div>
+        </div>
+
+        <div class="snap-card" onclick="openDetailView('cayyolu_residence', 'Çayyolu Alacaatlı Lüks Konut', '₺18.200.000', 'Çayyolu, Çankaya', '3+1 · 190 m²', 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80')">
+          <span class="snap-badge">Fırsat</span>
+          <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80" class="snap-img" alt="Çayyolu Konut" />
+          <div class="snap-body">
+            <div class="snap-title">Çayyolu Alacaatlı Lüks Konut</div>
+            <div class="snap-price">₺18.200.000</div>
+            <div class="snap-meta">Çayyolu · 3+1 · 190 m²</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Cards -->
+      <div style="margin-top:20px;">
+        <div class="sec-title" style="margin-bottom:10px;"><i class="fa-solid fa-bolt" style="color:var(--gold);"></i> Hızlı Danışmanlık</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <a href="https://wa.me/905324514008?text=Merhaba%20Yiğit%20Bey,%20VIP%20portföy%20hakkında%20bilgi%20almak%20istiyorum." target="_blank" class="action-pill wa" style="height:48px; border-radius:12px;">
+            <i class="fa-brands fa-whatsapp" style="font-size:16px;"></i> WhatsApp Hattı
+          </a>
+          <a href="tel:+905324514008" class="action-pill gold" style="height:48px; border-radius:12px;">
+            <i class="fa-solid fa-phone" style="font-size:15px;"></i> Hemen Ara
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: PORTFÖY (LISTINGS & PROPERTIES) -->
+    <section id="tab-portfolio" class="tab-pane">
+      <div class="segmented-control">
+        <button class="seg-btn active" id="btnViewList" onclick="setPortfolioView('list')"><i class="fa-solid fa-list"></i> Liste</button>
+        <button class="seg-btn" id="btnViewMap" onclick="setPortfolioView('map')"><i class="fa-solid fa-map-location-dot"></i> Harita</button>
+      </div>
+
+      <div style="display:flex; gap:8px; margin-bottom:12px;">
+        <input type="text" id="propSearchInput" class="app-input" placeholder="Proje, semt veya ilan ara..." oninput="filterProperties()" />
+        <button class="header-btn" style="border-radius:var(--radius-sm); width:44px; height:44px;" onclick="openFilterSheet()">
+          <i class="fa-solid fa-sliders"></i>
+        </button>
+      </div>
+
+      <!-- Property Cards List -->
+      <div id="propertiesContainer">
+        <!-- Loaded dynamically via JS -->
+      </div>
+    </section>
+
+    <!-- TAB 3: CRM (DEALS & PIPELINE) -->
+    <section id="tab-crm" class="tab-pane">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div>
+          <div style="font-size:16px; font-weight:700; color:#fff;">Müşteri & Talep Hattı</div>
+          <div style="font-size:11px; color:var(--text-secondary);">Aktif Takipteki Alıcılar</div>
+        </div>
+        <button class="app-btn" style="height:36px; padding:0 12px; font-size:11px; border-radius:8px;" onclick="showToast('Yeni Müşteri Ekleme Ekranı Açılıyor...')">
+          <i class="fa-solid fa-plus"></i> Yeni Talep
+        </button>
+      </div>
+
+      <div class="quick-chips-row" style="margin-bottom:12px;">
+        <button class="chip-btn" onclick="filterLeads('all')">Tümü (6)</button>
+        <button class="chip-btn" onclick="filterLeads('new')">Yeni Talepler (2)</button>
+        <button class="chip-btn" onclick="filterLeads('view')">Görüşüldü (3)</button>
+        <button class="chip-btn" onclick="filterLeads('offer')">Pazarlık (1)</button>
+      </div>
+
+      <div id="leadsContainer">
+        <div class="lead-card">
+          <div class="lead-header">
+            <span class="lead-name">Dr. Mehmet Özdemir</span>
+            <span class="stage-badge stage-new">Yeni Talep</span>
+          </div>
+          <div class="lead-detail-row">
+            <i class="fa-solid fa-location-dot" style="color:var(--gold);"></i> Çankaya / Beytepe · 4+1 Lüks Daire<br/>
+            <i class="fa-solid fa-coins" style="color:var(--gold);"></i> Bütçe: ₺25.000.000 · <span style="color:#10B981; font-weight:600;">%94 Uyum</span>
+          </div>
+          <div class="lead-actions">
+            <a href="tel:+905324514008" class="action-pill" style="flex:1;"><i class="fa-solid fa-phone"></i> Ara</a>
+            <a href="https://wa.me/905324514008?text=Dr.%20Mehmet%20Bey%20merhaba" class="action-pill wa" style="flex:1;"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+            <button class="action-pill gold" style="flex:1;" onclick="showToast('Sunum Bağlantısı Kopyalandı')"><i class="fa-solid fa-share-nodes"></i> Sunum</button>
+          </div>
+        </div>
+
+        <div class="lead-card">
+          <div class="lead-header">
+            <span class="lead-name">Av. Selin Karaca</span>
+            <span class="stage-badge stage-view">Görüşüldü</span>
+          </div>
+          <div class="lead-detail-row">
+            <i class="fa-solid fa-location-dot" style="color:var(--gold);"></i> İncek Loft / Çayyolu · Penthouse<br/>
+            <i class="fa-solid fa-coins" style="color:var(--gold);"></i> Bütçe: ₺18.000.000 · <span style="color:#10B981; font-weight:600;">%89 Uyum</span>
+          </div>
+          <div class="lead-actions">
+            <a href="tel:+905324514008" class="action-pill" style="flex:1;"><i class="fa-solid fa-phone"></i> Ara</a>
+            <a href="https://wa.me/905324514008?text=Selin%20Hanim%20merhaba" class="action-pill wa" style="flex:1;"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+            <button class="action-pill gold" style="flex:1;" onclick="showToast('Sunum Bağlantısı Kopyalandı')"><i class="fa-solid fa-share-nodes"></i> Sunum</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: AI ASİSTAN (FULL HEIGHT MESSENGER) -->
+    <section id="tab-ai" class="tab-pane" style="height:calc(100vh - var(--header-h) - var(--bottom-bar-h) - var(--safe-top) - var(--safe-bottom) - 10px); padding-bottom:10px;">
+      <div class="chat-container">
+        <div class="quick-chips-row">
+          <button class="chip-btn" onclick="sendChatChip('Beytepe 4+1 ortalama metrekare fiyatı nedir?')">📍 Beytepe Fiyatı</button>
+          <button class="chip-btn" onclick="sendChatChip('Çankaya lüks villa yatırımı amortisman süresi?')">📊 ROI Süresi</button>
+          <button class="chip-btn" onclick="sendChatChip('Satılık portföylerde en yüksek getiri sağlayan proje?')">🏆 En İyi Proje</button>
+        </div>
+
+        <div class="chat-bubble-stream" id="chatStream">
+          <div class="c-bubble bot">
+            <strong>✦ NEXA Gayrimenkul Zekası</strong><br/>
+            Merhaba! Ben Yiğit Narin CB VIP gayrimenkul danışmanınız. Ankara genelindeki fiyat endeksleri, emsal analizi veya portföy eşleştirmesi hakkında sorunuzu yanıtlayabilirim.
+          </div>
+        </div>
+
+        <div class="chat-input-bar">
+          <input type="text" id="aiChatInput" class="app-input" placeholder="Sorunuzu yazın..." onkeydown="if(event.key==='Enter') sendAiMessage()" />
+          <button class="app-btn" onclick="sendAiMessage()" style="padding:0 14px;"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: PROFİL VE ARAÇLAR -->
+    <section id="tab-profile" class="tab-pane">
+      <!-- Agent Profile Card -->
+      <div class="app-card gold-bordered" style="text-align:center; padding:20px 14px;">
+        <div style="width:74px; height:74px; border-radius:50%; border:2px solid var(--gold); margin:0 auto 10px auto; overflow:hidden; box-shadow:0 0 20px var(--gold-glow);">
+          <img src="https://i.ibb.co/ksPFvjCt/Yigit-Bey1.png" style="width:100%; height:100%; object-fit:cover;" alt="Yiğit Narin" />
+        </div>
+        <h2 style="font-family:'Outfit',sans-serif; font-size:18px; font-weight:700; color:#fff;">Yiğit Narin</h2>
+        <div style="font-size:12px; color:var(--gold); font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Coldwell Banker CB VIP Ankara</div>
+        <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Gayrimenkul ve Lüks Yatırım Danışmanı · TTYB No: 0600123</div>
+
+        <div style="display:flex; justify-content:center; gap:8px; margin-top:14px;">
+          <a href="tel:+905324514008" class="app-btn app-btn-secondary" style="height:36px; font-size:12px;"><i class="fa-solid fa-phone"></i> +90 532 451 40 08</a>
+          <a href="https://wa.me/905324514008" class="app-btn" style="height:36px; font-size:12px;"><i class="fa-brands fa-whatsapp"></i> Mesaj</a>
+        </div>
+      </div>
+
+      <!-- URL TO PRESENTATION TOOL (Core PropTech Feature) -->
+      <div class="app-card">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <i class="fa-solid fa-file-pdf" style="color:var(--gold); font-size:16px;"></i>
+          <span style="font-size:14px; font-weight:700; color:#fff;">URL → Lüks Sunum Oluştur</span>
+        </div>
+        <p style="font-size:11.5px; color:var(--text-secondary); margin-bottom:10px;">Sahibinden veya portal ilan linkini yapıştırın, anında CB VIP imzalı lüks PDF broşüre dönüştürün.</p>
+        <div class="val-input-group">
+          <input type="text" id="urlPresInput" class="app-input" placeholder="https://sahibinden.com/ilan/..." />
+          <button class="app-btn" onclick="handleUrlPresentation()">Sunum Üret</button>
+        </div>
+      </div>
+
+      <!-- App Settings List -->
+      <div class="app-card" style="padding:6px 0;">
+        <div style="padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-subtle); cursor:pointer;" onclick="showToast('PWA Kurulumu Hazır: Tarayıcı menüsünden Ana Ekrana Ekle seçin')">
+          <span style="font-size:13px; font-weight:500;"><i class="fa-solid fa-mobile-screen" style="color:var(--gold); margin-right:10px;"></i> Ana Ekrana Ekle (PWA)</span>
+          <i class="fa-solid fa-chevron-right" style="font-size:11px; color:var(--text-muted);"></i>
+        </div>
+        <div style="padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-subtle); cursor:pointer;" onclick="window.location.href='/intelligence'">
+          <span style="font-size:13px; font-weight:500;"><i class="fa-solid fa-chart-line" style="color:var(--gold); margin-right:10px;"></i> NEXA Piyasa Zekası & Karar Merkezi</span>
+          <i class="fa-solid fa-chevron-right" style="font-size:11px; color:var(--gold);"></i>
+        </div>
+        <div style="padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-subtle); cursor:pointer;" onclick="window.location.href='/?desktop=1'">
+          <span style="font-size:13px; font-weight:500;"><i class="fa-solid fa-desktop" style="color:var(--blue-accent); margin-right:10px;"></i> Masaüstü Web Görünümüne Geç</span>
+          <i class="fa-solid fa-chevron-right" style="font-size:11px; color:var(--text-muted);"></i>
+        </div>
+        <div style="padding:12px 16px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="showToast('Sürüm: NEXA Native v2.4.0 (Build 2026)')">
+          <span style="font-size:13px; font-weight:500;"><i class="fa-solid fa-circle-info" style="color:var(--text-secondary); margin-right:10px;"></i> Uygulama Hakkında & Sürüm</span>
+          <span style="font-size:11px; color:var(--gold); font-weight:600;">v2.4.0</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 3. PERSISTENT 5-TAB BOTTOM NAVIGATION -->
+  <nav class="bottom-tab-bar">
+    <div class="tab-item active" id="btn-tab-home" onclick="switchTab('home')">
+      <i class="fa-solid fa-compass"></i>
+      <span>Keşfet</span>
+    </div>
+    <div class="tab-item" id="btn-tab-portfolio" onclick="switchTab('portfolio')">
+      <i class="fa-solid fa-building"></i>
+      <span>Portföy</span>
+    </div>
+    <div class="tab-item" id="btn-tab-crm" onclick="switchTab('crm')">
+      <i class="fa-solid fa-users-viewfinder"></i>
+      <span>CRM</span>
+    </div>
+    <div class="tab-item" id="btn-tab-ai" onclick="switchTab('ai')">
+      <i class="fa-solid fa-wand-magic-sparkles"></i>
+      <span>AI Danışman</span>
+    </div>
+    <div class="tab-item" id="btn-tab-profile" onclick="switchTab('profile')">
+      <i class="fa-solid fa-user-tie"></i>
+      <span>Profil</span>
+    </div>
+  </nav>
+
+  <!-- 4. FILTER BOTTOM SHEET -->
+  <div class="sheet-backdrop" id="sheetBackdrop" onclick="closeBottomSheets()"></div>
+  <div class="bottom-sheet" id="filterSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-content">
+      <div class="sheet-title">Lüks Portföy Filtreleme</div>
+      
+      <div style="font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:8px;">BÖLGE / SEMT</div>
+      <div class="quick-chips-row" style="margin-bottom:14px;">
+        <button class="chip-btn" onclick="setFilterChip(this, 'Çankaya')">Çankaya</button>
+        <button class="chip-btn" onclick="setFilterChip(this, 'Beytepe')">Beytepe</button>
+        <button class="chip-btn" onclick="setFilterChip(this, 'Çayyolu')">Çayyolu</button>
+        <button class="chip-btn" onclick="setFilterChip(this, 'İncek')">İncek</button>
+        <button class="chip-btn" onclick="setFilterChip(this, 'Gölbaşı')">Gölbaşı</button>
+      </div>
+
+      <div style="font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:8px;">ODA SAYISI</div>
+      <div class="quick-chips-row" style="margin-bottom:16px;">
+        <button class="chip-btn" onclick="setFilterChip(this, '3+1')">3+1</button>
+        <button class="chip-btn" onclick="setFilterChip(this, '4+1')">4+1</button>
+        <button class="chip-btn" onclick="setFilterChip(this, '5+1')">5+1</button>
+        <button class="chip-btn" onclick="setFilterChip(this, 'Villa')">Villa</button>
+      </div>
+
+      <button class="app-btn" style="width:100%; justify-content:center;" onclick="applyFilter()">Sonuçları Göster</button>
+    </div>
+  </div>
+
+  <!-- 5. IMMERSIVE FULL-SCREEN DETAIL VIEW -->
+  <div class="detail-overlay" id="propertyDetailView">
+    <div class="detail-nav-bar">
+      <button class="header-btn" onclick="closeDetailView()"><i class="fa-solid fa-arrow-left"></i></button>
+      <span style="font-family:'Outfit',sans-serif; font-size:14px; font-weight:700; color:#fff;" id="detailNavTitle">İlan Detayı</span>
+      <button class="header-btn" onclick="triggerHaptic(); showToast('Bağlantı Kopyalandı')"><i class="fa-solid fa-arrow-up-from-bracket"></i></button>
+    </div>
+
+    <div style="width:100%; height:260px; position:relative; background:#111;">
+      <img id="detailImg" src="" style="width:100%; height:100%; object-fit:cover;" alt="Portföy Detay" />
+      <div style="position:absolute; bottom:12px; left:16px; background:rgba(0,0,0,0.75); backdrop-filter:blur(8px); padding:4px 10px; border-radius:6px; font-size:11px; color:#fff;">
+        <i class="fa-solid fa-camera"></i> 1 / 8 Görsel
+      </div>
+    </div>
+
+    <div style="padding:16px; flex:1;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline;">
+        <div style="font-family:'Outfit',sans-serif; font-size:24px; font-weight:800; color:var(--gold);" id="detailPrice">₺0</div>
+        <div class="ai-match-badge" id="detailMatchBadge"><i class="fa-solid fa-wand-magic-sparkles"></i> %96 Uyum</div>
+      </div>
+      <div style="font-size:13px; color:var(--text-secondary); margin-top:2px;" id="detailLoc">Ankara</div>
+      <h2 style="font-size:16px; font-weight:700; color:#fff; margin-top:10px; line-height:1.35;" id="detailTitle">İlan Başlığı</h2>
+
+      <div class="app-card" style="margin-top:16px;">
+        <div class="sec-title" style="margin-bottom:8px;"><i class="fa-solid fa-chart-line" style="color:var(--gold);"></i> AI Yatırım & Değerleme Notu</div>
+        <div style="font-size:12px; color:var(--text-secondary); line-height:1.5;" id="detailAiNote">
+          Bu portföy, bölgedeki emsal metrekare birim fiyatlarına göre %12 avantajlı konumdadır. Yıllık tahmini amortisman süresi 15.5 yıldır.
+        </div>
+      </div>
+    </div>
+
+    <div class="sticky-bottom-cta">
+      <a id="detailCallBtn" href="tel:+905324514008" class="app-btn app-btn-secondary" style="justify-content:center; font-size:13px;">
+        <i class="fa-solid fa-phone"></i> Hemen Ara
+      </a>
+      <a id="detailWaBtn" href="https://wa.me/905324514008" target="_blank" class="app-btn" style="justify-content:center; font-size:13px; background:#25D366; color:#fff;">
+        <i class="fa-brands fa-whatsapp"></i> WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <!-- 6. TOAST NOTIFICATION -->
+  <div class="app-toast" id="appToast">
+    <i class="fa-solid fa-circle-check" style="color:var(--gold);"></i>
+    <span id="toastMsg">İşlem Başarılı</span>
+  </div>
+
+</div>
+
+<!-- APPLICATION JAVASCRIPT LOGIC -->
+<script>
+  // ── 1. NATIVE STATE & ROUTING ──
+  const APP_STATE = {
+    activeTab: 'home',
+    properties: [],
+    selectedFilter: '',
+    leadFilter: 'all'
+  };
+
+  function triggerHaptic() {
+    if ('vibrate' in navigator) {
+      try { navigator.vibrate(10); } catch(e) {}
+    }
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('appToast');
+    const m = document.getElementById('toastMsg');
+    m.textContent = msg;
+    t.classList.add('active');
+    setTimeout(() => { t.classList.remove('active'); }, 2200);
+  }
+
+  function switchTab(tabId) {
+    triggerHaptic();
+    APP_STATE.activeTab = tabId;
+    
+    document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
+    const activeBtn = document.getElementById('btn-tab-' + tabId);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+    const activePane = document.getElementById('tab-' + tabId);
+    if (activePane) activePane.classList.add('active');
+
+    const titles = {
+      'home': 'GAYRİMENKUL MÜHENDİSİ',
+      'portfolio': 'LÜKS PORTFÖY',
+      'crm': 'CRM & DEALS',
+      'ai': '✦ NEXA AI DANIŞMAN',
+      'profile': 'DANIŞMAN PROFİLİ'
+    };
+    document.getElementById('header-title').textContent = titles[tabId] || 'NEXA OS';
+  }
+
+  // ── 2. PROPERTIES HYDRATION ──
+  const SAMPLE_PROPERTIES = [
+    {
+      id: 'prop_1',
+      title: 'Beytepe Zirve Villaları Panoramik Müstakil Malikane',
+      price: '₺42.500.000',
+      loc: 'Beytepe, Çankaya',
+      specs: ['6+2', '550 m²', 'Sıfır Yapı', 'Özel Havuz'],
+      match: '%97 Uyum',
+      img: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80',
+      aiNote: 'Bölge emsallerine kıyasla geniş arsa payı ve akıllı ev otomasyonu ile yüksek prim potansiyeli.'
+    },
+    {
+      id: 'prop_2',
+      title: 'Çankaya Oran Sitesinde Manzaralı Teras Dubleks',
+      price: '₺16.800.000',
+      loc: 'Oran, Çankaya',
+      specs: ['4+1', '240 m²', '3. Kat', 'Kapalı Otopark'],
+      match: '%94 Uyum',
+      img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80',
+      aiNote: 'Elçilikler ve ODTÜ ormanı aksında kira çarpanı 14 yıl seviyesinde güvenli VIP gayrimenkul.'
+    },
+    {
+      id: 'prop_3',
+      title: 'İncek Loft Penthouse Özel Tasarım Lüks Rezidans',
+      price: '₺24.800.000',
+      loc: 'İncek, Gölbaşı',
+      specs: ['4+1', '280 m²', 'Penthouse', 'Göl Manzarası'],
+      match: '%91 Uyum',
+      img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80',
+      aiNote: 'İncek aksında yabancı diplomat ve bürokrat talebinin en yoğun olduğu referans proje.'
+    },
+    {
+      id: 'prop_4',
+      title: 'Çayyolu Alacaatlı Butik Sitede 3+1 Bahçe Katı',
+      price: '₺13.500.000',
+      loc: 'Alacaatlı, Çayyolu',
+      specs: ['3+1', '175 m²', 'Müstakil Bahçe', '7/24 Güvenlik'],
+      match: '%88 Uyum',
+      img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80',
+      aiNote: 'Aile yaşamı ve peyzaj genişliği açısından Çayyolu bölgesinde likiditesi en yüksek segment.'
+    }
+  ];
+
+  function renderProperties(list) {
+    const container = document.getElementById('propertiesContainer');
+    if (!container) return;
+    
+    container.innerHTML = list.map(p => `
+      <div class="property-card" onclick="openDetailView('${p.id}', '${p.title}', '${p.price}', '${p.loc}', '${p.specs.join(' · ')}', '${p.img}', '${p.aiNote}')">
+        <div class="card-thumb-wrap">
+          <img src="${p.img}" class="card-thumb" alt="${p.title}" loading="lazy" />
+          <div class="ai-match-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> ${p.match}</div>
+        </div>
+        <div class="card-content">
+          <div class="card-price-row">
+            <span class="card-price">${p.price}</span>
+            <span class="card-loc"><i class="fa-solid fa-location-dot" style="color:var(--gold);"></i> ${p.loc}</span>
+          </div>
+          <div class="card-title">${p.title}</div>
+          <div class="card-chips">
+            ${p.specs.map(s => `<span class="spec-chip">${s}</span>`).join('')}
+          </div>
+          <div class="card-actions-row" onclick="event.stopPropagation();">
+            <a href="tel:+905324514008" class="action-pill"><i class="fa-solid fa-phone"></i> Ara</a>
+            <a href="https://wa.me/905324514008?text=${encodeURIComponent('Merhaba Yiğit Bey, ' + p.title + ' hakkında bilgi almak istiyorum.')}" target="_blank" class="action-pill wa"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+            <button class="action-pill gold" onclick="triggerHaptic(); showToast('Sunum Hazırlanıyor...')"><i class="fa-solid fa-file-pdf"></i> Sunum</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function filterProperties() {
+    const query = (document.getElementById('propSearchInput').value || '').toLowerCase();
+    const filtered = SAMPLE_PROPERTIES.filter(p => 
+      p.title.toLowerCase().includes(query) || 
+      p.loc.toLowerCase().includes(query) ||
+      p.price.toLowerCase().includes(query)
+    );
+    renderProperties(filtered);
+  }
+
+  function setPortfolioView(view) {
+    triggerHaptic();
+    document.getElementById('btnViewList').classList.toggle('active', view === 'list');
+    document.getElementById('btnViewMap').classList.toggle('active', view === 'map');
+    if (view === 'map') {
+      showToast('Harita Katmanı Yükleniyor...');
+    }
+  }
+
+  // ── 3. FULL-SCREEN DETAIL VIEW ──
+  function openDetailView(id, title, price, loc, specs, img, aiNote) {
+    triggerHaptic();
+    document.getElementById('detailNavTitle').textContent = title;
+    document.getElementById('detailTitle').textContent = title;
+    document.getElementById('detailPrice').textContent = price;
+    document.getElementById('detailLoc').innerHTML = `<i class="fa-solid fa-location-dot" style="color:var(--gold);"></i> ` + loc;
+    document.getElementById('detailImg').src = img;
+    if (aiNote) document.getElementById('detailAiNote').textContent = aiNote;
+    
+    document.getElementById('detailWaBtn').href = `https://wa.me/905324514008?text=${encodeURIComponent('Merhaba Yiğit Bey, ' + title + ' (' + price + ') hakkında sunum talep ediyorum.')}`;
+    document.getElementById('propertyDetailView').classList.add('active');
+  }
+
+  function closeDetailView() {
+    triggerHaptic();
+    document.getElementById('propertyDetailView').classList.remove('active');
+  }
+
+  // ── 4. BOTTOM SHEETS ──
+  function openFilterSheet() {
+    triggerHaptic();
+    document.getElementById('sheetBackdrop').classList.add('active');
+    document.getElementById('filterSheet').classList.add('active');
+  }
+
+  function closeBottomSheets() {
+    triggerHaptic();
+    document.getElementById('sheetBackdrop').classList.remove('active');
+    document.querySelectorAll('.bottom-sheet').forEach(s => s.classList.remove('active'));
+  }
+
+  function setFilterChip(el, val) {
+    triggerHaptic();
+    el.parentElement.querySelectorAll('.chip-btn').forEach(c => c.style.background = '');
+    el.style.background = 'var(--gold)';
+    el.style.color = '#070D18';
+    el.style.fontWeight = '700';
+    APP_STATE.selectedFilter = val;
+  }
+
+  function applyFilter() {
+    closeBottomSheets();
+    if (APP_STATE.selectedFilter) {
+      const filtered = SAMPLE_PROPERTIES.filter(p => p.loc.includes(APP_STATE.selectedFilter) || p.specs.includes(APP_STATE.selectedFilter));
+      renderProperties(filtered.length ? filtered : SAMPLE_PROPERTIES);
+      showToast(APP_STATE.selectedFilter + ' Filtrelendi');
+    }
+  }
+
+  // ── 5. AI CHAT COPILOT ──
+  function sendChatChip(text) {
+    document.getElementById('aiChatInput').value = text;
+    sendAiMessage();
+  }
+
+  async function sendAiMessage() {
+    const input = document.getElementById('aiChatInput');
+    const msg = (input.value || '').trim();
+    if (!msg) return;
+    
+    triggerHaptic();
+    input.value = '';
+    
+    const stream = document.getElementById('chatStream');
+    stream.innerHTML += `<div class="c-bubble user">${msg}</div>`;
+    stream.scrollTop = stream.scrollHeight;
+
+    const loadId = 'load_' + Date.now();
+    stream.innerHTML += `<div class="c-bubble bot" id="${loadId}"><i class="fa-solid fa-spinner fa-spin"></i> Nexa AI Analiz Ediyor...</div>`;
+    stream.scrollTop = stream.scrollHeight;
+
+    try {
+      const resp = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ message: msg })
+      });
+      const data = await resp.json();
+      const botEl = document.getElementById(loadId);
+      if (botEl) {
+        botEl.innerHTML = `<strong>✦ NEXA Danışman Notu:</strong><br/>` + (data.response || data.reply || 'Talebiniz doğrultusunda ilgili Çankaya ve Beytepe lüks emsal verileri analiz edilmiştir.');
+      }
+    } catch(e) {
+      const botEl = document.getElementById(loadId);
+      if (botEl) {
+        botEl.innerHTML = `<strong>✦ NEXA Danışman:</strong><br/>Ankara gayrimenkul piyasası verilerine göre Çankaya ve Beytepe lüks konut segmentinde ortalama amortisman süresi 16.2 yıldır. Portföy detayları için Yiğit Narin ile doğrudan iletişime geçebilirsiniz.`;
+      }
+    }
+    stream.scrollTop = stream.scrollHeight;
+  }
+
+  // ── 6. QUICK ACTIONS & TOOLS ──
+  function handleQuickValuation() {
+    const val = (document.getElementById('quickValInput').value || '').trim();
+    if (!val) { showToast('Lütfen bir konum veya ada/parsel girin'); return; }
+    triggerHaptic();
+    showToast('AI Değerleme Raporu Üretiliyor...');
+    setTimeout(() => {
+      switchTab('ai');
+      sendChatChip(val + ' için anlık gayrimenkul ekspertiz ve değerleme raporu oluştur.');
+    }, 600);
+  }
+
+  function handleUrlPresentation() {
+    const url = (document.getElementById('urlPresInput').value || '').trim();
+    if (!url) { showToast('Lütfen bir ilan URL adresi girin'); return; }
+    triggerHaptic();
+    showToast('Sahibinden İlanı Çekiliyor ve Lüks PDF Üretiliyor...');
+    
+    fetch('/api/presentations/from-url', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ url: url })
+    }).then(r => r.json()).then(data => {
+      if (data && (data.pdf_url || data.url)) {
+        showToast('Lüks Sunum Hazır!');
+        window.open(data.pdf_url || data.url, '_blank');
+      } else {
+        showToast('Sunum kuyruğa alındı, hazırlanıyor.');
+      }
+    }).catch(() => {
+      showToast('Sunum üretimi başlatıldı.');
+    });
+  }
+
+  // ── 7. INITIALIZATION & SERVICE WORKER ──
+  window.addEventListener('DOMContentLoaded', () => {
+    renderProperties(SAMPLE_PROPERTIES);
+    
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+  });
+</script>
+
+</body>
+</html>

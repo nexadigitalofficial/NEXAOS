@@ -1,0 +1,25 @@
+{
+  "name": "Gayrimenkul Mühendisi | Yiğit Narin CB VIP",
+  "short_name": "Yiğit Narin",
+  "description": "Ankara Gayrimenkul, Portföy & AI Piyasa İstihbarat Platformu",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#070D18",
+  "theme_color": "#070D18",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/ksPFvjCt/Yigit-Bey1.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://i.ibb.co/ksPFvjCt/Yigit-Bey1.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

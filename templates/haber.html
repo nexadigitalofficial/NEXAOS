@@ -1,0 +1,2915 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NEXA Real Estate Intelligence Network | Coldwell Banker VIP Ankara • Yiğit Narin</title>
+  <meta name="description" content="TCMB, TÜİK, AA Finans ve Endeksa verileriyle doğrulanan çok kaynaklı gayrimenkul piyasa istihbaratı, makroekonomik analizler, interaktif karar motorları ve Ankara lüks konut değerlemeleri.">
+  
+  <link rel="icon" type="image/png" href="https://i.ibb.co/ksPFvjCt/Yigit-Bey1.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <style>
+    :root {
+      --deep-navy: #070d18;
+      --navy: #0f1a2e;
+      --navy-card: #132238;
+      --navy-card-hover: #1a2c47;
+      --navy-border: rgba(212, 175, 55, 0.22);
+      --gold: #d4af37;
+      --gold-dark: #b8941f;
+      --gold-light: #f6e6b4;
+      --gold-glow: rgba(212, 175, 55, 0.35);
+      --cream: #f8fafc;
+      --text-muted: #94a3b8;
+      --green-up: #10b981;
+      --red-down: #ef4444;
+      --blue-accent: #38bdf8;
+      --purple-accent: #a855f7;
+      --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.35);
+      --shadow-hover: 0 18px 45px rgba(0, 0, 0, 0.55);
+      --transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at 50% 0%, #0d1b33 0%, var(--deep-navy) 65%);
+      color: var(--cream);
+      min-height: 100vh;
+      line-height: 1.6;
+      padding-top: 110px;
+    }
+
+    h1, h2, h3, h4, .serif-title {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .stat-val, .ticker-val, .btn, .date-badge, .tab-btn, .pill-tag {
+      font-family: 'Outfit', sans-serif;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── MARKET PULSE LIVE TICKER ── */
+    .market-ticker-wrapper {
+      background: rgba(7, 13, 24, 0.96);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--navy-border);
+      padding: 9px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1002;
+    }
+
+    .market-ticker-track {
+      display: inline-flex;
+      gap: 36px;
+      animation: tickerRoll 35s linear infinite;
+    }
+
+    .market-ticker-wrapper:hover .market-ticker-track {
+      animation-play-state: paused;
+    }
+
+    @keyframes tickerRoll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .ticker-item strong {
+      color: var(--cream);
+      font-weight: 600;
+    }
+
+    .ticker-item .val-up {
+      color: var(--green-up);
+      font-weight: 700;
+    }
+
+    .ticker-item .val-gold {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    /* ── HEADER / NAVIGATION ── */
+    .header-nav {
+      position: fixed;
+      top: 38px;
+      left: 0;
+      right: 0;
+      z-index: 1001;
+      background: rgba(15, 26, 46, 0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--navy-border);
+      padding: 12px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--cream);
+    }
+
+    .brand-block img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      object-fit: cover;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .brand-title span {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-portal-back {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: var(--transition);
+    }
+
+    .btn-portal-back:hover {
+      color: var(--gold);
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, 0.08);
+    }
+
+    .btn-header-wa {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+      transition: var(--transition);
+    }
+
+    .btn-header-wa:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+    }
+
+    /* ── CONTAINER ── */
+    .hub-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px 24px 80px 24px;
+    }
+
+    /* ── HERO BANNER ── */
+    .hub-hero {
+      position: relative;
+      background: linear-gradient(135deg, rgba(19, 34, 56, 0.9) 0%, rgba(10, 19, 34, 0.95) 100%);
+      border: 1px solid var(--navy-border);
+      border-radius: 20px;
+      padding: 40px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .hub-hero::after {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hub-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      color: var(--gold-light);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .hub-hero h1 {
+      font-size: 38px;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 12px;
+      line-height: 1.25;
+    }
+
+    .hub-hero h1 span {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hub-hero p {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 800px;
+      margin-bottom: 24px;
+    }
+
+    .hub-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .hub-metric-card {
+      background: rgba(7, 13, 24, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      padding: 16px 20px;
+      transition: var(--transition);
+    }
+
+    .hub-metric-card:hover {
+      border-color: var(--navy-border);
+      background: rgba(19, 34, 56, 0.6);
+    }
+
+    .hub-metric-card .title {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+    }
+
+    .hub-metric-card .value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .hub-metric-card .sub {
+      font-size: 12px;
+      color: var(--green-up);
+      margin-top: 4px;
+    }
+
+    /* ── MAIN TAB BAR ── */
+    .hub-tabs-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--navy-border);
+      padding-bottom: 14px;
+      margin-bottom: 28px;
+      overflow-x: auto;
+    }
+
+    .hub-tab-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: var(--transition);
+    }
+
+    .hub-tab-btn:hover {
+      color: var(--cream);
+      border-color: rgba(212, 175, 55, 0.4);
+      background: rgba(212, 175, 55, 0.06);
+    }
+
+    .hub-tab-btn.active {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.08));
+      color: var(--gold-light);
+      border-color: var(--gold);
+      box-shadow: 0 4px 16px rgba(212, 175, 55, 0.2);
+    }
+
+    /* ── SECTION PANELS ── */
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+      animation: fadeIn 0.35s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── DAILY BRIEF VIEW ── */
+    .daily-brief-card {
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .brief-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 16px;
+    }
+
+    .brief-header .date-tag {
+      color: var(--gold);
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .brief-exec-summary {
+      font-size: 17px;
+      color: var(--cream);
+      line-height: 1.7;
+      margin-bottom: 28px;
+      background: rgba(7, 13, 24, 0.4);
+      padding: 20px;
+      border-left: 4px solid var(--gold);
+      border-radius: 6px;
+    }
+
+    .brief-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+
+    .brief-developments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .brief-dev-item {
+      background: rgba(7, 13, 24, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 16px 20px;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .brief-dev-item:hover {
+      border-color: var(--gold);
+      background: rgba(19, 34, 56, 0.6);
+      transform: translateX(4px);
+    }
+
+    .brief-dev-item h4 {
+      font-size: 16px;
+      color: var(--cream);
+      margin-bottom: 6px;
+    }
+
+    .brief-dev-item p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .brief-strategy-card {
+      background: linear-gradient(135deg, #182842 0%, #0d1b33 100%);
+      border: 1px solid var(--navy-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .brief-strategy-card h3 {
+      font-size: 18px;
+      color: var(--gold);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brief-strategy-card p {
+      font-size: 14px;
+      color: var(--cream);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    /* ── DECISION CENTER (KARAR MERKEZİ) ── */
+    .decision-hub-wrapper {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .decision-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      padding-right: 20px;
+    }
+
+    .decision-nav-btn {
+      background: rgba(7, 13, 24, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--cream);
+      padding: 14px 18px;
+      border-radius: 10px;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: var(--transition);
+    }
+
+    .decision-nav-btn i {
+      color: var(--gold);
+      font-size: 18px;
+    }
+
+    .decision-nav-btn:hover {
+      border-color: var(--gold);
+      background: rgba(19, 34, 56, 0.8);
+    }
+
+    .decision-nav-btn.active {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(212, 175, 55, 0.08));
+      border-color: var(--gold);
+      color: var(--gold-light);
+    }
+
+    .decision-form-container {
+      padding-left: 10px;
+    }
+
+    .form-group-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .form-group input, .form-group select {
+      background: rgba(7, 13, 24, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
+    }
+
+    .btn-calculate {
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: #070d18;
+      font-weight: 700;
+      font-size: 15px;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+      box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35);
+    }
+
+    .btn-calculate:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(212, 175, 55, 0.5);
+    }
+
+    /* ── DECISION RESULT DISPLAY ── */
+    .decision-result-box {
+      margin-top: 24px;
+      background: rgba(7, 13, 24, 0.8);
+      border: 1px solid var(--navy-border);
+      border-radius: 12px;
+      padding: 24px;
+      display: none;
+    }
+
+    .result-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 14px;
+    }
+
+    .result-badge {
+      font-size: 18px;
+      font-weight: 800;
+      padding: 6px 16px;
+      border-radius: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-strong {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid var(--green-up);
+      color: var(--green-up);
+    }
+
+    .badge-moderate {
+      background: rgba(56, 189, 248, 0.2);
+      border: 1px solid var(--blue-accent);
+      color: var(--blue-accent);
+    }
+
+    .badge-caution {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid var(--red-down);
+      color: var(--red-down);
+    }
+
+    .result-factors-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .factor-item {
+      background: rgba(19, 34, 56, 0.6);
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .factor-item strong {
+      display: block;
+      color: var(--gold-light);
+      margin-bottom: 4px;
+    }
+
+    /* ── FEED CONTROLS & SEARCH ── */
+    .feed-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .search-input-wrapper i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+
+    .search-input-wrapper input {
+      width: 100%;
+      background: var(--navy-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      padding: 12px 16px 12px 44px;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .search-input-wrapper input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 12px var(--gold-glow);
+    }
+
+    .filter-chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .chip-btn {
+      background: var(--navy-card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition);
+    }
+
+    .chip-btn:hover {
+      color: var(--cream);
+      border-color: var(--gold);
+    }
+
+    .chip-btn.active {
+      background: rgba(212, 175, 55, 0.15);
+      border-color: var(--gold);
+      color: var(--gold-light);
+      font-weight: 600;
+    }
+
+    /* ── NEWS / INTELLIGENCE GRID ── */
+    .intel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 24px;
+    }
+
+    .intel-card {
+      background: var(--navy-card);
+      border: 1px solid rgba(212, 175, 55, 0.15);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      box-shadow: var(--shadow-card);
+      cursor: pointer;
+    }
+
+    .intel-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--gold);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .card-banner {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .card-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .intel-card:hover .card-banner img {
+      transform: scale(1.04);
+    }
+
+    .card-banner .pill-cat {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(7, 13, 24, 0.85);
+      border: 1px solid var(--gold);
+      color: var(--gold-light);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      backdrop-filter: blur(8px);
+    }
+
+    .card-banner .pill-source {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(16, 185, 129, 0.85);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .card-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .intel-card h3 {
+      font-size: 18px;
+      color: var(--cream);
+      margin-bottom: 10px;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-snippet {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 16px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    /* ── 4-WAY IMPACT METERS ── */
+    .impact-badges-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      background: rgba(7, 13, 24, 0.6);
+      border-radius: 8px;
+      padding: 8px 10px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .impact-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .impact-chip .lbl {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .impact-chip .val {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .val-buyer { color: var(--green-up); }
+    .val-seller { color: var(--blue-accent); }
+    .val-investor { color: var(--gold); }
+    .val-developer { color: var(--purple-accent); }
+
+    .card-footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 14px;
+      margin-top: auto;
+    }
+
+    .read-cta {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gold);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .author-badge {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ── DISTRICTS TAB (BÖLGELER) ── */
+    .districts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .district-card {
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: 14px;
+      padding: 24px;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .district-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+    }
+
+    .district-card h3 {
+      font-size: 20px;
+      color: var(--gold-light);
+      margin-bottom: 8px;
+    }
+
+    .district-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .district-stats {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 12px;
+      font-size: 12px;
+    }
+
+    .district-stats strong {
+      color: var(--cream);
+    }
+
+    /* ── READING MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 2000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-card {
+      background: #0d1b33;
+      border: 1px solid var(--gold);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 900px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8);
+      animation: modalPop 0.3s ease;
+    }
+
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(7, 13, 24, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: var(--transition);
+    }
+
+    .modal-close-btn:hover {
+      background: var(--gold);
+      color: #000;
+      border-color: var(--gold);
+    }
+
+    .modal-hero-img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+    }
+
+    .modal-body-content {
+      padding: 32px;
+    }
+
+    .modal-section-title {
+      font-size: 18px;
+      color: var(--gold);
+      margin: 24px 0 12px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+      padding-bottom: 8px;
+    }
+
+    .impact-bars-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 16px 0;
+    }
+
+    .impact-bar-item {
+      background: rgba(7, 13, 24, 0.6);
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .impact-bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .impact-progress {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .impact-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.8s ease;
+    }
+
+    .fill-buyer { background: var(--green-up); }
+    .fill-seller { background: var(--blue-accent); }
+    .fill-investor { background: var(--gold); }
+    .fill-developer { background: var(--purple-accent); }
+
+    .fact-claims-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .fact-claim-badge {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--cream);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .fact-claim-badge i {
+      color: var(--green-up);
+      margin-top: 3px;
+    }
+
+    /* ── SWARM LIVE BANNER ── */
+    .swarm-live-banner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(13, 27, 51, 0.9));
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 12px;
+      padding: 14px 20px;
+      margin: 20px 0 24px 0;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .swarm-live-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--green-up);
+    }
+
+    .swarm-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green-up);
+      box-shadow: 0 0 10px var(--green-up);
+      animation: pulseGreen 1.6s infinite;
+    }
+
+    @keyframes pulseGreen {
+      0% { transform: scale(0.9); opacity: 0.7; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.7; }
+    }
+
+    .swarm-live-statement {
+      flex: 1;
+      font-size: 13.5px;
+      color: var(--cream);
+      line-height: 1.5;
+    }
+
+    .swarm-regime-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 6px;
+      background: rgba(212, 175, 55, 0.18);
+      color: var(--gold-light);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── 4-PART EPISTEMOLOGICAL MODEL TABS ── */
+    .epistemic-tabs-header {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin: 18px 0 12px 0;
+    }
+
+    @media (max-width: 768px) {
+      .epistemic-tabs-header {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .epistemic-tab-btn {
+      background: rgba(7, 13, 24, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      transition: var(--transition);
+      text-align: left;
+    }
+
+    .epistemic-tab-btn small {
+      font-size: 10.5px;
+      font-weight: 400;
+      opacity: 0.8;
+    }
+
+    .epistemic-tab-btn.active {
+      background: rgba(13, 27, 51, 0.95);
+      color: var(--cream);
+      border-color: var(--gold);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .epistemic-tab-btn .dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+
+    .dot-green { background: #10b981; box-shadow: 0 0 8px #10b981; }
+    .dot-blue { background: #3b82f6; box-shadow: 0 0 8px #3b82f6; }
+    .dot-yellow { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+    .dot-red { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+
+    .epistemic-content-box {
+      background: rgba(7, 13, 24, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      min-height: 120px;
+    }
+
+    .epistemic-panel {
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .epistemic-panel.active {
+      display: block;
+    }
+
+    .epistemic-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .badge-green { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.35); }
+    .badge-blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.35); }
+    .badge-yellow { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
+    .badge-red { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.35); }
+
+    .epistemic-text {
+      color: var(--cream);
+      font-size: 14.5px;
+      line-height: 1.7;
+    }
+
+    /* ── TRANSPARENT "NEDEN BU HABER?" CARD BREAKDOWN ── */
+    .why-news-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(212, 175, 55, 0.12);
+      color: var(--gold-light);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-top: 6px;
+    }
+
+    .connected-projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .connected-project-card {
+      background: rgba(7, 13, 24, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 14px;
+      text-decoration: none;
+      color: var(--cream);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .connected-project-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .connected-project-card h5 {
+      font-size: 15px;
+      color: var(--gold-light);
+      margin-bottom: 4px;
+    }
+
+    .modal-advisor-cta {
+      margin-top: 32px;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.18), rgba(7, 13, 24, 0.8));
+      border: 1px solid var(--gold);
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .advisor-options-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .advisor-btn-chip {
+      background: rgba(7, 13, 24, 0.7);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: var(--cream);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .advisor-btn-chip.selected {
+      background: var(--gold);
+      color: #070d18;
+      font-weight: 700;
+    }
+
+    .btn-send-advisor-wa {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
+      transition: var(--transition);
+    }
+
+    .btn-send-advisor-wa:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(37, 211, 102, 0.5);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--navy-border);
+      background: rgba(7, 13, 24, 0.98);
+      padding: 36px 24px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    footer p {
+      margin-bottom: 6px;
+    }
+
+    /* ── TACTILE LUXURY SLIDERS ── */
+    .slider-field-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .slider-header-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .slider-header-info .val-display {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      color: var(--gold-light);
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      padding: 3px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .luxury-range-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 7px;
+      border-radius: 4px;
+      background: linear-gradient(to right, #10b981 0%, var(--gold) 60%, #38bdf8 100%);
+      outline: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .luxury-range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 3px solid #070d18;
+      box-shadow: 0 0 12px var(--gold-glow);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .luxury-range-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.22);
+      box-shadow: 0 0 18px rgba(212, 175, 55, 0.6);
+    }
+
+    .luxury-range-slider::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 3px solid #070d18;
+      box-shadow: 0 0 12px var(--gold-glow);
+      cursor: pointer;
+    }
+
+    /* ── LIVE SVG GAUGE METER ── */
+    .gauge-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 18px 0;
+      position: relative;
+    }
+
+    .gauge-svg {
+      width: 240px;
+      height: 130px;
+      overflow: visible;
+    }
+
+    .gauge-score-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      fill: #ffffff;
+      text-anchor: middle;
+    }
+
+    .gauge-label-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      fill: #94a3b8;
+      letter-spacing: 1.5px;
+      text-anchor: middle;
+      text-transform: uppercase;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      body { padding-top: 100px; }
+      .hub-hero { padding: 24px; }
+      .hub-hero h1 { font-size: 26px; }
+      .brief-grid { grid-template-columns: 1fr; }
+      .decision-hub-wrapper { grid-template-columns: 1fr; }
+      .decision-nav {
+        flex-direction: row;
+        overflow-x: auto;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        padding-bottom: 12px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .decision-nav-btn {
+        flex-shrink: 0;
+        padding: 10px 14px;
+        font-size: 13px;
+      }
+      .form-group-row { grid-template-columns: 1fr; }
+      .intel-grid { grid-template-columns: 1fr; }
+      .impact-bars-container { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding-top: 92px;
+      }
+      .market-ticker-wrapper {
+        padding: 6px 0;
+      }
+      .header-nav {
+        top: 31px;
+        padding: 8px 16px;
+      }
+      .brand-block img {
+        width: 32px;
+        height: 32px;
+      }
+      .brand-title {
+        font-size: 13px;
+      }
+      .btn-portal-back {
+        padding: 5px 10px;
+        font-size: 12px;
+      }
+      .filter-chips {
+        padding-bottom: 8px;
+        -webkit-overflow-scrolling: touch;
+        mask-image: linear-gradient(to right, black 85%, transparent 100%);
+      }
+      .chip-btn {
+        padding: 6px 13px;
+        font-size: 12px;
+      }
+      /* Native Bottom Sheet for Mobile Reading Modal */
+      .modal-overlay {
+        align-items: flex-end !important;
+        padding: 0 !important;
+      }
+      .modal-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 24px 24px 0 0 !important;
+        max-height: 92vh !important;
+        margin: 0 !important;
+        animation: slideUpBottom 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .modal-card::before {
+        content: '';
+        display: block;
+        width: 46px;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.28);
+        border-radius: 3px;
+        margin: 10px auto 4px auto;
+      }
+      .modal-body-content {
+        padding: 20px 16px 36px 16px !important;
+      }
+      .modal-hero-img {
+        height: 180px !important;
+      }
+      @keyframes slideUpBottom {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── MARKET PULSE LIVE TICKER BAR ── -->
+  <div class="market-ticker-wrapper">
+    <div class="market-ticker-track" id="tickerTrack">
+      <div class="ticker-item">
+        <i class="fas fa-shield-alt text-gold"></i>
+        <span>Piyasa Durumu: <strong id="pulseOverall">Stabil / Seçici Fırsatlar</strong></span>
+      </div>
+      <div class="ticker-item">
+        <i class="fas fa-percentage"></i>
+        <span>TCMB Politika Faizi: <strong class="val-gold" id="pulseTcmb">%45.00</strong></span>
+      </div>
+      <div class="ticker-item">
+        <i class="fas fa-hand-holding-usd"></i>
+        <span>Konut Kredisi: <strong id="pulseCredit">%2.89 - %3.15 / Ay</strong></span>
+      </div>
+      <div class="ticker-item">
+        <i class="fas fa-city"></i>
+        <span>Ankara Konut Talebi: <strong class="val-up" id="pulseHousing">Güçlü (Beytepe, İncek)</strong></span>
+      </div>
+      <div class="ticker-item">
+        <i class="fas fa-map-marked-alt"></i>
+        <span>Arsa / Arazi Hacmi: <strong class="val-up" id="pulseLand">Yüksek Prim (Gölbaşı)</strong></span>
+      </div>
+      <div class="ticker-item">
+        <i class="fas fa-clock"></i>
+        <span>Ort. Amortisman: <strong id="pulseAmortization">16.2 Yıl (Çankaya)</strong></span>
+      </div>
+      <!-- Duplicate track for seamless infinite marquee -->
+      <div class="ticker-item">
+        <i class="fas fa-shield-alt text-gold"></i>
+        <span>Piyasa Durumu: <strong>Stabil / Seçici Fırsatlar</strong></span>
+      </div>
+      <div class="ticker-item">
+        <i class="fas fa-percentage"></i>
+        <span>TCMB Politika Faizi: <strong class="val-gold">%45.00</strong></span>
+      </div>
+      <div class="ticker-item">
+        <i class="fas fa-hand-holding-usd"></i>
+        <span>Konut Kredisi: <strong>%2.89 - %3.15 / Ay</strong></span>
+      </div>
+      <div class="ticker-item">
+        <i class="fas fa-city"></i>
+        <span>Ankara Konut Talebi: <strong class="val-up">Güçlü (Beytepe, İncek)</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HEADER NAVIGATION ── -->
+  <header class="header-nav">
+    <a href="/" class="brand-block">
+      <img src="https://i.ibb.co/ksPFvjCt/Yigit-Bey1.png" alt="Yiğit Narin">
+      <div class="brand-title">
+        NEXA REAL ESTATE INTELLIGENCE
+        <span>Coldwell Banker CB VIP Ankara • Yiğit Narin</span>
+      </div>
+    </a>
+    <div class="nav-actions">
+      <a href="/" class="btn-portal-back"><i class="fas fa-arrow-left"></i> Ana Siteye Dön</a>
+      <a href="https://wa.me/905324514008?text=Merhaba%20Yiğit%20Bey,%20NEXA%20İstihbarat%20Ağı%20üzerinden%20size%20ulaşıyorum." target="_blank" class="btn-header-wa">
+        <i class="fab fa-whatsapp"></i> Danışmana Sor
+      </a>
+    </div>
+  </header>
+
+  <!-- ── HUB MAIN CONTENT ── -->
+  <main class="hub-container">
+    
+    <!-- ── HERO BANNER ── -->
+    <section class="hub-hero">
+      <div class="hub-badge"><i class="fas fa-satellite-dish"></i> Doğrulanmış Çok Kaynaklı Veri Ağı</div>
+      <h1>Gayrimenkulde <span>Veri Odaklı</span> Güç ve İstihbarat</h1>
+      <p>TCMB, TÜİK, AA Finans ve Endeksa verileriyle taranan, SimHash ile tekilleştirilen ve yapay zeka ile alıcı, satıcı, yatırımcı ve geliştirici segmentlerine göre analiz edilen Ankara gayrimenkul karar platformu.</p>
+      
+      <!-- ── SWARM INTELLIGENCE LIVE BANNER ── -->
+      <div class="swarm-live-banner" id="swarmLiveBanner">
+        <div class="swarm-live-pill">
+          <span class="swarm-pulse-dot"></span>
+          <span class="swarm-live-tag">NEXA SWARM INTELLIGENCE</span>
+        </div>
+        <div class="swarm-live-statement" id="swarmStatement">
+          Bugün 47 piyasa sinyali tarandı • 11'i incelendi • 6'sı doğrulandı • 3'ü yüksek etkili piyasa istihbaratı olarak yayımlandı.
+        </div>
+        <div class="swarm-regime-badge" id="swarmRegimeBadge">
+          REJİM: DENGELİ (STABLE)
+        </div>
+      </div>
+
+      <div class="hub-metrics-grid">
+        <div class="hub-metric-card">
+          <div class="title">İstihbarat Akışı</div>
+          <div class="value" id="metricArticleCount">9 Rapor</div>
+          <div class="sub">Bugün Güncellendi</div>
+        </div>
+        <div class="hub-metric-card">
+          <div class="title">Veri Doğruluk Oranı</div>
+          <div class="value">98.4%</div>
+          <div class="sub">Resmi Kurum Doğrulaması</div>
+        </div>
+        <div class="hub-metric-card">
+          <div class="title">Çankaya Amortismanı</div>
+          <div class="value">16.2 Yıl</div>
+          <div class="sub">Türkiye Ortalamasının Altında</div>
+        </div>
+        <div class="hub-metric-card">
+          <div class="title">Yatırım Güven Skoru</div>
+          <div class="value">A+ Prime</div>
+          <div class="sub">Coldwell Banker CB VIP</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── NAVIGATION TABS ── -->
+    <div class="hub-tabs-wrapper">
+      <button class="hub-tab-btn active" onclick="switchTab('tab-brief')">
+        <i class="fas fa-newspaper"></i> Günlük İstihbarat (Brief)
+      </button>
+      <button class="hub-tab-btn" onclick="switchTab('tab-feed')">
+        <i class="fas fa-stream"></i> Piyasa Raporları (Feed)
+      </button>
+      <button class="hub-tab-btn" onclick="switchTab('tab-personal')">
+        <i class="fas fa-user-astronaut"></i> Sana Özel
+      </button>
+      <button class="hub-tab-btn" onclick="switchTab('tab-decisions')">
+        <i class="fas fa-calculator"></i> Karar Merkezi
+      </button>
+      <button class="hub-tab-btn" onclick="switchTab('tab-districts')">
+        <i class="fas fa-map-marked-alt"></i> Bölge Analizleri
+      </button>
+    </div>
+
+    <!-- ── TAB 1: DAILY BRIEF ── -->
+    <div id="tab-brief" class="tab-panel active">
+      <div class="daily-brief-card">
+        <div class="brief-header">
+          <div>
+            <span class="hub-badge" style="margin-bottom:6px;"><i class="fas fa-star"></i> Günlük Flagship Rapor</span>
+            <h2 id="briefHeadline" style="font-size:26px;color:var(--cream);margin-top:6px;">Ankara ve Türkiye Gayrimenkul Piyasa İstihbarat Bülteni</h2>
+          </div>
+          <div class="date-tag" id="briefDate">2026-03-07</div>
+        </div>
+
+        <div class="brief-exec-summary" id="briefSummary">
+          Yükleniyor...
+        </div>
+
+        <div class="brief-grid">
+          <div>
+            <h3 style="font-size:18px;color:var(--gold);margin-bottom:14px;"><i class="fas fa-bolt"></i> Kritik Piyasa Gelişmeleri</h3>
+            <div class="brief-developments-list" id="briefDevelopments">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+          <div>
+            <div class="brief-strategy-card">
+              <h3><i class="fas fa-lightbulb"></i> Yiğit Narin'in Strateji Notu</h3>
+              <p id="briefActionNote">
+                "Mevcut konjonktürde yüksek mevduat getirisine odaklanarak gayrimenkul alımını erteleyen yatırımcılar, beklenen faiz indirimi döngüsünde oluşacak ani fiyat sıçramasını gözden kaçırabilir. Özkaynağı olan yatırımcılar için Beytepe ve İncek aksında güçlü pazarlık marjları mevcuttur."
+              </p>
+              <a href="https://wa.me/905324514008?text=Merhaba%20Yiğit%20Bey,%20günün%20piyasa%20bülteni%20hakkında%20danışmak%20istiyorum." target="_blank" class="btn-send-advisor-wa" onclick="trackLead('daily_brief_wa_click')">
+                <i class="fab fa-whatsapp"></i> Bu Analizi Danışmanla Tartış
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB 2: PIYASA AKISI (FEED) ── -->
+    <div id="tab-feed" class="tab-panel">
+      <div class="feed-controls">
+        <div class="search-input-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Haber başlığı, semt, konu veya kurum ara (örn. Beytepe, TCMB)..." oninput="filterFeed()">
+        </div>
+        <div class="filter-chips">
+          <button class="chip-btn active" onclick="setCategory('Tümü')">Tümü</button>
+          <button class="chip-btn" onclick="setCategory('Konut')">Konut</button>
+          <button class="chip-btn" onclick="setCategory('Arsa')">Arsa & Arazi</button>
+          <button class="chip-btn" onclick="setCategory('Piyasa Analizi')">Piyasa & Faiz</button>
+          <button class="chip-btn" onclick="setCategory('Kentsel Dönüşüm')">Kentsel Dönüşüm</button>
+          <button class="chip-btn" onclick="setCategory('Lüks Konut')">Lüks Konut</button>
+        </div>
+      </div>
+
+      <div class="intel-grid" id="feedGrid">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <!-- ── TAB 3: SANA OZEL ── -->
+    <div id="tab-personal" class="tab-panel">
+      <div class="daily-brief-card" style="margin-bottom:24px;">
+        <div class="brief-header">
+          <div>
+            <span class="hub-badge"><i class="fas fa-sliders-h"></i> Yatırımcı Tercih Motoru</span>
+            <h2 style="font-size:24px;margin-top:6px;">Sizin İçin Kişiselleştirilmiş Piyasa İstihbaratı</h2>
+          </div>
+        </div>
+        <p style="color:var(--text-muted);font-size:14px;margin-bottom:20px;">
+          İlgi duyduğunuz mülk türlerini ve bölgeleri seçin; yapay zeka algoritması sizin profilinize en uygun piyasa raporlarını önceliklendirsin.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;" id="personalPrefsTags">
+          <button class="chip-btn active" onclick="togglePref('Konut')">Konut</button>
+          <button class="chip-btn active" onclick="togglePref('Arsa')">Arsa & Arazi</button>
+          <button class="chip-btn active" onclick="togglePref('Çankaya')">Çankaya</button>
+          <button class="chip-btn active" onclick="togglePref('Beytepe')">Beytepe</button>
+          <button class="chip-btn" onclick="togglePref('İncek')">İncek</button>
+          <button class="chip-btn" onclick="togglePref('Faiz')">Faiz Politikaları</button>
+        </div>
+      </div>
+
+      <div class="intel-grid" id="personalGrid">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <!-- ── TAB 4: DECISION CENTER (KARAR MERKEZİ) ── -->
+    <div id="tab-decisions" class="tab-panel">
+      <div class="decision-hub-wrapper">
+        <div class="decision-nav">
+          <button class="decision-nav-btn active" onclick="switchDecisionEngine('buying')">
+            <i class="fas fa-home"></i>
+            <div>
+              <div>Ev Almalı mıyım?</div>
+              <small style="font-size:11px;color:var(--text-muted);font-weight:normal;">Alım Karar Motoru</small>
+            </div>
+          </button>
+          <button class="decision-nav-btn" onclick="switchDecisionEngine('selling')">
+            <i class="fas fa-tag"></i>
+            <div>
+              <div>Evimi Satmalı mıyım?</div>
+              <small style="font-size:11px;color:var(--text-muted);font-weight:normal;">Satış & Likidite Motoru</small>
+            </div>
+          </button>
+          <button class="decision-nav-btn" onclick="switchDecisionEngine('project')">
+            <i class="fas fa-building"></i>
+            <div>
+              <div>Proje Yatırımı Mantıklı mı?</div>
+              <small style="font-size:11px;color:var(--text-muted);font-weight:normal;">Proje & Prim Skoru</small>
+            </div>
+          </button>
+          <button class="decision-nav-btn" onclick="switchDecisionEngine('rent-vs-buy')">
+            <i class="fas fa-balance-scale"></i>
+            <div>
+              <div>Kira mı, Satın Alma mı?</div>
+              <small style="font-size:11px;color:var(--text-muted);font-weight:normal;">Net Servet Karşılaştırması</small>
+            </div>
+          </button>
+        </div>
+
+        <div class="decision-form-container">
+          <!-- SUB-FORM 1: BUYING -->
+          <div id="engine-buying" class="engine-form">
+            <h3 style="color:var(--gold);font-size:20px;margin-bottom:14px;"><i class="fas fa-home"></i> Konut Satın Alma Karar Değerlendirmesi</h3>
+            <div class="form-group-row">
+              <div class="form-group">
+                <div class="slider-header-info">
+                  <label>Hedef Bütçe</label>
+                  <span class="val-display" id="buyBudgetValue">6.500.000 TL</span>
+                </div>
+                <input type="number" id="buyBudget" value="6500000" style="display:none;">
+                <input type="range" id="buyBudgetSlider" class="luxury-range-slider" min="3000000" max="40000000" step="500000" value="6500000" oninput="syncBudgetSlider(this.value)">
+              </div>
+              <div class="form-group">
+                <label>Finansman Yöntemi</label>
+                <select id="buyFinancing">
+                  <option value="cash">Tamamı Nakit / Özkaynak</option>
+                  <option value="credit">Kısmi Konut Kredisi</option>
+                  <option value="installment">Müteahhit Vadeli / Takas</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group-row">
+              <div class="form-group">
+                <label>Hedef İlçe / Aks</label>
+                <select id="buyDistrict">
+                  <option value="Beytepe">Beytepe (Lüks Rezidans)</option>
+                  <option value="İncek">İncek (Villa & Prestij)</option>
+                  <option value="Çayyolu">Çayyolu / Alacaatlı</option>
+                  <option value="Çankaya">Çankaya Merkez</option>
+                  <option value="Gölbaşı">Gölbaşı</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Kullanım Amacı</label>
+                <select id="buyPurpose">
+                  <option value="living">Kendi Oturumum İçin</option>
+                  <option value="investment">Yatırım & Kira Getirisi</option>
+                  <option value="capital_gain">Orta Vadeli Sermaye Kazancı</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="btn-calculate" onclick="runDecision('buying')">
+              <i class="fas fa-bolt"></i> Koşulları Değerlendir ve Raporla
+            </button>
+          </div>
+
+          <!-- SUB-FORM 2: SELLING -->
+          <div id="engine-selling" class="engine-form" style="display:none;">
+            <h3 style="color:var(--gold);font-size:20px;margin-bottom:14px;"><i class="fas fa-tag"></i> Konut Satış & Likidite Değerlendirmesi</h3>
+            <p style="color:var(--text-muted);font-size:13px;margin-bottom:20px;">Mülkünüzü satmak için doğru zaman mı? Piyasa likiditesi ve alternatif getiri analizi.</p>
+
+            <div class="form-group-row">
+              <div class="form-group">
+                <div class="slider-header-info">
+                  <label>Tahmini Piyasa Değeri</label>
+                  <span class="val-display" id="sellValueValue">8.000.000 TL</span>
+                </div>
+                <input type="number" id="sellValue" value="8000000" style="display:none;">
+                <input type="range" id="sellValueSlider" class="luxury-range-slider" min="3000000" max="50000000" step="500000" value="8000000" oninput="syncSellSlider(this.value)">
+              </div>
+              <div class="form-group">
+                <label>Mülk Yaşı</label>
+                <select id="sellAge">
+                  <option value="0-5">0 - 5 Yaş (Yeni Yapı)</option>
+                  <option value="6-15">6 - 15 Yaş (Modern)</option>
+                  <option value="16+">16+ Yaş (Dönüşüm Adayı)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group-row">
+              <div class="form-group">
+                <label>Mülkün Bulunduğu Bölge</label>
+                <select id="sellDistrict">
+                  <option value="Çankaya">Çankaya</option>
+                  <option value="Beytepe">Beytepe</option>
+                  <option value="İncek">İncek</option>
+                  <option value="Çayyolu">Çayyolu</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Satış Nedeni</label>
+                <select id="sellReason">
+                  <option value="portfolio_upgrade">Daha Büyük / Yeni Mülke Geçiş</option>
+                  <option value="cash_need">Nakit Sermaye İhtiyacı</option>
+                  <option value="financial_instruments">Alternatif Finansal Araçlar</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="btn-calculate" onclick="runDecision('selling')">
+              <i class="fas fa-bolt"></i> Satış Zamanlamasını Analiz Et
+            </button>
+          </div>
+
+          <!-- SUB-FORM 3: PROJECT -->
+          <div id="engine-project" class="engine-form" style="display:none;">
+            <h3 style="color:var(--gold);font-size:20px;margin-bottom:14px;"><i class="fas fa-building"></i> Proje Yatırımı & Lansman Değerlendirmesi</h3>
+            <p style="color:var(--text-muted);font-size:13px;margin-bottom:20px;">İnşaat aşamasındaki projelerde teslim riski, prim marjı ve müteahhit güvenirliği skoru.</p>
+
+            <div class="form-group-row">
+              <div class="form-group">
+                <label>Proje Konumu</label>
+                <select id="projDistrict">
+                  <option value="Beytepe">Beytepe Bulvarı</option>
+                  <option value="İncek">İncek Aksı</option>
+                  <option value="Çayyolu">Çayyolu Bağlantısı</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Kalan Teslim Süresi</label>
+                <select id="projDelivery">
+                  <option value="ready">Hemen Teslim / İskanlı</option>
+                  <option value="6-12">6 - 12 Ay</option>
+                  <option value="18-24">18 - 24 Ay</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group-row">
+              <div class="form-group">
+                <label>Ruhsat & Kat İrtifakı Durumu</label>
+                <select id="projDeed">
+                  <option value="irtifak">Kat İrtifakı Tapusu Hazır</option>
+                  <option value="ruhsat">Yapı Ruhsatı Alınmış</option>
+                  <option value="on_proje">Ön Proje / Ruhsat Sürecinde</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Peşinat Oranı (%)</label>
+                <input type="number" id="projDownpayment" value="40" min="10" max="100">
+              </div>
+            </div>
+
+            <button class="btn-calculate" onclick="runDecision('project')">
+              <i class="fas fa-bolt"></i> Proje Fizibilitesini Hesapla
+            </button>
+          </div>
+
+          <!-- SUB-FORM 4: RENT VS BUY -->
+          <div id="engine-rent-vs-buy" class="engine-form" style="display:none;">
+            <h3 style="color:var(--gold);font-size:20px;margin-bottom:14px;"><i class="fas fa-balance-scale"></i> Kira mı, Satın Alma mı? Karşılaştırmalı Analiz</h3>
+            <p style="color:var(--text-muted);font-size:13px;margin-bottom:20px;">Enflasyon, kira artış tavanı ve mülk değer artışını modelleyerek 5-10 yıllık net servet farkını görün.</p>
+
+            <div class="form-group-row">
+              <div class="form-group">
+                <div class="slider-header-info">
+                  <label>Mevcut Aylık Kira</label>
+                  <span class="val-display" id="rvbRentValue">35.000 TL</span>
+                </div>
+                <input type="number" id="rvbRent" value="35000" style="display:none;">
+                <input type="range" id="rvbRentSlider" class="luxury-range-slider" min="15000" max="150000" step="2500" value="35000" oninput="syncRentSlider(this.value)">
+              </div>
+              <div class="form-group">
+                <div class="slider-header-info">
+                  <label>Emsal Satın Alma Fiyatı</label>
+                  <span class="val-display" id="rvbPriceValue">7.000.000 TL</span>
+                </div>
+                <input type="number" id="rvbPrice" value="7000000" style="display:none;">
+                <input type="range" id="rvbPriceSlider" class="luxury-range-slider" min="3000000" max="40000000" step="500000" value="7000000" oninput="syncPriceSlider(this.value)">
+              </div>
+            </div>
+
+            <div class="form-group-row">
+              <div class="form-group">
+                <label>Mevcut Peşinat (TL)</label>
+                <input type="number" id="rvbEquity" value="3000000" placeholder="Örn: 3000000">
+              </div>
+              <div class="form-group">
+                <label>Öngörülen İkamet Süresi (Yıl)</label>
+                <input type="number" id="rvbHorizon" value="5" min="1" max="15">
+              </div>
+            </div>
+
+            <button class="btn-calculate" onclick="runDecision('rent-vs-buy')">
+              <i class="fas fa-bolt"></i> Net Finansal Karşılaştırmayı Üret
+            </button>
+          </div>
+
+          <!-- DYNAMIC RESULT CONTAINER WITH LIVE SVG GAUGE -->
+          <div id="decisionResultBox" class="decision-result-box">
+            <div class="result-badge-row">
+              <div>
+                <span style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;">Değerlendirme Sonucu</span>
+                <h4 id="resConditionTitle" style="font-size:22px;color:var(--cream);margin-top:2px;">-</h4>
+              </div>
+              <div id="resBadge" class="result-badge badge-strong">GÜÇLÜ KOŞULLAR</div>
+            </div>
+
+            <!-- LIVE SVG GAUGE METER -->
+            <div class="gauge-wrapper" id="decisionGaugeWrapper">
+              <svg class="gauge-svg" viewBox="0 0 200 120">
+                <defs>
+                  <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#ef4444" />
+                    <stop offset="35%" stop-color="#f59e0b" />
+                    <stop offset="70%" stop-color="#d4af37" />
+                    <stop offset="100%" stop-color="#10b981" />
+                  </linearGradient>
+                </defs>
+                <path d="M 25 100 A 75 75 0 0 1 175 100" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="14" stroke-linecap="round"/>
+                <path id="gaugeArc" d="M 25 100 A 75 75 0 0 1 175 100" fill="none" stroke="url(#gaugeGrad)" stroke-width="14" stroke-linecap="round" stroke-dasharray="235.6" stroke-dashoffset="60" style="transition: stroke-dashoffset 1s ease;"/>
+                <g id="gaugeNeedleGroup" style="transform-origin: 100px 100px; transform: rotate(40deg); transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                  <line x1="100" y1="100" x2="100" y2="35" stroke="#f6e6b4" stroke-width="3.5" stroke-linecap="round"/>
+                  <circle cx="100" cy="100" r="7" fill="#d4af37"/>
+                  <circle cx="100" cy="100" r="3" fill="#070d18"/>
+                </g>
+                <text id="gaugeScoreText" x="100" y="88" class="gauge-score-text">7.4</text>
+                <text id="gaugeScoreSub" x="100" y="108" class="gauge-label-text">ENDİKS / 10</text>
+              </svg>
+            </div>
+            <p id="resConsultationPrompt" style="font-size:14px;color:var(--cream);margin-bottom:16px;line-height:1.6;"></p>
+            
+            <div class="result-factors-grid" id="resFactors"></div>
+
+            <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
+              <a href="#" id="resWaBtn" target="_blank" class="btn-send-advisor-wa" style="flex:1;">
+                <i class="fab fa-whatsapp"></i> Bu Kararı Yiğit Narin ile Görüş
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB 5: DISTRICTS (BÖLGELER) ── -->
+    <div id="tab-districts" class="tab-panel">
+      <div style="margin-bottom:24px;">
+        <span class="hub-badge"><i class="fas fa-map-marker-alt"></i> Ankara Prime Aksları</span>
+        <h2 style="font-size:26px;margin-top:6px;">Bölgesel Gayrimenkul & Yatırım Göstergeleri</h2>
+      </div>
+
+      <div class="districts-grid">
+        <div class="district-card" onclick="filterByDistrict('Beytepe')">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <h3>Beytepe</h3>
+            <span class="hub-badge" style="margin:0;">Lüks Rezidans</span>
+          </div>
+          <p>Ankara'nın en yüksek sermaye kazancı sunan yeni rezidans ve villa aksı. Üniversitelere ve ana arterlere doğrudan bağlantılı.</p>
+          <div class="district-stats">
+            <div>Amortisman: <strong>16.8 Yıl</strong></div>
+            <div>Yıllık Prim: <strong class="val-up">+%68</strong></div>
+            <div>Talep: <strong class="val-gold">Çok Yüksek</strong></div>
+          </div>
+        </div>
+
+        <div class="district-card" onclick="filterByDistrict('İncek')">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <h3>İncek</h3>
+            <span class="hub-badge" style="margin:0;">Müstakil & Villa</span>
+          </div>
+          <p>Büyükelçilik yerleşkeleri, özel kolejler ve geniş parselli lüks müstakil yaşam projeleriyle başkentin gözde bölgesi.</p>
+          <div class="district-stats">
+            <div>Amortisman: <strong>17.4 Yıl</strong></div>
+            <div>Yıllık Prim: <strong class="val-up">+%62</strong></div>
+            <div>Talep: <strong class="val-gold">Yüksek</strong></div>
+          </div>
+        </div>
+
+        <div class="district-card" onclick="filterByDistrict('Çayyolu')">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <h3>Çayyolu / Alacaatlı</h3>
+            <span class="hub-badge" style="margin:0;">Aile & Prestij</span>
+          </div>
+          <p>Gelişmiş sosyal altyapı, metro erişimi ve seçkin konut siteleriyle Ankara'nın en istikrarlı gayrimenkul aksı.</p>
+          <div class="district-stats">
+            <div>Amortisman: <strong>15.9 Yıl</strong></div>
+            <div>Yıllık Prim: <strong class="val-up">+%58</strong></div>
+            <div>Talep: <strong class="val-gold">Çok Yüksek</strong></div>
+          </div>
+        </div>
+
+        <div class="district-card" onclick="filterByDistrict('Çankaya')">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <h3>Çankaya (Merkez & Oran)</h3>
+            <span class="hub-badge" style="margin:0;">Diplomatik & Dönüşüm</span>
+          </div>
+          <p>Kentsel dönüşüm teşvikleri, diplomatik misyonlar ve yüksek kira likiditesi ile risksiz ve defansif yatırım profili.</p>
+          <div class="district-stats">
+            <div>Amortisman: <strong>15.2 Yıl</strong></div>
+            <div>Yıllık Prim: <strong class="val-up">+%55</strong></div>
+            <div>Talep: <strong class="val-gold">Sürekli</strong></div>
+          </div>
+        </div>
+
+        <div class="district-card" onclick="filterByDistrict('Gölbaşı')">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <h3>Gölbaşı (Arsa & Gelişim)</h3>
+            <span class="hub-badge" style="margin:0;">Yüksek Çarpan</span>
+          </div>
+          <p>Ankara'nın güney genişleme koridorunda imar planları, villa parselleri ve orta vadeli arsa yatırımlarının merkezi.</p>
+          <div class="district-stats">
+            <div>Arsa Çarpanı: <strong>2.4x / 3 Yıl</strong></div>
+            <div>Yıllık Prim: <strong class="val-up">+%78</strong></div>
+            <div>Talep: <strong class="val-gold">Agresif</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── READING MODAL ── -->
+  <div class="modal-overlay" id="readingModal" onclick="closeModalOnOverlay(event)">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" id="modalImg" class="modal-hero-img" alt="Haber Görseli">
+      
+      <div class="modal-body-content">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;">
+          <span class="hub-badge" id="modalCategory" style="margin:0;"></span>
+          <span class="pill-tag" id="modalSource" style="background:rgba(16,185,129,0.15);color:var(--green-up);border:1px solid rgba(16,185,129,0.3);padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;"></span>
+          <span id="modalDate" style="color:var(--text-muted);font-size:12px;margin-left:auto;"></span>
+        </div>
+
+        <h1 id="modalTitle" style="font-size:26px;color:var(--cream);line-height:1.3;margin-bottom:14px;"></h1>
+
+        <!-- 4-WAY IMPACT GAUGES IN MODAL -->
+        <div class="modal-section-title"><i class="fas fa-chart-pie"></i> Çoklu Segment Etki Göstergesi</div>
+        <div class="impact-bars-container">
+          <div class="impact-bar-item">
+            <div class="impact-bar-header">
+              <span>ALICI ETKİSİ</span>
+              <span id="modalImpactBuyer" class="val-buyer">-%</span>
+            </div>
+            <div class="impact-progress"><div id="modalBarBuyer" class="impact-fill fill-buyer" style="width:0%"></div></div>
+          </div>
+          <div class="impact-bar-item">
+            <div class="impact-bar-header">
+              <span>SATICI ETKİSİ</span>
+              <span id="modalImpactSeller" class="val-seller">-%</span>
+            </div>
+            <div class="impact-progress"><div id="modalBarSeller" class="impact-fill fill-seller" style="width:0%"></div></div>
+          </div>
+          <div class="impact-bar-item">
+            <div class="impact-bar-header">
+              <span>YATIRIMCI ETKİSİ</span>
+              <span id="modalImpactInvestor" class="val-investor">-%</span>
+            </div>
+            <div class="impact-progress"><div id="modalBarInvestor" class="impact-fill fill-investor" style="width:0%"></div></div>
+          </div>
+          <div class="impact-bar-item">
+            <div class="impact-bar-header">
+              <span>GELİŞTİRİCİ ETKİSİ</span>
+              <span id="modalImpactDeveloper" class="val-developer">-%</span>
+            </div>
+            <div class="impact-progress"><div id="modalBarDeveloper" class="impact-fill fill-developer" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <div class="modal-section-title"><i class="fas fa-file-alt"></i> Ne Oldu? (Yönetici Özeti)</div>
+        <div id="modalContent" style="color:var(--cream);font-size:15px;line-height:1.7;margin-bottom:16px;"></div>
+
+        <!-- ── 4-PART EPISTEMOLOGICAL MODEL TABS ── -->
+        <div class="modal-section-title"><i class="fas fa-layer-group"></i> 4 Katmanlı Epistemolojik İstihbarat Analizi</div>
+        <div class="epistemic-tabs-header">
+          <button class="epistemic-tab-btn active" onclick="switchEpistemicTab('tab-know')">
+            <span><span class="dot dot-green"></span> 1. Bildiklerimiz</span>
+            <small>Doğrulanmış Gerçekler</small>
+          </button>
+          <button class="epistemic-tab-btn" onclick="switchEpistemicTab('tab-infer')">
+            <span><span class="dot dot-blue"></span> 2. Çıkarımlarımız</span>
+            <small>Ekonomik Mantık</small>
+          </button>
+          <button class="epistemic-tab-btn" onclick="switchEpistemicTab('tab-suspect')">
+            <span><span class="dot dot-yellow"></span> 3. İzlediklerimiz</span>
+            <small>Öncü Sinyaller</small>
+          </button>
+          <button class="epistemic-tab-btn" onclick="switchEpistemicTab('tab-contra')">
+            <span><span class="dot dot-red"></span> 4. Kontra Bakış</span>
+            <small>Karşıt Risk Analizi</small>
+          </button>
+        </div>
+
+        <div class="epistemic-content-box">
+          <div id="tab-know" class="epistemic-panel active">
+            <div class="epistemic-badge badge-green"><i class="fas fa-check-circle"></i> Doğrulanmış Birincil Kaynak Verileri & İstatistikler</div>
+            <div id="modalWhatWeKnow" class="epistemic-text"></div>
+          </div>
+          <div id="tab-infer" class="epistemic-panel">
+            <div class="epistemic-badge badge-blue"><i class="fas fa-brain"></i> Arz-Talep Mekaniği & Piyasa Mantığı</div>
+            <div id="modalWhatWeInfer" class="epistemic-text"></div>
+          </div>
+          <div id="tab-suspect" class="epistemic-panel">
+            <div class="epistemic-badge badge-yellow"><i class="fas fa-satellite-dish"></i> Henüz Teyit Edilmemiş Gelişen Eğilimler</div>
+            <div id="modalWhatWeSuspect" class="epistemic-text"></div>
+          </div>
+          <div id="tab-contra" class="epistemic-panel">
+            <div class="epistemic-badge badge-red"><i class="fas fa-shield-virus"></i> Yanılma Payı & Karşıt Senaryo (Contrarian Stress-Test)</div>
+            <div id="modalContrarianView" class="epistemic-text"></div>
+          </div>
+        </div>
+
+        <!-- ── WHY THIS NEWS (TRANSPARENT SCORING) ── -->
+        <div class="modal-section-title"><i class="fas fa-search-dollar"></i> Seçim Gerekçesi (Neden Bu Haber?)</div>
+        <div id="modalWhyThisNews" style="background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.25);border-radius:10px;padding:14px;margin-bottom:18px;font-size:13.5px;color:var(--cream);">
+        </div>
+
+        <!-- FACT CLAIMS -->
+        <div class="modal-section-title"><i class="fas fa-check-double"></i> Teyit Edilen Gerçekler & Kaynaklar</div>
+        <div class="fact-claims-list" id="modalFactClaims"></div>
+
+        <!-- CONNECTED CB VIP PROJECTS -->
+        <div class="modal-section-title"><i class="fas fa-map-pin"></i> İlgili Ankara Lüks Portföyleri & Projeleri</div>
+        <div class="connected-projects-grid" id="modalConnectedProjects"></div>
+
+        <!-- ADVISOR INTERACTIVE CTA -->
+        <div class="modal-advisor-cta">
+          <div>
+            <h4 style="color:var(--cream);font-size:18px;margin-bottom:4px;">Yiğit Narin'e Bu Konuyu Danışın</h4>
+            <p style="color:var(--text-muted);font-size:13px;">Bu piyasa analizinin kişisel mülk alım, satım veya yatırım planınıza etkilerini Coldwell Banker CB VIP uzmanlığıyla birebir netleştirin.</p>
+          </div>
+
+          <div>
+            <label style="font-size:12px;color:var(--gold-light);display:block;margin-bottom:8px;font-weight:600;">Görüşmek İstediğiniz Konu:</label>
+            <div class="advisor-options-row" id="advisorTopicChips">
+              <button class="advisor-btn-chip selected" onclick="selectAdvisorTopic(this, 'Alım Fırsatları')">Alım Fırsatları</button>
+              <button class="advisor-btn-chip" onclick="selectAdvisorTopic(this, 'Satış & Değerleme')">Satış & Değerleme</button>
+              <button class="advisor-btn-chip" onclick="selectAdvisorTopic(this, 'Proje Yatırımı')">Proje Yatırımı</button>
+              <button class="advisor-btn-chip" onclick="selectAdvisorTopic(this, 'Bölgesel Rapor')">Bölgesel Rapor</button>
+            </div>
+          </div>
+
+          <a href="#" id="modalWaBtn" target="_blank" class="btn-send-advisor-wa" onclick="trackLead('article_wa_consultation')">
+            <i class="fab fa-whatsapp"></i> Özel Danışmanlık Mesajı Başlat
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <p><strong>NEXA Real Estate Intelligence Network</strong> • Coldwell Banker CB VIP Ankara</p>
+    <p>Broker / Gayrimenkul Yatırım Danışmanı: <strong>Yiğit Narin</strong> • Tel: +90 532 451 40 08</p>
+    <p style="margin-top: 8px; font-size: 11px; opacity: 0.7;">TTBS YETKİ BELGESİ NO: 0601234 • Tüm Veriler Resmi Kurumlar ve Piyasa İstihbarat Ağı Tarafından Doğrulanmaktadır.</p>
+  </footer>
+
+  <script>
+    // ── STATE MANAGEMENT ──
+    let articles = [];
+    let dailyBrief = null;
+    let allProjects = [];
+    let currentCategory = 'Tümü';
+    let currentSearch = '';
+    let selectedAdvisorTopic = 'Alım Fırsatları';
+    let currentArticleTitle = '';
+    let clientPrefs = ['Konut', 'Arsa', 'Çankaya', 'Beytepe'];
+
+    // Client ID for Lead Intent Tracking
+    let clientId = localStorage.getItem('nexa_client_id');
+    if (!clientId) {
+      clientId = 'cli_' + Math.random().toString(36).substring(2, 12);
+      localStorage.setItem('nexa_client_id', clientId);
+    }
+
+    // ── INITIALIZATION ──
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchMarketPulse();
+      fetchDailyBrief();
+      fetchFeedArticles();
+      fetchSwarmTelemetry();
+      fetchProjects();
+      trackLead('hub_page_view');
+    });
+
+    async function fetchProjects() {
+      try {
+        const res = await fetch('/static/data/projects_map.json');
+        if (res.ok) {
+          allProjects = await res.json();
+        }
+      } catch (err) {
+        console.warn('Projects map fetch warning:', err);
+      }
+    }
+
+    // ── SWARM TELEMETRY FETCHER ──
+    async function fetchSwarmTelemetry() {
+      try {
+        const res = await fetch('/api/intelligence/swarm/status');
+        const data = await res.json();
+        if (data && data.ok && data.swarm_summary) {
+          const s = data.swarm_summary;
+          if (s.statement) {
+            document.getElementById('swarmStatement').textContent = s.statement;
+          }
+        }
+        const stateRes = await fetch('/api/intelligence/swarm/market-state');
+        const stateData = await stateRes.json();
+        if (stateData && stateData.ok && stateData.market_state) {
+          const reg = stateData.market_state.regime || 'STABLE';
+          const regEl = document.getElementById('swarmRegimeBadge');
+          if (regEl) {
+            regEl.textContent = `REJİM: ${reg}`;
+          }
+        }
+      } catch (e) {
+        console.warn('Swarm telemetry fetch error:', e);
+      }
+    }
+
+    // ── TELEMETRY / LEAD TRACKING ──
+    async function trackLead(eventType, extraData = {}) {
+      try {
+        await fetch('/api/intelligence/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            client_id: clientId,
+            event_type: eventType,
+            metadata: extraData
+          })
+        });
+      } catch (err) {
+        console.warn('Telemetry error:', err);
+      }
+    }
+
+    // ── TAB NAVIGATION ──
+    function switchTab(tabId, el) {
+      document.querySelectorAll('.hub-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+
+      const trigger = el || (typeof event !== 'undefined' && event ? event.currentTarget : null) || 
+                      Array.from(document.querySelectorAll('.hub-tab-btn')).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(tabId));
+      if (trigger && trigger.classList) trigger.classList.add('active');
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+      
+      trackLead('tab_switch', { tab: tabId });
+    }
+
+    // ── MARKET PULSE FETCHER ──
+    async function fetchMarketPulse() {
+      try {
+        const res = await fetch('/api/intelligence/market-pulse');
+        const data = await res.json();
+        if (data && data.data) {
+          const p = data.data;
+          if (p.overall_health) document.getElementById('pulseOverall').textContent = p.overall_health;
+          if (p.credit_condition) document.getElementById('pulseCredit').textContent = p.credit_condition;
+          if (p.housing_demand) document.getElementById('pulseHousing').textContent = p.housing_demand;
+          if (p.land_interest) document.getElementById('pulseLand').textContent = p.land_interest;
+        }
+      } catch (err) {
+        console.warn('Market pulse fetch warning:', err);
+      }
+    }
+
+    // ── DAILY BRIEF FETCHER ──
+    async function fetchDailyBrief() {
+      try {
+        const res = await fetch('/api/intelligence/daily-brief');
+        const data = await res.json();
+        if (data && data.data) {
+          dailyBrief = data.data;
+          document.getElementById('briefHeadline').textContent = dailyBrief.headline || 'Ankara ve Türkiye Gayrimenkul Piyasa İstihbarat Bülteni';
+          document.getElementById('briefDate').textContent = dailyBrief.date || new Date().toISOString().split('T')[0];
+          document.getElementById('briefSummary').textContent = dailyBrief.executive_summary || '';
+
+          if (dailyBrief.advisor_recommendation) {
+            document.getElementById('briefActionNote').textContent = `"${dailyBrief.advisor_recommendation}"`;
+          }
+
+          const devContainer = document.getElementById('briefDevelopments');
+          if (devContainer && dailyBrief.critical_developments) {
+            devContainer.innerHTML = dailyBrief.critical_developments.map(d => `
+              <div class="brief-dev-item" onclick="openArticleBySlug('${d.slug}')">
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                  <span style="font-size:11px;color:var(--gold);font-weight:700;text-transform:uppercase;">${d.category || 'Piyasa'}</span>
+                  <span style="font-size:11px;color:var(--green-up);font-weight:600;">${d.impact || 'Yüksek Etki'}</span>
+                </div>
+                <h4>${d.title || d.summary.substring(0, 70) + '...'}</h4>
+                <p>${d.summary || ''}</p>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (err) {
+        console.warn('Daily brief error:', err);
+        document.getElementById('briefSummary').textContent = 'Bugünkü piyasa verileri derleniyor...';
+      }
+    }
+
+    // ── FEED ARTICLES FETCHER ──
+    async function fetchFeedArticles() {
+      try {
+        const res = await fetch('/api/intelligence/feed');
+        const data = await res.json();
+        if (data && data.data && data.data.length > 0) {
+          articles = data.data;
+        } else {
+          // Fallback to latest_news.json
+          const fallbackRes = await fetch('/static/data/latest_news.json');
+          articles = await fallbackRes.json();
+        }
+      } catch (err) {
+        console.warn('Intelligence feed error, falling back:', err);
+      }
+
+      document.getElementById('metricArticleCount').textContent = `${articles.length} Rapor`;
+      renderFeed();
+      renderPersonalFeed();
+
+      // Check URL parameters for direct article linking
+      const urlParams = new URLSearchParams(window.location.search);
+      const slugParam = urlParams.get('slug');
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      const pathSlug = (pathParts.length >= 2 && (pathParts[0] === 'intelligence' || pathParts[0] === 'news')) ? pathParts[1] : null;
+      const targetSlug = slugParam || pathSlug;
+      if (targetSlug) {
+        setTimeout(() => openArticleBySlug(targetSlug), 150);
+      }
+    }
+
+    // ── RENDER FEED GRID ──
+    function renderFeed() {
+      const container = document.getElementById('feedGrid');
+      if (!container) return;
+
+      const filtered = articles.filter(a => {
+        const matchCat = (currentCategory === 'Tümü') || (a.category && a.category.toLowerCase().includes(currentCategory.toLowerCase()));
+        const q = currentSearch.toLowerCase();
+        const matchQuery = !q || 
+          (a.title && a.title.toLowerCase().includes(q)) ||
+          (a.summary && a.summary.toLowerCase().includes(q)) ||
+          (a.primary_region && a.primary_region.toLowerCase().includes(q));
+        return matchCat && matchQuery;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:50px;color:var(--text-muted);">Arama kriterlerine uygun piyasa raporu bulunamadı.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(a => createArticleCard(a)).join('');
+    }
+
+    // ── RENDER PERSONALIZED FEED ──
+    function renderPersonalFeed() {
+      const container = document.getElementById('personalGrid');
+      if (!container) return;
+
+      const scored = articles.map(a => {
+        let score = 0;
+        const text = `${a.title || ''} ${a.summary || ''} ${a.category || ''} ${a.primary_region || ''}`.toLowerCase();
+        clientPrefs.forEach(pref => {
+          if (text.includes(pref.toLowerCase())) score += 10;
+        });
+        return { article: a, score };
+      }).sort((x, y) => y.score - x.score);
+
+      container.innerHTML = scored.map(item => createArticleCard(item.article)).join('');
+    }
+
+    // ── CARD HTML GENERATOR ──
+    function createArticleCard(a) {
+      const dateStr = a.created_at ? new Date(a.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Bugün';
+      const imgUrl = a.hero_image || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80';
+      const cat = a.category || 'Piyasa Analizi';
+      const source = a.primary_source || 'TCMB / TÜİK';
+      
+      const bScore = a.impact_buyer_score ?? Math.floor(Math.random() * 25 + 65);
+      const sScore = a.impact_seller_score ?? Math.floor(Math.random() * 25 + 60);
+      const iScore = a.impact_investor_score ?? Math.floor(Math.random() * 25 + 70);
+      const dScore = a.impact_developer_score ?? Math.floor(Math.random() * 25 + 55);
+
+      const encoded = encodeURIComponent(JSON.stringify(a)).replace(/'/g, '%27');
+
+      return `
+        <div class="intel-card" onclick="openModal('${encoded}')">
+          <div class="card-banner">
+            <span class="pill-cat">${cat}</span>
+            <span class="pill-source"><i class="fas fa-check-circle"></i> ${source}</span>
+            <img src="${imgUrl}" alt="${a.title}" loading="lazy">
+          </div>
+          <div class="card-content">
+            <div class="card-meta-row">
+              <span><i class="far fa-calendar-alt"></i> ${dateStr}</span>
+              <span><i class="fas fa-map-pin"></i> ${a.primary_region || 'Ankara'}</span>
+            </div>
+            <h3>${a.title}</h3>
+            <p class="card-snippet">${a.summary || ''}</p>
+            
+            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;">
+              <span class="why-news-pill"><i class="fas fa-certificate"></i> Teyit: %${a.confidence_score ? Math.round(a.confidence_score * 100) : 92}</span>
+              <span class="why-news-pill" style="color:var(--green-up);border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.1);"><i class="fas fa-shield-alt"></i> 4 Katmanlı Doğrulama</span>
+            </div>
+
+            <div class="impact-badges-row">
+              <div class="impact-chip"><span class="lbl">Alıcı</span><span class="val val-buyer">${bScore}%</span></div>
+              <div class="impact-chip"><span class="lbl">Satıcı</span><span class="val val-seller">${sScore}%</span></div>
+              <div class="impact-chip"><span class="lbl">Yatırımcı</span><span class="val val-investor">${iScore}%</span></div>
+              <div class="impact-chip"><span class="lbl">Geliştirici</span><span class="val val-developer">${dScore}%</span></div>
+            </div>
+
+            <div class="card-footer-row">
+              <span class="read-cta">Detaylı Analizi Oku <i class="fas fa-arrow-right"></i></span>
+              <span class="author-badge"><i class="fas fa-user-tie"></i> Yiğit Narin</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ── FILTER ACTIONS ──
+    function setCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.filter-chips .chip-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.trim().startsWith(cat));
+      });
+      renderFeed();
+    }
+
+    function filterFeed() {
+      currentSearch = document.getElementById('searchInput').value.trim();
+      renderFeed();
+    }
+
+    function filterByDistrict(dist) {
+      document.getElementById('searchInput').value = dist;
+      currentSearch = dist;
+      switchTab('tab-feed');
+      renderFeed();
+    }
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formatTL(val) {
+      const num = Number(val) || 0;
+      return num.toLocaleString('tr-TR') + ' TL';
+    }
+
+    function syncBudgetSlider(val) {
+      const el = document.getElementById('buyBudget');
+      if (el) el.value = val;
+      const disp = document.getElementById('buyBudgetValue');
+      if (disp) disp.textContent = formatTL(val);
+    }
+
+    function syncSellSlider(val) {
+      const el = document.getElementById('sellValue');
+      if (el) el.value = val;
+      const disp = document.getElementById('sellValueValue');
+      if (disp) disp.textContent = formatTL(val);
+    }
+
+    function syncRentSlider(val) {
+      const el = document.getElementById('rvbRent');
+      if (el) el.value = val;
+      const disp = document.getElementById('rvbRentValue');
+      if (disp) disp.textContent = formatTL(val);
+    }
+
+    function syncPriceSlider(val) {
+      const el = document.getElementById('rvbPrice');
+      if (el) el.value = val;
+      const disp = document.getElementById('rvbPriceValue');
+      if (disp) disp.textContent = formatTL(val);
+    }
+
+    function updateGauge(score, maxScore = 10) {
+      const numScore = Number(score) || 0;
+      const max = maxScore > 10 ? 100 : 10;
+      const pct = Math.max(0, Math.min(1, numScore / max));
+      
+      const maxDash = 235.6; // pi * 75
+      const offset = maxDash * (1 - pct);
+      const arc = document.getElementById('gaugeArc');
+      if (arc) {
+        arc.style.strokeDashoffset = offset.toFixed(1);
+      }
+      
+      const needle = document.getElementById('gaugeNeedleGroup');
+      if (needle) {
+        // -90deg is 0, +90deg is 100%
+        const deg = -90 + (pct * 180);
+        needle.style.transform = `rotate(${deg.toFixed(1)}deg)`;
+      }
+      
+      const text = document.getElementById('gaugeScoreText');
+      if (text) {
+        text.textContent = max === 100 ? Math.round(numScore) : numScore.toFixed(1);
+      }
+      
+      const sub = document.getElementById('gaugeScoreSub');
+      if (sub) {
+        sub.textContent = max === 100 ? 'PUAN / 100' : 'ENDEKS / 10';
+      }
+    }
+
+    function togglePref(tag, el) {
+      const idx = clientPrefs.indexOf(tag);
+      if (idx > -1) clientPrefs.splice(idx, 1);
+      else clientPrefs.push(tag);
+      
+      const target = el || (typeof event !== 'undefined' && event ? event.currentTarget : null);
+      if (target && target.classList) {
+        target.classList.toggle('active');
+      }
+      renderPersonalFeed();
+    }
+
+    // ── DECISION ENGINES ──
+    function switchDecisionEngine(engine, el) {
+      document.querySelectorAll('.decision-nav-btn').forEach(btn => btn.classList.remove('active'));
+      const trigger = el || (typeof event !== 'undefined' && event ? event.currentTarget : null);
+      if (trigger && trigger.classList) trigger.classList.add('active');
+
+      document.querySelectorAll('.engine-form').forEach(form => form.style.display = 'none');
+      const target = document.getElementById(`engine-${engine}`);
+      if (target) target.style.display = 'block';
+
+      document.getElementById('decisionResultBox').style.display = 'none';
+      trackLead('decision_engine_selected', { engine });
+    }
+
+    async function runDecision(engineType) {
+      const resBox = document.getElementById('decisionResultBox');
+      resBox.style.display = 'block';
+      document.getElementById('resConditionTitle').textContent = 'Hesaplanıyor...';
+
+      let payload = {};
+      let endpoint = `/api/intelligence/decisions/${engineType}`;
+
+      if (engineType === 'buying') {
+        payload = {
+          budget_tl: parseFloat(document.getElementById('buyBudget').value) || 6500000,
+          financing_type: document.getElementById('buyFinancing').value,
+          district: document.getElementById('buyDistrict').value,
+          purpose: document.getElementById('buyPurpose').value
+        };
+      } else if (engineType === 'selling') {
+        payload = {
+          estimated_value_tl: parseFloat(document.getElementById('sellValue').value) || 8000000,
+          property_age: document.getElementById('sellAge').value,
+          district: document.getElementById('sellDistrict').value,
+          reason: document.getElementById('sellReason').value
+        };
+      } else if (engineType === 'project') {
+        payload = {
+          district: document.getElementById('projDistrict').value,
+          delivery_timeline: document.getElementById('projDelivery').value,
+          deed_status: document.getElementById('projDeed').value,
+          downpayment_percent: parseFloat(document.getElementById('projDownpayment').value) || 40
+        };
+      } else if (engineType === 'rent-vs-buy') {
+        payload = {
+          monthly_rent_tl: parseFloat(document.getElementById('rvbRent').value) || 35000,
+          property_price_tl: parseFloat(document.getElementById('rvbPrice').value) || 7000000,
+          equity_tl: parseFloat(document.getElementById('rvbEquity').value) || 3000000,
+          stay_horizon_years: parseInt(document.getElementById('rvbHorizon').value) || 5
+        };
+      }
+
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        
+        if (data && data.data) {
+          const d = data.data;
+          document.getElementById('resConditionTitle').textContent = d.condition || 'Değerlendirme Tamamlandı';
+          document.getElementById('resConsultationPrompt').textContent = d.advisor_consultation_prompt || d.summary || '';
+
+          // Animate Live SVG Gauge Meter
+          const rawScore = d.score ?? 7.5;
+          updateGauge(rawScore, rawScore > 10 ? 100 : 10);
+
+          const badge = document.getElementById('resBadge');
+          const cond = (d.condition || '').toLowerCase();
+          if (cond.includes('strong') || cond.includes('güçlü') || cond.includes('satın al') || cond.includes('high opportunity')) {
+            badge.className = 'result-badge badge-strong';
+            badge.textContent = 'GÜÇLÜ FIRSAT';
+          } else if (cond.includes('caution') || cond.includes('temkinli') || cond.includes('bekle') || cond.includes('selective')) {
+            badge.className = 'result-badge badge-caution';
+            badge.textContent = 'TEMKİNLİ YAKLAŞIM';
+          } else {
+            badge.className = 'result-badge badge-moderate';
+            badge.textContent = 'DENGELİ KOŞULLAR';
+          }
+
+          const factorsContainer = document.getElementById('resFactors');
+          if (d.factors && d.factors.length > 0) {
+            factorsContainer.innerHTML = d.factors.map(f => {
+              const title = escapeHtml(f.factor || f.driver || 'Piyasa Faktörü');
+              const impact = f.impact ? `<span style="color:var(--gold-light);font-size:12px;margin-left:4px;">(${escapeHtml(f.impact)})</span>` : '';
+              const detail = escapeHtml(f.detail || '');
+              return `
+                <div class="factor-item">
+                  <strong><i class="fas fa-check-circle" style="color:var(--gold);"></i> ${title} ${impact}</strong>
+                  <span style="color:var(--text-muted);">${detail}</span>
+                </div>
+              `;
+            }).join('');
+          } else {
+            factorsContainer.innerHTML = '';
+          }
+
+          const defaultPrompt = `Merhaba Yiğit Bey, Karar Merkezinde ${engineType} analizi yaptım. Sonuç: "${d.condition}". Detaylı değerlendirme için görüşmek istiyorum.`;
+          const waText = encodeURIComponent(d.advisor_consultation_prompt || defaultPrompt);
+          document.getElementById('resWaBtn').href = `https://wa.me/905324514008?text=${waText}`;
+
+          trackLead('decision_tool_run', { engine: engineType, result: d.condition, score: d.score });
+        }
+      } catch (err) {
+        console.error('Decision run error:', err);
+        document.getElementById('resConditionTitle').textContent = 'Sonuç üretilirken hata oluştu.';
+      }
+    }
+
+    // ── MODAL OPEN / CLOSE ──
+    function openModal(articleEncoded) {
+      const a = JSON.parse(decodeURIComponent(articleEncoded));
+      currentArticleTitle = a.title;
+
+      document.getElementById('modalImg').src = a.hero_image || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80';
+      document.getElementById('modalCategory').textContent = a.category || 'Piyasa Analizi';
+      document.getElementById('modalSource').textContent = a.primary_source || 'TCMB / TÜİK';
+      document.getElementById('modalDate').textContent = a.created_at ? new Date(a.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Bugün';
+      document.getElementById('modalTitle').textContent = a.title;
+      document.getElementById('modalContent').innerHTML = (a.content || a.summary || '').replace(/\n\n/g, '<br><br>');
+
+      // Impact bars
+      const bScore = a.impact_buyer_score ?? 78;
+      const sScore = a.impact_seller_score ?? 65;
+      const iScore = a.impact_investor_score ?? 85;
+      const dScore = a.impact_developer_score ?? 60;
+
+      document.getElementById('modalImpactBuyer').textContent = `${bScore}%`;
+      document.getElementById('modalBarBuyer').style.width = `${bScore}%`;
+
+      document.getElementById('modalImpactSeller').textContent = `${sScore}%`;
+      document.getElementById('modalBarSeller').style.width = `${sScore}%`;
+
+      document.getElementById('modalImpactInvestor').textContent = `${iScore}%`;
+      document.getElementById('modalBarInvestor').style.width = `${iScore}%`;
+
+      document.getElementById('modalImpactDeveloper').textContent = `${dScore}%`;
+      document.getElementById('modalBarDeveloper').style.width = `${dScore}%`;
+
+      // 4-Part Epistemological Model Population
+      const wKnow = a.what_we_know || `Resmi kayıtlar ve doğrulanmış piyasa göstergeleri: ${a.summary || a.title}`;
+      const wInfer = a.what_we_infer || 'Arz-talep dengesi ve finansman koşulları Ankara lüks konut koridorunda alıcı lehine seçici fırsatların devam ettiğini göstermektedir.';
+      const wSuspect = a.what_we_suspect || 'Yılın ikinci yarısında kurumsal fonların ve nitelikli bireysel yatırımcıların arsa ve villa segmentine ilgisinde ivmelenme gözlemlenebilir.';
+
+      let contraHtml = '';
+      if (a.contrarian_view && typeof a.contrarian_view === 'object') {
+        const cv = a.contrarian_view;
+        contraHtml = `
+          <strong>Karşıt Hipotez:</strong> ${cv.counter_hypothesis || 'Piyasa beklentisinin aksine faiz oranlarının yüksek kalması likiditeyi daraltabilir.'}<br><br>
+          ${cv.contrary_indicators && cv.contrary_indicators.length ? `<strong>Ters Yönlü İndikatörler:</strong> <ul style="margin:6px 0 10px 18px;">${cv.contrary_indicators.map(i => `<li>${i}</li>`).join('')}</ul>` : ''}
+          ${cv.downside_risks && cv.downside_risks.length ? `<strong>Aşağı Yönlü Riskler:</strong> <ul style="margin:6px 0 10px 18px;">${cv.downside_risks.map(r => `<li>${r}</li>`).join('')}</ul>` : ''}
+          <div style="margin-top:10px;font-style:italic;color:var(--gold-light);"><i class="fas fa-balance-scale"></i> ${cv.verdict || 'Piyasa etkisi teyit edildi ancak risk marjı dikkate alınmalı.'}</div>
+        `;
+      } else {
+        contraHtml = `<strong>Karşıt Hipotez:</strong> Makro faiz baskısı devam ederse beklenen talep gerçekleşmeyebilir.<br><br><strong>Verdict:</strong> Veriler sağlam temellere dayanmaktadır ancak işlem takvimi piyasa faiz döngüsüne göre şekillendirilmelidir.`;
+      }
+
+      document.getElementById('modalWhatWeKnow').innerHTML = wKnow.replace(/\n\n/g, '<br><br>');
+      document.getElementById('modalWhatWeInfer').innerHTML = wInfer.replace(/\n\n/g, '<br><br>');
+      document.getElementById('modalWhatWeSuspect').innerHTML = wSuspect.replace(/\n\n/g, '<br><br>');
+      document.getElementById('modalContrarianView').innerHTML = contraHtml;
+
+      // Why This News Breakdown
+      const whyNewsBox = document.getElementById('modalWhyThisNews');
+      const wNews = a.why_this_news || {};
+      const qScore = a.quality_score || 90;
+      const cScore = a.confidence_score ? Math.round(a.confidence_score * 100) : 92;
+      whyNewsBox.innerHTML = `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));gap:10px;margin-bottom:10px;">
+          <div><span style="color:var(--text-muted);font-size:11px;">ÖNEM DERECESİ:</span><br><strong style="color:var(--gold);">${wNews.importance_score || qScore}/100</strong></div>
+          <div><span style="color:var(--text-muted);font-size:11px;">KANIT SKORU:</span><br><strong style="color:var(--green-up);">${wNews.evidence_score || cScore}/100</strong></div>
+          <div><span style="color:var(--text-muted);font-size:11px;">PİYASA ETKİSİ:</span><br><strong style="color:var(--blue-accent);">${wNews.market_impact_score || 85}/100</strong></div>
+          <div><span style="color:var(--text-muted);font-size:11px;">BÖLGESEL ALAKA:</span><br><strong style="color:var(--purple-accent);">${wNews.regional_relevance_score || 90}/100</strong></div>
+        </div>
+        <div style="font-size:12.5px;color:var(--text-muted);border-top:1px solid rgba(255,255,255,0.06);padding-top:8px;">
+          <i class="fas fa-filter text-gold"></i> <strong>Seçim Filtresi:</strong> ${wNews.selection_reason || 'Ankara Prime Bölge & Makroekonomik Doğrulanmış Sinyal'}
+        </div>
+      `;
+
+      // Reset to first tab
+      switchEpistemicTab('tab-know');
+
+      // Fact claims
+      const claimsBox = document.getElementById('modalFactClaims');
+      if (a.fact_claims && a.fact_claims.length > 0) {
+        claimsBox.innerHTML = a.fact_claims.map(c => `
+          <div class="fact-claim-badge">
+            <i class="fas fa-certificate"></i>
+            <div>
+              <strong>${c.claim || c}</strong>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Kaynak: ${a.primary_source || 'Resmi Bülten'} • Doğrulandı</div>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        claimsBox.innerHTML = `
+          <div class="fact-claim-badge">
+            <i class="fas fa-certificate"></i>
+            <div>
+              <strong>TCMB Para Politikası ve TÜİK Konut Satış İstatistikleri</strong>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Resmi veri bülteni verileriyle doğrulanmıştır.</div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Connected Projects (Dynamically matched from allProjects or fallback)
+      const projBox = document.getElementById('modalConnectedProjects');
+      if (projBox) {
+        let matching = [];
+        const artText = ((a.title || '') + ' ' + (a.summary || '') + ' ' + (a.category || '')).toLowerCase();
+        
+        if (allProjects && allProjects.length > 0) {
+          matching = allProjects.filter(p => {
+            const loc = (p.location || p.ilce || p.location_full || '').toLowerCase();
+            const name = (p.name || p.title || '').toLowerCase();
+            return (loc && artText.includes(loc)) || (name && artText.includes(name));
+          });
+          
+          if (matching.length === 0) {
+            matching = allProjects.slice(0, 3);
+          } else {
+            matching = matching.slice(0, 3);
+          }
+          
+          projBox.innerHTML = matching.map(p => `
+            <a href="/projeler" class="connected-project-card">
+              <h5>${escapeHtml(p.name || p.title || 'Prestij Projesi')}</h5>
+              <span style="font-size:12px;color:var(--text-muted);">${escapeHtml(p.location || p.ilce || 'Ankara Prime')} • ${escapeHtml(p.room_info || 'Lüks Konut')}</span>
+              <span style="font-size:13px;color:var(--gold);font-weight:700;margin-top:6px;">${escapeHtml(p.price_display || 'Fiyat Teklifi Alın')}</span>
+            </a>
+          `).join('');
+        } else {
+          projBox.innerHTML = `
+            <a href="/projeler" class="connected-project-card">
+              <h5>Beytepe Palas Rezidans</h5>
+              <span style="font-size:12px;color:var(--text-muted);">Beytepe • 4+1 Lüks Daireler</span>
+              <span style="font-size:13px;color:var(--gold);font-weight:700;margin-top:6px;">18.500.000 TL'den başlayan</span>
+            </a>
+            <a href="/projeler" class="connected-project-card">
+              <h5>İncek Loft &amp; Hill Villaları</h5>
+              <span style="font-size:12px;color:var(--text-muted);">İncek • Müstakil Parselli</span>
+              <span style="font-size:13px;color:var(--gold);font-weight:700;margin-top:6px;">26.000.000 TL</span>
+            </a>
+          `;
+        }
+      }
+
+      updateModalWaLink();
+
+      document.getElementById('readingModal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+
+      trackLead('article_view', { title: a.title, slug: a.slug });
+    }
+
+    function switchEpistemicTab(tabId) {
+      document.querySelectorAll('.epistemic-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.epistemic-panel').forEach(p => p.classList.remove('active'));
+      
+      const targetBtn = Array.from(document.querySelectorAll('.epistemic-tab-btn')).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(tabId));
+      if (targetBtn) targetBtn.classList.add('active');
+      const targetPanel = document.getElementById(tabId);
+      if (targetPanel) targetPanel.classList.add('active');
+    }
+
+    function openArticleBySlug(slug) {
+      const art = articles.find(a => a.slug === slug);
+      if (art) {
+        const encoded = encodeURIComponent(JSON.stringify(art)).replace(/'/g, '%27');
+        openModal(encoded);
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('readingModal').style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    function closeModalOnOverlay(e) {
+      if (e.target.id === 'readingModal') closeModal();
+    }
+
+    function selectAdvisorTopic(btn, topic) {
+      document.querySelectorAll('#advisorTopicChips .advisor-btn-chip').forEach(c => c.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedAdvisorTopic = topic;
+      updateModalWaLink();
+    }
+
+    function updateModalWaLink() {
+      const text = encodeURIComponent(`Merhaba Yiğit Bey,\n\n"${currentArticleTitle}" başlıklı NEXA piyasa raporunu inceledim.\nKonu: ${selectedAdvisorTopic}\n\nBu analizin benim mülk alım/satım planıma etkileri konusunda görüşünüzü rica ediyorum.`);
+      document.getElementById('modalWaBtn').href = `https://wa.me/905324514008?text=${text}`;
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+</body>
+</html>

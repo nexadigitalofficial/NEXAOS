@@ -1,21 +1,27 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>{{ presentation.title }} | Yiğit Narin CB VIP Ankara</title>
     <meta name="description" content="{{ presentation.title }} - Coldwell Banker CB VIP Ankara Gayrimenkul Portföy Sunumu">
+    
+    <!-- Mobile Native App PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#070d18">
     
     <!-- Open Graph for WhatsApp & Social Sharing -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="{{ presentation.title }}">
     <meta property="og:description" content="{{ presentation.location }} • {{ presentation.price }}">
-    <meta property="og:image" content="{{ presentation.hero_image or 'https://i.ibb.co/ksPFvjCt/Yigit-Bey1.png' }}">
+    <meta property="og:image" content="{{ presentation.images[0] if presentation.images else 'https://i.ibb.co/ksPFvjCt/Yigit-Bey1.png' }}">
     <meta property="og:url" content="{{ request.url }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -26,91 +32,131 @@
             --gold-light: #E6D5B8;
             --text-gray: #94a3b8;
         }
+        * {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
             color: #f8fafc;
-            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+            overscroll-behavior-y: contain;
         }
-        .gold-border { border-color: var(--gold); }
-        .gold-text { color: var(--gold); }
-        .gold-bg { background-color: var(--gold); }
-        .navy-bg { background-color: var(--navy); }
+        .selectable {
+            user-select: text;
+            -webkit-user-select: text;
+        }
+        .font-heading {
+            font-family: 'Outfit', sans-serif;
+        }
         .card-bg { background-color: var(--bg-card); }
-        
-        .img-grid-item {
-            aspect-ratio: 4/3;
-            object-fit: cover;
-            border-radius: 0.5rem;
+        .glass-header {
+            background: rgba(7, 13, 24, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
         }
+        .glass-footer {
+            background: rgba(7, 13, 24, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .pb-safe {
+            padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+        }
+        .pt-safe {
+            padding-top: max(0.75rem, env(safe-area-inset-top, 0px));
+        }
+        /* Mobile Scrollbar Hide */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="pb-24 min-h-screen flex flex-col justify-between">
+<body class="min-h-screen flex flex-col justify-between antialiased pb-safe">
 
-    <!-- TOP NAVIGATION BAR -->
-    <header class="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-amber-500/30 px-4 py-3 flex items-center justify-between">
+    <!-- APP HEADER -->
+    <header class="sticky top-0 z-40 glass-header border-b border-amber-500/20 px-4 py-3 flex items-center justify-between pt-safe">
         <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full bg-amber-500/20 border border-amber-500/40 p-0.5 flex items-center justify-center overflow-hidden">
+            <div class="w-10 h-10 rounded-full bg-amber-500/20 border-2 border-amber-500/50 p-0.5 flex items-center justify-center overflow-hidden shrink-0 shadow-lg shadow-amber-500/10">
                 <img src="/static/yigit_narin_portrait.png" alt="Yiğit Narin" class="w-full h-full object-cover rounded-full" onerror="this.src='https://i.ibb.co/ksPFvjCt/Yigit-Bey1.png'">
             </div>
             <div>
-                <h1 class="text-xs font-bold text-amber-400 tracking-wider uppercase">Coldwell Banker CB VIP</h1>
-                <p class="text-[11px] text-slate-300 font-semibold">Yiğit Narin • Portföy Sunumu</p>
+                <h1 class="text-[11px] font-bold text-amber-400 tracking-wider uppercase font-heading">Coldwell Banker CB VIP</h1>
+                <p class="text-xs text-slate-200 font-bold truncate max-w-[170px] xs:max-w-[220px]">Yiğit Narin • Portföy Sunumu</p>
             </div>
         </div>
-        {% if presentation.pdf_url %}
-        <a href="{{ presentation.pdf_url }}" target="_blank" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-amber-500/20 transition-all">
-            <i class="fa-solid fa-file-pdf"></i> PDF İndir
-        </a>
-        {% endif %}
+
+        <div class="flex items-center gap-2">
+            <!-- Share Button -->
+            <button onclick="shareAppPresentation()" class="w-9 h-9 rounded-xl bg-slate-800/80 border border-slate-700/60 text-amber-400 flex items-center justify-center active:scale-95 transition-transform" title="Paylaş">
+                <i class="fa-solid fa-share-nodes text-sm"></i>
+            </button>
+            <!-- PDF Download Button -->
+            {% if presentation.pdf_url %}
+            <a href="{{ presentation.pdf_download_url or presentation.pdf_url }}" download class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center active:scale-95 transition-transform" title="PDF İndir">
+                <i class="fa-solid fa-file-pdf text-sm"></i>
+            </a>
+            {% endif %}
+        </div>
     </header>
 
-    <!-- MAIN PRESENTATION BODY -->
-    <main class="max-w-3xl mx-auto w-full px-4 py-6 space-y-6 flex-1">
+    <!-- MAIN CONTENT -->
+    <main class="max-w-3xl mx-auto w-full px-4 pt-4 space-y-6 flex-1">
 
-        <!-- HERO SECTION -->
-        <section class="card-bg rounded-2xl border border-amber-500/30 overflow-hidden shadow-2xl">
-            {% if presentation.hero_image %}
-            <div class="relative w-full aspect-[16/10] bg-slate-900 overflow-hidden">
-                <img src="{{ presentation.hero_image }}" alt="{{ presentation.title }}" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
-                {% if presentation.price %}
-                <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-                    <div class="bg-amber-500/90 backdrop-blur-md text-slate-950 px-4 py-2 rounded-xl font-extrabold text-lg sm:text-2xl shadow-xl">
-                        {{ presentation.price }}
-                    </div>
-                    {% if presentation.location %}
-                    <span class="bg-slate-900/80 backdrop-blur-md text-amber-300 text-xs px-3 py-1.5 rounded-lg border border-amber-500/30 font-medium">
-                        <i class="fa-solid fa-location-dot mr-1"></i>{{ presentation.location }}
+        <!-- TITLE & PRICE CARD -->
+        <section class="card-bg p-5 rounded-2xl border border-slate-800/80 shadow-2xl relative overflow-hidden">
+            <div class="absolute -right-8 -top-8 w-32 h-32 bg-amber-500/10 rounded-full blur-xl pointer-events-none"></div>
+            
+            <div class="space-y-2 relative">
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-bold font-heading">
+                        <i class="fa-solid fa-crown text-[10px]"></i> LÜKS PORTFÖY
                     </span>
-                    {% endif %}
+                    <span class="text-xs text-slate-400 flex items-center gap-1">
+                        <i class="fa-solid fa-location-dot text-amber-500"></i> {{ presentation.location or 'Ankara' }}
+                    </span>
                 </div>
-                {% endif %}
-            </div>
-            {% endif %}
 
-            <div class="p-5 sm:p-6 space-y-3">
-                <h2 class="text-xl sm:text-2xl font-bold text-slate-100 leading-snug">{{ presentation.title }}</h2>
-                {% if presentation.location and not presentation.hero_image %}
-                <p class="text-sm font-semibold text-amber-400"><i class="fa-solid fa-location-dot mr-1.5"></i>{{ presentation.location }}</p>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-100 leading-snug font-heading selectable">
+                    {{ presentation.title }}
+                </h2>
+
+                {% if presentation.price %}
+                <div class="pt-2 flex items-baseline gap-2">
+                    <span class="text-2xl sm:text-3xl font-black text-amber-400 tracking-tight font-heading selectable">
+                        {{ presentation.price }}
+                    </span>
+                </div>
                 {% endif %}
             </div>
         </section>
 
-        <!-- HIGHLIGHT SPECS GRID -->
+        <!-- HERO IMAGE SLIDER / COVER PHOTO -->
+        {% if presentation.images %}
+        <section class="relative rounded-2xl overflow-hidden border border-slate-800 shadow-2xl bg-slate-900 group">
+            <div class="aspect-[16/10] w-full overflow-hidden relative cursor-pointer" onclick="openLightbox(0)">
+                <img id="heroImg" src="{{ presentation.images[0] }}" alt="{{ presentation.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+                <div class="absolute bottom-3 right-3 bg-slate-950/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-700/80 text-xs font-semibold text-amber-400 flex items-center gap-1.5">
+                    <i class="fa-solid fa-expand text-xs"></i> Galeriyi Aç ({{ presentation.images|length }})
+                </div>
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- KEY PROPERTY SPECIFICATIONS GRID -->
         {% if presentation.specs %}
         <section class="space-y-3">
-            <h3 class="text-xs font-bold text-amber-400 tracking-wider uppercase flex items-center gap-2">
-                <span class="w-1.5 h-4 bg-amber-500 rounded-full"></span> Mülk Özellikleri
+            <h3 class="text-xs font-bold text-amber-400 tracking-wider uppercase flex items-center gap-2 font-heading">
+                <span class="w-1.5 h-4 bg-amber-500 rounded-full"></span> Teknik Portföy Detayları
             </h3>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {% for key, val in presentation.specs.items() %}
-                {% if key not in ['İlan No', 'İlan ID', 'İlan Tarihi'] and val %}
-                <div class="card-bg p-3.5 rounded-xl border border-slate-800 hover:border-amber-500/40 transition-all">
-                    <span class="text-[11px] font-semibold text-slate-400 block uppercase tracking-wider mb-1">{{ key }}</span>
-                    <span class="text-sm font-bold text-slate-100 block truncate">{{ val }}</span>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                {% for spec in presentation.specs %}
+                <div class="card-bg p-3.5 rounded-xl border border-slate-800/80 flex flex-col justify-center space-y-1">
+                    <span class="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide truncate">{{ spec.name }}</span>
+                    <span class="text-xs sm:text-sm font-bold text-slate-100 truncate selectable">{{ spec.value }}</span>
                 </div>
-                {% endif %}
                 {% endfor %}
             </div>
         </section>
@@ -119,14 +165,18 @@
         <!-- PHOTO GALLERY GRID -->
         {% if presentation.images and presentation.images|length > 1 %}
         <section class="space-y-3">
-            <h3 class="text-xs font-bold text-amber-400 tracking-wider uppercase flex items-center gap-2">
-                <span class="w-1.5 h-4 bg-amber-500 rounded-full"></span> Fotoğraf Galerisi ({{ presentation.images|length }})
-            </h3>
+            <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold text-amber-400 tracking-wider uppercase flex items-center gap-2 font-heading">
+                    <span class="w-1.5 h-4 bg-amber-500 rounded-full"></span> Fotoğraf Galerisi ({{ presentation.images|length }})
+                </h3>
+                <span class="text-[11px] text-slate-400">Büyütmek için dokunun</span>
+            </div>
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                {% for img_url in presentation.images[1:10] %}
-                <a href="{{ img_url }}" target="_blank" class="group relative rounded-xl overflow-hidden border border-slate-800 bg-slate-900 aspect-video sm:aspect-square block">
-                    <img src="{{ img_url }}" alt="Fotoğraf" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                </a>
+                {% for img_url in presentation.images %}
+                <div onclick="openLightbox({{ loop.index0 }})" class="group relative rounded-xl overflow-hidden border border-slate-800 bg-slate-900 aspect-video sm:aspect-square cursor-pointer active:scale-95 transition-transform">
+                    <img src="{{ img_url }}" alt="Portföy Fotoğrafı" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                    <div class="absolute inset-0 bg-slate-950/20 group-hover:bg-transparent transition-colors"></div>
+                </div>
                 {% endfor %}
             </div>
         </section>
@@ -135,58 +185,150 @@
         <!-- PROPERTY DESCRIPTION -->
         {% if presentation.description %}
         <section class="space-y-3">
-            <h3 class="text-xs font-bold text-amber-400 tracking-wider uppercase flex items-center gap-2">
+            <h3 class="text-xs font-bold text-amber-400 tracking-wider uppercase flex items-center gap-2 font-heading">
                 <span class="w-1.5 h-4 bg-amber-500 rounded-full"></span> Portföy Açıklaması
             </h3>
-            <div class="card-bg p-5 rounded-2xl border border-slate-800 text-slate-300 text-sm leading-relaxed whitespace-pre-line">
+            <div class="card-bg p-5 rounded-2xl border border-slate-800/80 text-slate-300 text-xs sm:text-sm leading-relaxed whitespace-pre-line selectable">
                 {{ presentation.description }}
             </div>
         </section>
         {% endif %}
 
-        <!-- AGENT VIP CARD -->
+        <!-- AGENT EXECUTIVE NATIVE CARD -->
         <section class="card-bg p-6 rounded-2xl border-2 border-amber-500/40 shadow-2xl relative overflow-hidden">
             <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
             
             <div class="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
-                <div class="w-24 h-32 rounded-xl border-2 border-amber-500/60 overflow-hidden shadow-xl flex-shrink-0 bg-slate-900">
+                <div class="w-24 h-30 rounded-2xl border-2 border-amber-500/60 overflow-hidden shadow-xl shrink-0 bg-slate-900">
                     <img src="/static/yigit_narin_portrait.png" alt="Yiğit Narin" class="w-full h-full object-cover" onerror="this.src='https://i.ibb.co/ksPFvjCt/Yigit-Bey1.png'">
                 </div>
                 <div class="space-y-1.5 flex-1">
-                    <h4 class="text-xl font-bold text-slate-100">Yiğit Narin</h4>
-                    <p class="text-xs font-semibold text-amber-400">Gayrimenkul ve Yatırım Danışmanı</p>
+                    <h4 class="text-xl font-extrabold text-slate-100 font-heading">Yiğit Narin</h4>
+                    <p class="text-xs font-bold text-amber-400">Gayrimenkul ve Yatırım Danışmanı</p>
                     <p class="text-xs text-slate-400 font-medium">Coldwell Banker CB VIP Ankara</p>
                     
                     <div class="pt-3 flex flex-wrap justify-center sm:justify-start gap-3 text-xs font-semibold text-slate-300">
-                        <a href="tel:+905324514008" class="flex items-center gap-1.5 hover:text-amber-400 transition-colors">
+                        <a href="tel:+905324514008" class="flex items-center gap-1.5 hover:text-amber-400 active:scale-95 transition-transform">
                             <i class="fa-solid fa-phone text-amber-500"></i> +90 532 451 40 08
                         </a>
-                        <a href="https://wa.me/905324514008" target="_blank" class="flex items-center gap-1.5 hover:text-emerald-400 transition-colors">
+                        <a href="https://wa.me/905324514008" target="_blank" class="flex items-center gap-1.5 hover:text-emerald-400 active:scale-95 transition-transform">
                             <i class="fa-brands fa-whatsapp text-emerald-500"></i> WhatsApp
                         </a>
-                        <a href="https://www.gayrimenkulmuhendisi.com" target="_blank" class="flex items-center gap-1.5 hover:text-amber-400 transition-colors">
+                        <a href="https://www.gayrimenkulmuhendisi.com" target="_blank" class="flex items-center gap-1.5 hover:text-amber-400 active:scale-95 transition-transform">
                             <i class="fa-solid fa-globe text-amber-500"></i> Web
                         </a>
                     </div>
                 </div>
             </div>
 
-            <p class="mt-4 pt-4 border-t border-slate-800/80 text-xs text-slate-400 text-center italic">
+            <p class="mt-4 pt-4 border-t border-slate-800/80 text-[11px] text-slate-400 text-center italic">
                 Bu mülkün sunumu, ekspertiz analizi ve yer gösterimi Coldwell Banker CB VIP Ankara güvencesiyle yürütülmektedir.
             </p>
         </section>
 
     </main>
 
-    <!-- STICKY FOOTER CTA BAR FOR MOBILE -->
-    <footer class="fixed bottom-0 inset-x-0 bg-slate-950/95 backdrop-blur-md border-t border-slate-800 p-3 z-50 flex items-center justify-center gap-3 max-w-3xl mx-auto">
-        <a href="https://wa.me/905324514008?text=Merhaba%20Yigi%CC%87t%20Bey%2C%20ilan%C4%B1n%C4%B1z%20ihakk%C4%B1nda%20bilgi%20almak%20istiyorum." target="_blank" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl text-center text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 transition-all">
+    <!-- STICKY FOOTER NATIVE ACTION BAR -->
+    <footer class="fixed bottom-0 inset-x-0 glass-footer border-t border-slate-800/80 p-3 z-40 flex items-center justify-center gap-3 max-w-3xl mx-auto shadow-2xl">
+        <a href="https://wa.me/905324514008?text=Merhaba%20Yi%C4%9Fit%20Bey%2C%20{{ presentation.title|urlencode }}%20ilan%C4%B1n%C4%B1z%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum." target="_blank" class="flex-1 bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold py-3.5 px-4 rounded-xl text-center text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 transition-all font-heading">
             <i class="fa-brands fa-whatsapp text-base"></i> WhatsApp'tan İletişime Geç
         </a>
-        <a href="tel:+905324514008" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 px-4 rounded-xl text-center text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all">
-            <i class="fa-solid fa-phone"></i> Ara
+        <a href="tel:+905324514008" class="bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-bold py-3.5 px-4 rounded-xl text-center text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/30 transition-all font-heading">
+            <i class="fa-solid fa-phone text-sm"></i> Hemen Ara
         </a>
     </footer>
 
+    <!-- NATIVE FULLSCREEN LIGHTBOX MODAL -->
+    <div id="lightboxModal" class="fixed inset-0 z-50 bg-black/95 hidden flex-col justify-between items-center p-4 backdrop-blur-xl transition-opacity duration-300">
+        <div class="w-full flex items-center justify-between text-white pt-safe px-2">
+            <span id="lightboxCounter" class="text-xs font-bold text-amber-400 font-heading">1 / 1</span>
+            <button onclick="closeLightbox()" class="w-10 h-10 rounded-full bg-slate-800/80 text-white flex items-center justify-center text-lg active:scale-90 transition-transform">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="relative w-full max-w-4xl flex-1 flex items-center justify-center my-auto overflow-hidden">
+            <img id="lightboxImg" src="" alt="Fullscreen view" class="max-h-[80vh] max-w-full object-contain rounded-lg shadow-2xl transition-all duration-300">
+        </div>
+
+        <div class="w-full flex items-center justify-between gap-4 pb-safe max-w-md px-4">
+            <button onclick="prevLightboxImg()" class="flex-1 bg-slate-800/90 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-transform text-xs">
+                <i class="fa-solid fa-chevron-left"></i> Önceki
+            </button>
+            <button onclick="nextLightboxImg()" class="flex-1 bg-amber-500 text-slate-950 font-bold py-3 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-transform text-xs">
+                Sonraki <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- NATIVE APP JAVASCRIPT -->
+    <script>
+        const galleryImages = {{ presentation.images|tojson if presentation.images else '[]' }};
+        let currentImgIdx = 0;
+
+        function openLightbox(idx) {
+            if (!galleryImages || galleryImages.length === 0) return;
+            currentImgIdx = idx;
+            updateLightbox();
+            const modal = document.getElementById('lightboxModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('lightboxModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        function updateLightbox() {
+            if (currentImgIdx < 0) currentImgIdx = galleryImages.length - 1;
+            if (currentImgIdx >= galleryImages.length) currentImgIdx = 0;
+            document.getElementById('lightboxImg').src = galleryImages[currentImgIdx];
+            document.getElementById('lightboxCounter').textContent = `${currentImgIdx + 1} / ${galleryImages.length}`;
+        }
+
+        function prevLightboxImg() {
+            currentImgIdx--;
+            updateLightbox();
+        }
+
+        function nextLightboxImg() {
+            currentImgIdx++;
+            updateLightbox();
+        }
+
+        // Native Mobile Share API
+        async function shareAppPresentation() {
+            const shareData = {
+                title: {{ presentation.title|tojson }},
+                text: {{ (presentation.title + " • Yiğit Narin Portföy Sunumu")|tojson }},
+                url: window.location.href
+            };
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                } catch (e) {
+                    console.log('Share canceled', e);
+                }
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('Sunum bağlantısı kopyalandı!');
+                });
+            }
+        }
+
+        // Keyboard navigation for lightbox
+        document.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('lightboxModal');
+            if (!modal.classList.contains('hidden')) {
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') prevLightboxImg();
+                if (e.key === 'ArrowRight') nextLightboxImg();
+            }
+        });
+    </script>
 </body>
 </html>

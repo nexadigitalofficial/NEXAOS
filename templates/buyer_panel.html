@@ -1,0 +1,574 @@
+<!--
+====================================================================
+BUYER PANEL UI
+Nexa CRM — AI Buyer Extension
+====================================================================
+
+Entegrasyon: crm.html'in içinde bir tab olarak eklenebilir.
+Örnek (crm.html'de):
+  <div id="buyerTab" style="display:none;">
+    <!-- buyer_panel.html içeriği buraya -->
+  </div>
+
+Stil: Mevcut CRM tasarımı (LUXURY NOIR) ile uyumlu
+Teknoloji: Vanilla JS + Fetch API
+====================================================================
+-->
+
+<div style="font-family: 'Jost', 'Playfair Display', Arial, sans-serif; background: #0b0f19; color: #e5e7eb; min-height: 100vh; padding: 20px;">
+
+  <!-- HEADER -->
+  <div style="max-width: 1400px; margin: 0 auto; padding-bottom: 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+    <h1 style="margin: 0; font-size: 32px; color: #ffffff; font-weight: 700;">🎯 Alıcı Uzantısı</h1>
+    <p style="margin: 8px 0 0; color: #9ca3af; font-size: 14px;">Profilleri yönet, eşleşmeleri izle, otomatik bildirimleri tetikle</p>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div style="max-width: 1400px; margin: 30px auto;">
+
+    <!-- TAB NAVIGATION -->
+    <div style="display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 0;">
+      <button onclick="switchBuyerTab('dashboard')" id="tab-dashboard" style="padding: 12px 24px; border: none; background: transparent; color: #c7a34b; border-bottom: 2px solid #c7a34b; cursor: pointer; font-size: 14px; font-weight: 600;">
+        📊 Dashboard
+      </button>
+      <button onclick="switchBuyerTab('profiles')" id="tab-profiles" style="padding: 12px 24px; border: none; background: transparent; color: #9ca3af; cursor: pointer; font-size: 14px; font-weight: 600;">
+        👤 Profiller
+      </button>
+      <button onclick="switchBuyerTab('matches')" id="tab-matches" style="padding: 12px 24px; border: none; background: transparent; color: #9ca3af; cursor: pointer; font-size: 14px; font-weight: 600;">
+        🔗 Eşleşmeler
+      </button>
+    </div>
+
+    <!-- TAB: DASHBOARD -->
+    <div id="buyerTab-dashboard" style="display: block;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
+        <div style="background: #121826; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 20px;">
+          <div style="font-size: 12px; color: #c7a34b; font-weight: 600; margin-bottom: 8px;">AKTIF PROFILLER</div>
+          <div style="font-size: 32px; color: #ffffff; font-weight: 700;" id="stat-buyers">0</div>
+        </div>
+        <div style="background: #121826; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 20px;">
+          <div style="font-size: 12px; color: #c7a34b; font-weight: 600; margin-bottom: 8px;">TOPLAM EŞLEŞME</div>
+          <div style="font-size: 32px; color: #ffffff; font-weight: 700;" id="stat-matches">0</div>
+        </div>
+        <div style="background: #121826; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 20px;">
+          <div style="font-size: 12px; color: #c7a34b; font-weight: 600; margin-bottom: 8px;">ORT. SKOR</div>
+          <div style="font-size: 32px; color: #ffffff; font-weight: 700;" id="stat-avg-score">0</div>
+          <div style="font-size: 11px; color: #9ca3af;">%</div>
+        </div>
+        <div style="background: #121826; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 20px;">
+          <div style="font-size: 12px; color: #c7a34b; font-weight: 600; margin-bottom: 8px;">HARIKA EŞLEŞ.</div>
+          <div style="font-size: 32px; color: #ffffff; font-weight: 700;" id="stat-excellent">0</div>
+        </div>
+      </div>
+
+      <!-- TIER DISTRIBUTION CHART -->
+      <div style="background: #121826; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 24px;">
+        <h3 style="margin: 0 0 20px; font-size: 16px; color: #ffffff;">Eşleşme Dağılımı</h3>
+        <div id="tierChart" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;">
+          <!-- Dinamik olarak doldurulacak -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: PROFILES -->
+    <div id="buyerTab-profiles" style="display: none;">
+      <div style="margin-bottom: 20px;">
+        <button onclick="openBuyerCreateModal()" style="padding: 12px 24px; background: #c7a34b; color: #0b0f19; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;">
+          + Yeni Profil
+        </button>
+      </div>
+
+      <!-- PROFILES LIST -->
+      <div id="buyerProfilesList" style="display: grid; gap: 16px;">
+        <!-- Dinamik olarak doldurulacak -->
+      </div>
+    </div>
+
+    <!-- TAB: MATCHES -->
+    <div id="buyerTab-matches" style="display: none;">
+      <div style="margin-bottom: 20px;">
+        <label for="filterBuyerSelect" style="display: block; margin-bottom: 8px; font-size: 14px; color: #9ca3af;">Profil Seç:</label>
+        <select id="filterBuyerSelect" onchange="loadBuyerMatches()" style="padding: 10px; background: #121826; border: 1px solid rgba(255, 255, 255, 0.08); color: #e5e7eb; border-radius: 8px; width: 100%; max-width: 300px;">
+          <option value="">Tümü</option>
+        </select>
+      </div>
+
+      <!-- MATCHES LIST -->
+      <div id="buyerMatchesList" style="display: grid; gap: 16px;">
+        <!-- Dinamik olarak doldurulacak -->
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MODAL: CREATE/EDIT BUYER PROFILE -->
+<div id="buyerModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); z-index: 1000; padding: 20px; overflow-y: auto;">
+  <div style="background: #121826; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; max-width: 600px; margin: 50px auto; padding: 30px;">
+    <h2 id="modalTitle" style="margin: 0 0 20px; font-size: 24px; color: #ffffff;">Yeni Alıcı Profili</h2>
+
+    <!-- Basic Info -->
+    <div style="margin-bottom: 20px;">
+      <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #9ca3af;">Ad Soyad</label>
+      <input id="buyerName" type="text" placeholder="Ahmet Yılmaz" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.08); color: #e5e7eb; border-radius: 8px; box-sizing: border-box;">
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+      <div>
+        <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #9ca3af;">Email</label>
+        <input id="buyerEmail" type="email" placeholder="ahmet@example.com" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.08); color: #e5e7eb; border-radius: 8px; box-sizing: border-box;">
+      </div>
+      <div>
+        <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #9ca3af;">Telefon</label>
+        <input id="buyerPhone" type="tel" placeholder="05324514008" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.08); color: #e5e7eb; border-radius: 8px; box-sizing: border-box;">
+      </div>
+    </div>
+
+    <!-- Criteria -->
+    <h3 style="margin: 30px 0 16px; font-size: 16px; color: #ffffff;">Kriterleri</h3>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+      <div>
+        <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #9ca3af;">Min. Fiyat (TL)</label>
+        <input id="criteriaMinPrice" type="number" placeholder="3000000" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.08); color: #e5e7eb; border-radius: 8px; box-sizing: border-box;">
+      </div>
+      <div>
+        <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #9ca3af;">Max. Fiyat (TL)</label>
+        <input id="criteriaMaxPrice" type="number" placeholder="6000000" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.08); color: #e5e7eb; border-radius: 8px; box-sizing: border-box;">
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+      <div>
+        <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #9ca3af;">Min. Alan (m²)</label>
+        <input id="criteriaMinArea" type="number" placeholder="80" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.08); color: #e5e7eb; border-radius: 8px; box-sizing: border-box;">
+      </div>
+      <div>
+        <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #9ca3af;">Max. Alan (m²)</label>
+        <input id="criteriaMaxArea" type="number" placeholder="150" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.08); color: #e5e7eb; border-radius: 8px; box-sizing: border-box;">
+      </div>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #9ca3af;">Semtler (virgülle ayırın)</label>
+      <input id="criteriaNeighborhoods" type="text" placeholder="Çankaya, Dikmen, Çukurambar" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.08); color: #e5e7eb; border-radius: 8px; box-sizing: border-box;">
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #9ca3af;">Doğal Dil Kriterleri</label>
+      <textarea id="criteriaNaturalLanguage" placeholder="Örn: Ankara'da yeni, balkonlu, otopark" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.08); color: #e5e7eb; border-radius: 8px; box-sizing: border-box; min-height: 80px;"></textarea>
+    </div>
+
+    <!-- Preferences -->
+    <h3 style="margin: 30px 0 16px; font-size: 16px; color: #ffffff;">Tercihler</h3>
+
+    <div style="margin-bottom: 20px;">
+      <label style="display: block; margin-bottom: 12px; font-size: 14px; color: #9ca3af;">Bildirim Kanalları</label>
+      <div style="display: grid; gap: 8px;">
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" id="notifEmail" checked style="cursor: pointer;">
+          <span style="color: #e5e7eb;">Email</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" id="notifCrmTask" checked style="cursor: pointer;">
+          <span style="color: #e5e7eb;">CRM Görev</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" id="notifTelegram" style="cursor: pointer;">
+          <span style="color: #e5e7eb;">Telegram</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" id="notifWhatsApp" style="cursor: pointer;">
+          <span style="color: #e5e7eb;">WhatsApp</span>
+        </label>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+        <input type="checkbox" id="autoMatch" checked style="cursor: pointer;">
+        <span style="color: #e5e7eb; font-size: 14px;">Yeni ilanları otomatik eşleştir</span>
+      </label>
+    </div>
+
+    <!-- BUTTONS -->
+    <div style="display: flex; gap: 12px; margin-top: 30px;">
+      <button onclick="saveBuyerProfile()" style="flex: 1; padding: 12px; background: #c7a34b; color: #0b0f19; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+        Kaydet
+      </button>
+      <button onclick="closeBuyerModal()" style="flex: 1; padding: 12px; background: transparent; color: #e5e7eb; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; cursor: pointer;">
+        İptal
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPT -->
+<script>
+  const BUYER_API_BASE = "/api/buyer";
+  let currentUID = null;
+  let currentEditBuyerID = null;
+  let allBuyers = [];
+
+  // ── Initialization ──────────────────────────────────────────────
+  function initBuyerPanel(uid) {
+    currentUID = uid;
+    switchBuyerTab("dashboard");
+    loadBuyerDashboard();
+  }
+
+  // ── Tab Navigation ────────────────────────────────────────────
+  function switchBuyerTab(tabName) {
+    // Hide all tabs
+    document.querySelectorAll("[id^='buyerTab-']").forEach(el => el.style.display = "none");
+    document.querySelectorAll("[id^='tab-']").forEach(el => el.style.color = "#9ca3af");
+    document.querySelectorAll("[id^='tab-']").forEach(el => el.style.borderBottom = "none");
+
+    // Show selected tab
+    const tabEl = document.getElementById(`buyerTab-${tabName}`);
+    if (tabEl) tabEl.style.display = "block";
+
+    const btnEl = document.getElementById(`tab-${tabName}`);
+    if (btnEl) {
+      btnEl.style.color = "#c7a34b";
+      btnEl.style.borderBottom = "2px solid #c7a34b";
+    }
+
+    // Load content
+    if (tabName === "profiles") {
+      loadBuyerProfiles();
+    } else if (tabName === "matches") {
+      loadBuyerMatchesTab();
+    }
+  }
+
+  // ── DASHBOARD ──────────────────────────────────────────────────
+  async function loadBuyerDashboard() {
+    try {
+      const res = await fetch(`${BUYER_API_BASE}/dashboard?uid=${currentUID}`);
+      const data = await res.json();
+
+      if (data.ok) {
+        const d = data.dashboard;
+        document.getElementById("stat-buyers").textContent = d.active_buyers;
+        document.getElementById("stat-matches").textContent = d.total_matches;
+        document.getElementById("stat-avg-score").textContent = Math.round(d.avg_match_score);
+        document.getElementById("stat-excellent").textContent = d.tier_distribution.excellent || 0;
+
+        // Tier chart
+        renderTierChart(d.tier_distribution);
+      }
+    } catch (e) {
+      console.error("Dashboard yükleme hatası:", e);
+    }
+  }
+
+  function renderTierChart(tiers) {
+    const container = document.getElementById("tierChart");
+    container.innerHTML = "";
+
+    const tierNames = ["perfect", "excellent", "good", "fair", "weak"];
+    const tierLabels = ["🟢 HARIKA", "🔵 MÜK.", "🟡 İYİ", "🟠 ORTA", "🔴 ZAYIF"];
+
+    tierNames.forEach((tier, idx) => {
+      const count = tiers[tier] || 0;
+      const div = document.createElement("div");
+      div.style.cssText = `
+        background: #0f172a;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 8px;
+        padding: 16px;
+        text-align: center;
+      `;
+      div.innerHTML = `
+        <div style="font-size: 12px; color: #9ca3af; margin-bottom: 8px;">${tierLabels[idx]}</div>
+        <div style="font-size: 24px; color: #ffffff; font-weight: 700;">${count}</div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  // ── PROFILES ────────────────────────────────────────────────────
+  async function loadBuyerProfiles() {
+    try {
+      const res = await fetch(`${BUYER_API_BASE}/profile/list?uid=${currentUID}`);
+      const data = await res.json();
+
+      if (data.ok) {
+        allBuyers = data.profiles;
+        renderBuyerProfilesList();
+
+        // Popula filter dropdown
+        const select = document.getElementById("filterBuyerSelect");
+        select.innerHTML = '<option value="">Tümü</option>';
+        allBuyers.forEach(buyer => {
+          const opt = document.createElement("option");
+          opt.value = buyer.id;
+          opt.textContent = buyer.name;
+          select.appendChild(opt);
+        });
+      }
+    } catch (e) {
+      console.error("Profiller yükleme hatası:", e);
+    }
+  }
+
+  function renderBuyerProfilesList() {
+    const container = document.getElementById("buyerProfilesList");
+    container.innerHTML = "";
+
+    allBuyers.forEach(buyer => {
+      const div = document.createElement("div");
+      div.style.cssText = `
+        background: #121826;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 16px;
+        align-items: center;
+      `;
+
+      const criteria = buyer.criteria;
+      div.innerHTML = `
+        <div>
+          <h4 style="margin: 0 0 8px; color: #ffffff; font-size: 16px;">${buyer.name}</h4>
+          <p style="margin: 0 0 12px; color: #9ca3af; font-size: 13px;">${buyer.email} • ${buyer.phone}</p>
+          <div style="font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+            <div>💰 ${criteria.min_price?.toLocaleString()} - ${criteria.max_price?.toLocaleString()} TL</div>
+            <div>📐 ${criteria.min_area} - ${criteria.max_area} m²</div>
+            <div>📍 ${criteria.neighborhoods.join(", ")}</div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button onclick="editBuyerProfile('${buyer.id}')" style="padding: 8px 16px; background: #0f172a; color: #c7a34b; border: 1px solid #c7a34b; border-radius: 6px; cursor: pointer; font-size: 12px;">✏️ Düzenle</button>
+          <button onclick="deleteBuyerProfile('${buyer.id}')" style="padding: 8px 16px; background: #0f172a; color: #ef4444; border: 1px solid #ef4444; border-radius: 6px; cursor: pointer; font-size: 12px;">🗑️ Sil</button>
+        </div>
+      `;
+
+      container.appendChild(div);
+    });
+  }
+
+  // ── MODAL FUNCTIONS ────────────────────────────────────────────
+  function openBuyerCreateModal() {
+    currentEditBuyerID = null;
+    document.getElementById("modalTitle").textContent = "Yeni Alıcı Profili";
+    document.getElementById("buyerName").value = "";
+    document.getElementById("buyerEmail").value = "";
+    document.getElementById("buyerPhone").value = "";
+    document.getElementById("criteriaMinPrice").value = "";
+    document.getElementById("criteriaMaxPrice").value = "";
+    document.getElementById("criteriaMinArea").value = "";
+    document.getElementById("criteriaMaxArea").value = "";
+    document.getElementById("criteriaNeighborhoods").value = "";
+    document.getElementById("criteriaNaturalLanguage").value = "";
+    document.getElementById("notifEmail").checked = true;
+    document.getElementById("notifCrmTask").checked = true;
+    document.getElementById("autoMatch").checked = true;
+    document.getElementById("buyerModal").style.display = "block";
+  }
+
+  function editBuyerProfile(buyerID) {
+    currentEditBuyerID = buyerID;
+    const buyer = allBuyers.find(b => b.id === buyerID);
+    if (!buyer) return;
+
+    document.getElementById("modalTitle").textContent = "Profili Düzenle";
+    document.getElementById("buyerName").value = buyer.name;
+    document.getElementById("buyerEmail").value = buyer.email;
+    document.getElementById("buyerPhone").value = buyer.phone;
+    document.getElementById("criteriaMinPrice").value = buyer.criteria.min_price || "";
+    document.getElementById("criteriaMaxPrice").value = buyer.criteria.max_price || "";
+    document.getElementById("criteriaMinArea").value = buyer.criteria.min_area || "";
+    document.getElementById("criteriaMaxArea").value = buyer.criteria.max_area || "";
+    document.getElementById("criteriaNeighborhoods").value = (buyer.criteria.neighborhoods || []).join(", ");
+    document.getElementById("criteriaNaturalLanguage").value = buyer.criteria.natural_language || "";
+    document.getElementById("notifEmail").checked = buyer.preferences.notification_channels.includes("email");
+    document.getElementById("notifCrmTask").checked = buyer.preferences.notification_channels.includes("crm_task");
+    document.getElementById("autoMatch").checked = buyer.preferences.auto_match;
+    document.getElementById("buyerModal").style.display = "block";
+  }
+
+  function closeBuyerModal() {
+    document.getElementById("buyerModal").style.display = "none";
+    currentEditBuyerID = null;
+  }
+
+  async function saveBuyerProfile() {
+    const payload = {
+      uid: currentUID,
+      name: document.getElementById("buyerName").value,
+      email: document.getElementById("buyerEmail").value,
+      phone: document.getElementById("buyerPhone").value,
+      criteria: {
+        min_price: parseFloat(document.getElementById("criteriaMinPrice").value) || 0,
+        max_price: parseFloat(document.getElementById("criteriaMaxPrice").value) || 10000000,
+        min_area: parseFloat(document.getElementById("criteriaMinArea").value) || 0,
+        max_area: parseFloat(document.getElementById("criteriaMaxArea").value) || 1000,
+        neighborhoods: document.getElementById("criteriaNeighborhoods").value.split(",").map(s => s.trim()),
+        natural_language: document.getElementById("criteriaNaturalLanguage").value,
+      },
+      preferences: {
+        notification_channels: [
+          document.getElementById("notifEmail").checked && "email",
+          document.getElementById("notifCrmTask").checked && "crm_task",
+        ].filter(Boolean),
+        auto_match: document.getElementById("autoMatch").checked,
+      },
+    };
+
+    try {
+      const endpoint = currentEditBuyerID
+        ? `${BUYER_API_BASE}/profile/update`
+        : `${BUYER_API_BASE}/profile/create`;
+
+      if (currentEditBuyerID) {
+        payload.buyer_id = currentEditBuyerID;
+      }
+
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (data.ok) {
+        closeBuyerModal();
+        loadBuyerProfiles();
+      } else {
+        alert("Hata: " + (data.error || "Bilinmeyen hata"));
+      }
+    } catch (e) {
+      alert("Kaydetme hatası: " + e.message);
+    }
+  }
+
+  async function deleteBuyerProfile(buyerID) {
+    if (!confirm("Bu profili silmek istediğinizden emin misiniz?")) return;
+
+    try {
+      const res = await fetch(`${BUYER_API_BASE}/profile/delete`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ uid: currentUID, buyer_id: buyerID }),
+      });
+
+      const data = await res.json();
+      if (data.ok) {
+        loadBuyerProfiles();
+      } else {
+        alert("Silme hatası: " + (data.error || "Bilinmeyen hata"));
+      }
+    } catch (e) {
+      alert("Silme hatası: " + e.message);
+    }
+  }
+
+  // ── MATCHES ────────────────────────────────────────────────────
+  async function loadBuyerMatchesTab() {
+    const buyerID = document.getElementById("filterBuyerSelect").value;
+    if (!buyerID) {
+      document.getElementById("buyerMatchesList").innerHTML = "<p style='color: #9ca3af;'>Eşleşmeleri görmek için bir profil seçin.</p>";
+      return;
+    }
+    loadBuyerMatches();
+  }
+
+  async function loadBuyerMatches() {
+    const buyerID = document.getElementById("filterBuyerSelect").value;
+    if (!buyerID) return;
+
+    try {
+      const res = await fetch(`${BUYER_API_BASE}/matches/list?uid=${currentUID}&buyer_id=${buyerID}&limit=50`);
+      const data = await res.json();
+
+      if (data.ok) {
+        renderMatchesList(data.matches);
+      }
+    } catch (e) {
+      console.error("Matches yükleme hatası:", e);
+    }
+  }
+
+  function renderMatchesList(matches) {
+    const container = document.getElementById("buyerMatchesList");
+    container.innerHTML = "";
+
+    if (matches.length === 0) {
+      container.innerHTML = "<p style='color: #9ca3af;'>Henüz eşleşme yok.</p>";
+      return;
+    }
+
+    matches.forEach(match => {
+      const listing = match.listing_data;
+      const div = document.createElement("div");
+      div.style.cssText = `
+        background: #121826;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 20px;
+      `;
+
+      const tierEmoji = {
+        perfect: "🟢",
+        excellent: "🔵",
+        good: "🟡",
+        fair: "🟠",
+        weak: "🔴",
+      }[match.tier] || "⚪";
+
+      div.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start;">
+          <div>
+            <h4 style="margin: 0 0 8px; color: #ffffff;">
+              ${tierEmoji} ${match.tier.toUpperCase()} — ${match.match_score.toFixed(1)}%
+            </h4>
+            <p style="margin: 0 0 12px; color: #9ca3af; font-size: 13px;">
+              ${listing.property_type || "?"} • ${listing.location || "?"}
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 12px; color: #cbd5e1;">
+              <div>💰 ${(listing.price || 0).toLocaleString()} TL</div>
+              <div>📐 ${listing.area || "?"} m²</div>
+            </div>
+            <div style="margin-top: 12px; font-size: 11px; color: #9ca3af;">
+              Eşleşme Detayları: ${Object.entries(match.match_details).map(([k, v]) => v).join(" • ")}
+            </div>
+          </div>
+          <button onclick="notifyBuyerForMatch('${match.buyer_id}', ${match.match_score})" style="padding: 8px 16px; background: #c7a34b; color: #0b0f19; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; white-space: nowrap;">
+            📧 Bildir
+          </button>
+        </div>
+      `;
+
+      container.appendChild(div);
+    });
+  }
+
+  async function notifyBuyerForMatch(buyerID, score) {
+    try {
+      const res = await fetch(`${BUYER_API_BASE}/notify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          uid: currentUID,
+          buyer_id: buyerID,
+          match_score: score,
+          channels: ["email", "crm_task"],
+        }),
+      });
+
+      const data = await res.json();
+      if (data.ok) {
+        alert("✅ Bildirimler gönderildi!");
+      } else {
+        alert("Hata: " + (data.error || "Bilinmeyen hata"));
+      }
+    } catch (e) {
+      alert("Bildirim hatası: " + e.message);
+    }
+  }
+</script>

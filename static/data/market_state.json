@@ -1,0 +1,68 @@
+{
+  "demand": 98.0,
+  "supply": 54.0,
+  "credit": 58.0,
+  "rental": 78.0,
+  "price_pressure": 72.0,
+  "investment_appetite": 98.0,
+  "regime": "EXPANSION",
+  "regional_indices": {
+    "Beytepe": {
+      "demand": 86.0,
+      "supply": 48.0,
+      "price_pressure": 82.0,
+      "rental_yield": 6.8,
+      "investment_appetite": 89.0,
+      "dominant_segment": "Ultra-Lüks Villa / Rezidans",
+      "cycle_stage": "Yüksek Talep / Sınırlı Arz",
+      "m2_average_try": 88000.0
+    },
+    "İncek": {
+      "demand": 82.0,
+      "supply": 64.0,
+      "price_pressure": 74.0,
+      "rental_yield": 7.4,
+      "investment_appetite": 85.0,
+      "dominant_segment": "Müstakil Yaşam & Kampüs Konutları",
+      "cycle_stage": "Dengeli Genişleme",
+      "m2_average_try": 72000.0
+    },
+    "Çayyolu": {
+      "demand": 78.0,
+      "supply": 52.0,
+      "price_pressure": 75.0,
+      "rental_yield": 6.5,
+      "investment_appetite": 79.0,
+      "dominant_segment": "Oturum Odaklı Prestij Konut",
+      "cycle_stage": "Konsolide / Stabil",
+      "m2_average_try": 76000.0
+    },
+    "Çankaya": {
+      "demand": 74.0,
+      "supply": 58.0,
+      "price_pressure": 70.0,
+      "rental_yield": 7.1,
+      "investment_appetite": 76.0,
+      "dominant_segment": "Merkezi Elit Rezidans & Kurumsal Kiralama",
+      "cycle_stage": "Stabil Yüksek Likidite",
+      "m2_average_try": 68000.0
+    },
+    "Gölbaşı": {
+      "demand": 79.0,
+      "supply": 68.0,
+      "price_pressure": 72.0,
+      "rental_yield": 6.9,
+      "investment_appetite": 84.0,
+      "dominant_segment": "Göl Manzaralı Villa & Gelişim Alanı",
+      "cycle_stage": "Erken Genişleme",
+      "m2_average_try": 62000.0
+    }
+  },
+  "daily_diff": {
+    "demand": 0.0,
+    "supply": 0.0,
+    "price_pressure": 0.0,
+    "investment_appetite": 0.0
+  },
+  "last_updated": "2026-09-19T11:47:49.946797+00:00"
+}

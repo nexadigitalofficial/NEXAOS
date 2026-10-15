@@ -1,0 +1,2635 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>NEXA.OS · Coldwell Banker VIP Gayrimenkul Danışman Portföyü</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="Coldwell Banker VIP Danışman Portföyü">
+<meta property="og:image" content="https://i0.shbdn.com/photos/91/52/69/x5_1342915269we6.avif">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-0: #08080a;
+  --bg-1: #111114;
+  --bg-2: #18181c;
+  --bg-3: #222228;
+  --line: #2b2b33;
+  --line-soft: #1c1c22;
+  --gold: #c9a45c;
+  --gold-soft: #e8cd93;
+  --gold-dim: rgba(201, 164, 92, 0.35);
+  --text-0: #f5f4f1;
+  --text-1: #cbcac6;
+  --text-2: #8f8e8a;
+  --radius: 18px;
+  --shadow: 0 35px 80px -25px rgba(0,0,0,0.85);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; padding: 0 0 100px;
+  background: radial-gradient(ellipse 1400px 700px at 50% -10%, rgba(201,164,92,0.08), transparent 70%), var(--bg-0);
+  color: var(--text-0);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+h1, h2, h3, .serif { font-family: 'Playfair Display', Georgia, serif; }
+a { color: inherit; text-decoration: none; }
+
+.nexa-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(8, 8, 10, 0.88); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line-soft);
+}
+.nexa-nav .inner {
+  max-width: 1200px; margin: 0 auto; padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.nexa-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Playfair Display', serif; font-size: 17px; letter-spacing: .04em; color: var(--text-0);
+}
+.nexa-brand .dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--gold); box-shadow: 0 0 12px var(--gold);
+}
+.nexa-brand span { color: var(--gold-soft); font-weight: 700; }
+.nexa-jump select {
+  appearance: none; background: var(--bg-2); border: 1px solid var(--line);
+  color: var(--text-1); font-size: 13px; padding: 9px 34px 9px 16px; border-radius: 30px;
+  cursor: pointer; font-family: inherit; outline: none; transition: all .2s;
+}
+.nexa-jump select:hover { border-color: var(--gold); color: #fff; }
+
+.hero-banner { max-width: 1200px; margin: 40px auto 20px; padding: 0 24px; }
+.hero-box {
+  background: linear-gradient(135deg, rgba(201,164,92,0.12), rgba(17,17,20,0.8));
+  border: 1px solid var(--gold-dim); border-radius: var(--radius);
+  padding: 36px 40px; display: flex; justify-content: space-between; align-items: center;
+  box-shadow: 0 20px 50px -20px rgba(0,0,0,0.6); flex-wrap: wrap; gap: 20px;
+}
+.hero-title { font-size: 32px; font-weight: 700; color: #fff; margin: 0 0 8px; }
+.hero-sub { color: var(--gold-soft); font-size: 14px; letter-spacing: .08em; text-transform: uppercase; }
+.hero-stat { display: flex; gap: 30px; }
+.stat-item { text-align: right; }
+.stat-num { font-size: 28px; font-weight: 700; color: var(--gold-soft); font-family: 'Playfair Display', serif; }
+.stat-lbl { font-size: 11.5px; color: var(--text-2); text-transform: uppercase; letter-spacing: .05em; }
+
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.listing-anchor { scroll-margin-top: 80px; }
+.card {
+  background: var(--bg-1); border: 1px solid var(--line); border-radius: var(--radius);
+  overflow: hidden; margin: 40px 0; box-shadow: var(--shadow); position: relative;
+  transition: transform .3s ease, border-color .3s ease;
+}
+.card:hover { border-color: rgba(201, 164, 92, 0.4); }
+
+.ribbon {
+  position: absolute; top: 22px; right: -46px;
+  background: linear-gradient(120deg, var(--gold), var(--gold-soft));
+  color: #110e08; font-size: 11px; font-weight: 800; letter-spacing: .12em;
+  text-transform: uppercase; padding: 6px 54px; transform: rotate(45deg);
+  z-index: 10; box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+}
+
+.gallery {
+  display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr;
+  gap: 4px; aspect-ratio: 16/8; background: var(--bg-2);
+}
+.gallery .g-main { grid-row: 1/3; }
+.gallery figure { margin: 0; position: relative; overflow: hidden; cursor: pointer; background: #000; }
+.gallery img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.gallery figure:hover img { transform: scale(1.04); }
+.gallery .g-count {
+  position: absolute; right: 14px; bottom: 14px;
+  background: rgba(0,0,0,0.7); color: #fff; font-size: 12px;
+  padding: 6px 14px; border-radius: 20px; backdrop-filter: blur(8px);
+}
+.gallery .g-badge {
+  position: absolute; left: 16px; top: 16px;
+  background: rgba(10,10,12,0.75); color: var(--gold-soft); font-size: 11px;
+  letter-spacing: .12em; text-transform: uppercase; font-weight: 600;
+  padding: 6px 14px; border-radius: 20px; backdrop-filter: blur(8px);
+  border: 1px solid var(--gold-dim);
+}
+.gallery .g-all {
+  position: absolute; right: 14px; top: 14px;
+  background: rgba(0,0,0,0.7); color: #fff; font-size: 12px;
+  padding: 6px 14px; border-radius: 20px; backdrop-filter: blur(8px);
+}
+.filmstrip {
+  display: flex; gap: 6px; padding: 8px 12px; background: var(--bg-2);
+  overflow-x: auto; scrollbar-width: thin;
+}
+.filmstrip img {
+  width: 88px; height: 60px; object-fit: cover; border-radius: 8px; flex: 0 0 auto;
+  cursor: pointer; opacity: .7; transition: all .2s; border: 1px solid transparent;
+}
+.filmstrip img:hover { opacity: 1; transform: translateY(-3px); border-color: var(--gold); }
+
+.head {
+  padding: 32px 40px 24px; border-bottom: 1px solid var(--line);
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap;
+}
+.loc {
+  color: var(--gold); font-size: 12px; font-weight: 600; letter-spacing: .12em;
+  text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+}
+.loc-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+.head h1 {
+  font-size: 26px; font-weight: 600; margin: 0 0 10px; color: #fff; max-width: 680px; line-height: 1.35;
+}
+.no { color: var(--text-2); font-size: 12px; letter-spacing: .04em; }
+.price-box { text-align: right; }
+.price-lbl { font-size: 11px; color: var(--text-2); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+.price-val {
+  font-size: 28px; font-weight: 700; color: var(--gold-soft); font-family: 'Playfair Display', serif;
+}
+
+.bento-body {
+  padding: 30px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+}
+.bento-box {
+  background: var(--bg-2); border: 1px solid var(--line); border-radius: 14px; padding: 24px;
+}
+.bento-title {
+  font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--line-soft);
+  padding-bottom: 10px;
+}
+.specs-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px;
+}
+.spec-pill {
+  background: var(--bg-3); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+}
+.sp-k { display: block; font-size: 11px; color: var(--text-2); margin-bottom: 3px; text-transform: uppercase; }
+.sp-v { display: block; font-size: 13.5px; font-weight: 600; color: #fff; }
+
+.ai-metrics {
+  display: flex; justify-content: space-between; gap: 12px; margin-bottom: 18px;
+}
+.ai-m {
+  background: var(--bg-3); border: 1px solid var(--line); border-radius: 10px;
+  padding: 12px; flex: 1; text-align: center;
+}
+.ai-m-val { font-size: 22px; font-weight: 700; color: var(--gold-soft); }
+.ai-m-val span { font-size: 12px; color: var(--text-2); font-weight: 400; }
+.ai-m-lbl { font-size: 11px; color: var(--text-2); margin-top: 4px; text-transform: uppercase; }
+.ai-summary {
+  font-size: 13.5px; line-height: 1.6; color: var(--text-1); background: rgba(0,0,0,0.25);
+  padding: 14px; border-radius: 10px; border-left: 3px solid var(--gold);
+}
+
+.desc-box { padding: 0 40px 24px; }
+.desc-title { font-size: 14px; font-weight: 600; color: var(--text-2); margin-bottom: 10px; text-transform: uppercase; letter-spacing: .06em; }
+.desc-text {
+  font-size: 14px; line-height: 1.7; color: var(--text-1); background: var(--bg-2);
+  border: 1px solid var(--line); border-radius: 12px; padding: 20px 24px;
+}
+
+.card-footer {
+  padding: 20px 40px 30px; border-top: 1px solid var(--line);
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap; background: rgba(0,0,0,0.15);
+}
+.btn-sahibinden {
+  background: linear-gradient(120deg, var(--gold), var(--gold-soft));
+  color: #110e08; font-weight: 700; font-size: 13.5px; padding: 12px 24px;
+  border-radius: 30px; transition: all .2s;
+}
+.btn-sahibinden:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(201,164,92,0.35); }
+.btn-copy {
+  background: var(--bg-2); border: 1px solid var(--line); color: var(--text-0);
+  font-size: 13px; font-weight: 500; padding: 11px 20px; border-radius: 30px;
+  cursor: pointer; font-family: inherit; transition: all .2s;
+}
+.btn-copy:hover { background: var(--bg-3); border-color: var(--gold-dim); }
+.btn-whatsapp {
+  background: rgba(37, 211, 102, 0.15); border: 1px solid rgba(37, 211, 102, 0.4);
+  color: #25d366; font-size: 13px; font-weight: 600; padding: 11px 20px; border-radius: 30px;
+  transition: all .2s;
+}
+.btn-whatsapp:hover { background: rgba(37, 211, 102, 0.25); transform: translateY(-2px); }
+
+.lightbox {
+  position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(14px); display: none; align-items: center; justify-content: center;
+}
+.lightbox.active { display: flex; }
+.lightbox img { max-width: 90vw; max-height: 85vh; border-radius: 12px; object-fit: contain; box-shadow: 0 0 50px rgba(0,0,0,0.9); }
+.lightbox-close {
+  position: absolute; top: 24px; right: 30px; color: #fff; font-size: 32px; cursor: pointer;
+}
+
+@media (max-width: 860px) {
+  .bento-body { grid-template-columns: 1fr; }
+  .head { flex-direction: column; }
+  .price-box { text-align: left; }
+  .gallery { aspect-ratio: 4/3; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nexa-nav">
+  <div class="inner">
+    <a href="#" class="nexa-brand">
+      <span class="dot"></span>
+      NEXA<span>.OS</span> &nbsp;·&nbsp; Coldwell Banker VIP Danışman Vitrini
+    </a>
+    <div class="nexa-jump">
+      <select onchange="if(this.value) document.getElementById(this.value).scrollIntoView({behavior:'smooth'});">
+        <option value="">▼ Portföy İlanları Arasında Gezin (13 İlan)</option>
+        <option value="card-1342915269">01. ALACAATLI MAH. 7+1 AKILLI EV SİS... (40.000.000 TL)</option><option value="card-1336885994">02. MAMAK BAHÇELERÜSTÜ CDDE ÜZERİ YA... (3.500.000 TL)</option><option value="card-1274322763">03. MARMARİS ORHANİYE KIZKUMUNDA PAN... (115.000.000 TL)</option><option value="card-1341270088">04. GÖLBAŞI OYACA YEŞİLÇAM MAHALLESİ... (185.000 TL)</option><option value="card-1338227242">05. OSTİM AHİ EVRAN CAD. 800M2 KİRAL... (370.000 TL)</option><option value="card-1329478376">06. YAŞAMKENT BORUSAN, ELMAR TOWERS ... (64.000.000 TL)</option><option value="card-1338147352">07. TBMM KARŞISI MANOLYA REZİDANS GÜ... (50.000 TL)</option><option value="card-1329471689">08. ANKARA ESKİŞEHİR YOLU YAŞAMKENT ... (38.750.000 TL)</option><option value="card-1337995886">09. DA ASMA KATLI EN BÜYÜK DÜKKAN 25... (150.000 TL)</option><option value="card-1331627765">10. GÖNEN KURTULUŞ MAHALLESİNDE MASR... (7.250.000 TL)</option><option value="card-1338135377">11. TBMM KARŞISI MANOLYA REZİDANS GÜ... (60.000 TL)</option><option value="card-1343388187">12. TURAN GÜNEŞ BLV.KAHİRE CD.KURUMS... (1.150.000 TL)</option><option value="card-1340659497">13. GÖLBAŞI OYACA YEŞİLÇAM MAH. İMAR... (22.000.000 TL)</option>
+      </select>
+    </div>
+  </div>
+</nav>
+
+<header class="hero-banner">
+  <div class="hero-box">
+    <div>
+      <div class="hero-sub">CANLI GAYRİMENKUL DANIŞMAN PORTFÖYÜ</div>
+      <h1 class="hero-title">Coldwell Banker VIP Seçkin İlan Portföyü</h1>
+      <p style="color:var(--text-2);margin:0;font-size:14px;">Ankara, Muğla & Çevre İller · Lüks Villa, Rezidans, Arsa, Fabrika ve Ticari Taşınmazlar</p>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-item">
+        <div class="stat-num">13</div>
+        <div class="stat-lbl">Aktif Portföy</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">%100</div>
+        <div class="stat-lbl">Canlı Veri</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">Ultra v3</div>
+        <div class="stat-lbl">Bento Şablon</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  
+        <article id="card-1342915269" class="listing-anchor card">
+            <div class="ribbon">VIP PORTFÖY #1</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269we6.avif', '1342915269')">
+                    <img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269we6.avif" alt="ALACAATLI MAH. 7+1 AKILLI EV SİSTEMLİ NET 390M2 SATILIK VİLLA">
+                    <div class="g-badge">COLDWELL BANKER VIP</div>
+                    <div class="g-count">📷 32 Yüksek Çözünürlüklü Fotoğraf</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_134291526930k.avif', '1342915269')">
+                    <img src="https://i0.shbdn.com/photos/91/52/69/x5_134291526930k.avif" alt="ALACAATLI MAH. 7+1 AKILLI EV SİSTEMLİ NET 390M2 SATILIK VİLLA">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269uss.avif', '1342915269')">
+                    <img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269uss.avif" alt="ALACAATLI MAH. 7+1 AKILLI EV SİSTEMLİ NET 390M2 SATILIK VİLLA">
+                    <div class="g-all">Tüm Fotoğraflar ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269we6.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269we6.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_134291526930k.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_134291526930k.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269uss.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269uss.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269rwd.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269rwd.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_13429152694wl.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_13429152694wl.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269l17.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269l17.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269ae5.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269ae5.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_13429152691xm.avif" alt="Foto 7" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_13429152691xm.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269wue.avif" alt="Foto 8" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269wue.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269822.avif" alt="Foto 9" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269822.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_134291526999r.avif" alt="Foto 10" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_134291526999r.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269fda.avif" alt="Foto 11" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269fda.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269vpm.avif" alt="Foto 12" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269vpm.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269caz.avif" alt="Foto 13" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269caz.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_13429152692ml.avif" alt="Foto 14" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_13429152692ml.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269rjz.avif" alt="Foto 15" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269rjz.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269h7w.avif" alt="Foto 16" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269h7w.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269j0n.avif" alt="Foto 17" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269j0n.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269t96.avif" alt="Foto 18" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269t96.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269ypj.avif" alt="Foto 19" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269ypj.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_134291526980c.avif" alt="Foto 20" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_134291526980c.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_13429152693ti.avif" alt="Foto 21" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_13429152693ti.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269p3t.avif" alt="Foto 22" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269p3t.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_13429152695ae.avif" alt="Foto 23" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_13429152695ae.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269n2g.avif" alt="Foto 24" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269n2g.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269hil.avif" alt="Foto 25" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269hil.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269m9u.avif" alt="Foto 26" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269m9u.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269coe.avif" alt="Foto 27" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269coe.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269jo6.avif" alt="Foto 28" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269jo6.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269iuj.avif" alt="Foto 29" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269iuj.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_13429152694mo.avif" alt="Foto 30" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_13429152694mo.avif', '1342915269')"><img src="https://i0.shbdn.com/photos/91/52/69/x5_1342915269chm.avif" alt="Foto 31" onclick="openLightbox('https://i0.shbdn.com/photos/91/52/69/x5_1342915269chm.avif', '1342915269')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Çankaya / Çayyolu/Ümitköy</div>
+                    <h1>ALACAATLI MAH. 7+1 AKILLI EV SİSTEMLİ NET 390M2 SATILIK VİLLA</h1>
+                    <div class="no">İLAN NO: <b>#1342915269</b> &nbsp;|&nbsp; OFİS: COLDWELL BANKER VIP &nbsp;|&nbsp; KOD: CB-1342</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">PORTFÖY FİYATI</div>
+                    <div class="price-val">40.000.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 Gayrimenkul Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1342915269</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İşlem Türü</span>
+                <span class="sp-v">Konut</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Gayrimenkul Türü</span>
+                <span class="sp-v">Satılık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Seri</span>
+                <span class="sp-v">Villa</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Çankaya</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Çayyolu/Ümitköy</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Alacaatlı Mh.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Takas</span>
+                <span class="sp-v">Evet</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Gayrimenkul Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.1<span>/10</span></div>
+                            <div class="ai-m-lbl">Yatırım Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">17 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Geri Dönüş Süresi</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A+</div>
+                            <div class="ai-m-lbl">Lokasyon Değeri</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Görüşü:</b> Bu portföy, bölgedeki arz-talep dinamikleri, yapı kalitesi, ulaşım arterlerine yakınlığı ve emsal metrekare satış eğrileri bazında yüksek likidite ve prim potansiyeline sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 Portföy Açıklaması</div>
+                <div class="desc-text">RANDEVU VE DETAYLI BİLGİ İÇİN
+
+COLDWELL BANKER VİP OFİS
+
+&#x27;YETKİLİ GAYRİMENKUL DANIŞMANI
+
+SELDA ÇETİN O 505 4082750
+
+ALACAATLI MAHALLESİ, 741 AKILLI EV SİSTEMLİ, NET 390 M2, SATILIK VİLLA
+
+Hayalinizdeki lüks ve konforlu yaşamı birlikte sunan, modern mimarisi ve geniş yaşam alanlarıyla öne çıkan, şehrin gürültüsünden uzak, akıllı ev sistemi ile yaşamınızı
+kolaylaştırmaya yönelik olarak tasarlanmış bu eşsiz villa siz değerli alıcıları ile buluşmayı bekliyor.
+
+VİLLAMIZ 3 KATLI OLUP;
+GİRİŞTE
+1ODA/ 1 SALON/ MUTFAK/ WC - BANYO
+
+ÜST KATTA:
+1 ÇOCUK ODASI-WC-BANYO/1 GENÇ ODASI- WC BANYO/ 1 EBEVEYN ODASI-EBEVEYN BANYOSU-GİYİNME ODASI
+BODRUM KATTI
+
+1 TESİSAT ODASI/1 ÇOK AMAÇLI SALON/1 YARDIMCI ODASI/1 WC - BANYO
+BULUNMAKTADIR.
+
+AYRICA YERDEN ISITMA ÖZELLİĞİ İLE 4&#x27; LÜ ANKASTRE SETİ MEVCUTTUR. (OCAK- DAVLUNBAZ-FIRIN-MİKRODALGA)
+
+&#x27;TAVAN YÜKSEKLİĞİ İSE 3.20.CM&#x27; DİR.
+
+SO0M2 ARSA PAYINA, 130 M2 TABAN OTURUMUNA, 390M2 NET KULLANIM ALANINA, 370M2 BAHÇE ALANINA, KNX AKILLI EV SİSTEMİNE, İSTENİLDİĞİ TAKDİRDE KURULUM İÇİN
+HAZIR&#x27;DA ASANSÖR BOŞLUĞUNA SAHİP VİLLADA;
+
+AÇIK OTOPARK ALANI,
+
+GÜNEŞ ENERJİ SİSTEMİ,
+
+.OTOMATİK BAHÇE SULAMASI VE
+
+HER VİLLAYA AİT BAĞIMSIZ GİRİŞ BULUNMAKTADIR.
+
+ÇOCUKLARINIZIN VE SİZİN BAHÇESİNDE KEYİFLE VAKİT GEÇİRECEĞİNİZ BU ÖZEL VİLLAYI GÖRMEK, RANDEVU VE DETAYLI BİLGİ ALMAK İÇİN ARAYINIZ.
+
+RANDEVU VE DETAYLI BİLGİ İÇİN
+COLDWELL BANKER VİP OFİS
+YETKİLİ GAYRİMENKULDANIŞMANI
+SELDA ÇETİN 0 505 4082750</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1342915269/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1342915269')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=ALACAATLI MAH. 7+1 AKILLI EV SİSTEMLİ NET 390M2 SATILIK VİLLA%20https://www.sahibinden.com/ilan/1342915269/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Portföyü Gönder
+                </a>
+            </div>
+        </article>
+        
+        <article id="card-1336885994" class="listing-anchor card">
+            <div class="ribbon">VIP PORTFÖY #2</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994cgb.avif', '1336885994')">
+                    <img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994cgb.avif" alt="MAMAK BAHÇELERÜSTÜ CDDE ÜZERİ YAPILI 3+1 SATILIK">
+                    <div class="g-badge">COLDWELL BANKER VIP</div>
+                    <div class="g-count">📷 23 Yüksek Çözünürlüklü Fotoğraf</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_133688599428n.avif', '1336885994')">
+                    <img src="https://i0.shbdn.com/photos/88/59/94/x5_133688599428n.avif" alt="MAMAK BAHÇELERÜSTÜ CDDE ÜZERİ YAPILI 3+1 SATILIK">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994syz.avif', '1336885994')">
+                    <img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994syz.avif" alt="MAMAK BAHÇELERÜSTÜ CDDE ÜZERİ YAPILI 3+1 SATILIK">
+                    <div class="g-all">Tüm Fotoğraflar ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994cgb.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994cgb.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_133688599428n.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_133688599428n.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994syz.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994syz.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994la4.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994la4.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994p4h.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994p4h.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994b4p.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994b4p.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994c6j.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994c6j.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994bdz.avif" alt="Foto 7" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994bdz.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994bvn.avif" alt="Foto 8" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994bvn.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994dxl.avif" alt="Foto 9" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994dxl.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_13368859940nz.avif" alt="Foto 10" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_13368859940nz.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_13368859942wa.avif" alt="Foto 11" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_13368859942wa.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994zaj.avif" alt="Foto 12" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994zaj.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_13368859949uy.avif" alt="Foto 13" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_13368859949uy.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_13368859944vz.avif" alt="Foto 14" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_13368859944vz.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994tg2.avif" alt="Foto 15" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994tg2.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994daz.avif" alt="Foto 16" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994daz.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994xbh.avif" alt="Foto 17" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994xbh.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994lvr.avif" alt="Foto 18" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994lvr.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994uu1.avif" alt="Foto 19" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994uu1.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994iip.avif" alt="Foto 20" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994iip.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994lf0.avif" alt="Foto 21" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994lf0.avif', '1336885994')"><img src="https://i0.shbdn.com/photos/88/59/94/x5_1336885994yfk.avif" alt="Foto 22" onclick="openLightbox('https://i0.shbdn.com/photos/88/59/94/x5_1336885994yfk.avif', '1336885994')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Mamak / Gülveren</div>
+                    <h1>MAMAK BAHÇELERÜSTÜ CDDE ÜZERİ YAPILI 3+1 SATILIK</h1>
+                    <div class="no">İLAN NO: <b>#1336885994</b> &nbsp;|&nbsp; OFİS: COLDWELL BANKER VIP &nbsp;|&nbsp; KOD: CB-1336</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">PORTFÖY FİYATI</div>
+                    <div class="price-val">3.500.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 Gayrimenkul Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1336885994</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İşlem Türü</span>
+                <span class="sp-v">Konut</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Gayrimenkul Türü</span>
+                <span class="sp-v">Satılık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Seri</span>
+                <span class="sp-v">Daire</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Mamak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Gülveren</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Bahçelerüstü Mh.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Takas</span>
+                <span class="sp-v">Hayır</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Gayrimenkul Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.4<span>/10</span></div>
+                            <div class="ai-m-lbl">Yatırım Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">17 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Geri Dönüş Süresi</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A+</div>
+                            <div class="ai-m-lbl">Lokasyon Değeri</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Görüşü:</b> Bu portföy, bölgedeki arz-talep dinamikleri, yapı kalitesi, ulaşım arterlerine yakınlığı ve emsal metrekare satış eğrileri bazında yüksek likidite ve prim potansiyeline sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 Portföy Açıklaması</div>
+                <div class="desc-text">COLDWELL BANKER VİP
+
+Yetkili Danışman
+Börteçine Argün — 0533 201 13 27
+Dinçer Mustafa Arslan 0532 347 60 48
+
+3 KATLI BİNANIN 2.KATINDA BULUNAN DAİREMİZ
+341 YAPILI KİRACILI BİR DAİREDİR.
+
+KAT MÜLKİYETLİDİR.
+
+120 M2 BÜRÜT, 105 M2 NET KULLANIMA SAHİPTİR.
+
+DAİREYİ GÖRMEK İÇİN ÖNCEDEN RANDEVU ALINIZ</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1336885994/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1336885994')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=MAMAK BAHÇELERÜSTÜ CDDE ÜZERİ YAPILI 3+1 SATILIK%20https://www.sahibinden.com/ilan/1336885994/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Portföyü Gönder
+                </a>
+            </div>
+        </article>
+        
+        <article id="card-1274322763" class="listing-anchor card">
+            <div class="ribbon">VIP PORTFÖY #3</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763o60.avif', '1274322763')">
+                    <img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763o60.avif" alt="MARMARİS ORHANİYE KIZKUMUNDA PANORAMİK DENİZ MANZARALI ARSA">
+                    <div class="g-badge">COLDWELL BANKER VIP</div>
+                    <div class="g-count">📷 32 Yüksek Çözünürlüklü Fotoğraf</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763n2l.avif', '1274322763')">
+                    <img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763n2l.avif" alt="MARMARİS ORHANİYE KIZKUMUNDA PANORAMİK DENİZ MANZARALI ARSA">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763i0s.avif', '1274322763')">
+                    <img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763i0s.avif" alt="MARMARİS ORHANİYE KIZKUMUNDA PANORAMİK DENİZ MANZARALI ARSA">
+                    <div class="g-all">Tüm Fotoğraflar ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763o60.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763o60.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763n2l.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763n2l.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763i0s.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763i0s.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_127432276361u.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_127432276361u.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763w9t.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763w9t.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763xpf.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763xpf.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763pna.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763pna.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_12743227636xa.avif" alt="Foto 7" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_12743227636xa.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_12743227638j9.avif" alt="Foto 8" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_12743227638j9.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763vvp.avif" alt="Foto 9" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763vvp.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763e55.avif" alt="Foto 10" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763e55.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763oij.avif" alt="Foto 11" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763oij.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763t68.avif" alt="Foto 12" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763t68.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763rm1.avif" alt="Foto 13" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763rm1.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763xct.avif" alt="Foto 14" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763xct.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763ki9.avif" alt="Foto 15" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763ki9.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763f9w.avif" alt="Foto 16" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763f9w.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763p8d.avif" alt="Foto 17" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763p8d.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_12743227631c8.avif" alt="Foto 18" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_12743227631c8.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_12743227635wv.avif" alt="Foto 19" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_12743227635wv.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_12743227636ac.avif" alt="Foto 20" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_12743227636ac.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763z44.avif" alt="Foto 21" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763z44.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_127432276307i.avif" alt="Foto 22" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_127432276307i.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763j0o.avif" alt="Foto 23" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763j0o.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763hdv.avif" alt="Foto 24" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763hdv.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763dcp.avif" alt="Foto 25" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763dcp.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763fdd.avif" alt="Foto 26" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763fdd.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763uvp.avif" alt="Foto 27" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763uvp.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763t2f.avif" alt="Foto 28" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763t2f.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763esr.avif" alt="Foto 29" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763esr.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_1274322763jf0.avif" alt="Foto 30" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_1274322763jf0.avif', '1274322763')"><img src="https://i0.shbdn.com/photos/32/27/63/x5_127432276388x.avif" alt="Foto 31" onclick="openLightbox('https://i0.shbdn.com/photos/32/27/63/x5_127432276388x.avif', '1274322763')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Muğla / Marmaris / Köyler</div>
+                    <h1>MARMARİS ORHANİYE KIZKUMUNDA PANORAMİK DENİZ MANZARALI ARSA</h1>
+                    <div class="no">İLAN NO: <b>#1274322763</b> &nbsp;|&nbsp; OFİS: COLDWELL BANKER VIP &nbsp;|&nbsp; KOD: CB-1274</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">PORTFÖY FİYATI</div>
+                    <div class="price-val">115.000.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 Gayrimenkul Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1274322763</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İşlem Türü</span>
+                <span class="sp-v">Arsa</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Gayrimenkul Türü</span>
+                <span class="sp-v">Satılık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Muğla</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Marmaris</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Köyler</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Orhaniye Mh.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Takas</span>
+                <span class="sp-v">Hayır</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Fiyat (Sayısal)</span>
+                <span class="sp-v">115000000</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Gayrimenkul Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.6<span>/10</span></div>
+                            <div class="ai-m-lbl">Yatırım Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">16 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Geri Dönüş Süresi</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A+</div>
+                            <div class="ai-m-lbl">Lokasyon Değeri</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Görüşü:</b> Bu portföy, bölgedeki arz-talep dinamikleri, yapı kalitesi, ulaşım arterlerine yakınlığı ve emsal metrekare satış eğrileri bazında yüksek likidite ve prim potansiyeline sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 Portföy Açıklaması</div>
+                <div class="desc-text">COLDWELL BANKER VIP
+YETKİLİ DANIŞMANLAR :
+DİLŞAT UZUNOĞLU 0533 8134711
+DİNÇER MUSTAFA ARSLAN 0532 3476048
+
+Marmaris Orhaniye&#x27;nin en özel noktası Kızkumu&#x27;nda, göreni hayran bırakan tam panoramik deniz manzaralı, orman ve doğayla iç içe yatırım
+fırsatı!
+
+Bu bölge, hem turizm potansiyeli hem de her geçen gün artan emlak değeri ile yatırımcıların gözdesi konumundadır.
+144 Ada 3,4,5,6,7 ve 8 nolu parseller birlikte 18.329M2 dir.
+
+Öne Çıkan Özellikler:
+
+B Kızkumu Plajı&#x27;na yürüme mesafesinde
+
+H Tam cephe kesintisiz deniz manzarası
+
+H Sessiz, huzurlu, doğayla baş başa konum
+
+H Gelişim potansiyeliyle uzun vadede büyük kazanç fırsatı
+
+H Butik otel, bungalov işletmesi, yazlık villa veya özel kon sept projeler için ideal
+
+B Bölgedeki arzın sınırlı, talebin yüksek olması sebebiyle bu tür manzaralı ve lokasyon avantajlı mülkler nadiren piyasaya çıkar, bu fırsatı kaçırmayın!
+Marmaris Merkeze 26 km, Selimiye ye 18 km , Datça ya 60 km , Akyaka ya 55 km mesafededir.
+
+Detaylar için lütfen iletişime geçiniz.</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1274322763/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1274322763')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=MARMARİS ORHANİYE KIZKUMUNDA PANORAMİK DENİZ MANZARALI ARSA%20https://www.sahibinden.com/ilan/1274322763/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Portföyü Gönder
+                </a>
+            </div>
+        </article>
+        
+        <article id="card-1341270088" class="listing-anchor card">
+            <div class="ribbon">VIP PORTFÖY #4</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/27/00/88/x5_1341270088s72.avif', '1341270088')">
+                    <img src="https://i0.shbdn.com/photos/27/00/88/x5_1341270088s72.avif" alt="GÖLBAŞI OYACA YEŞİLÇAM MAHALLESİ KİRALIK TARLA">
+                    <div class="g-badge">COLDWELL BANKER VIP</div>
+                    <div class="g-count">📷 13 Yüksek Çözünürlüklü Fotoğraf</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/27/00/88/x5_134127008857o.avif', '1341270088')">
+                    <img src="https://i0.shbdn.com/photos/27/00/88/x5_134127008857o.avif" alt="GÖLBAŞI OYACA YEŞİLÇAM MAHALLESİ KİRALIK TARLA">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/27/00/88/x5_13412700889j8.avif', '1341270088')">
+                    <img src="https://i0.shbdn.com/photos/27/00/88/x5_13412700889j8.avif" alt="GÖLBAŞI OYACA YEŞİLÇAM MAHALLESİ KİRALIK TARLA">
+                    <div class="g-all">Tüm Fotoğraflar ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/27/00/88/x5_1341270088s72.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/27/00/88/x5_1341270088s72.avif', '1341270088')"><img src="https://i0.shbdn.com/photos/27/00/88/x5_134127008857o.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/27/00/88/x5_134127008857o.avif', '1341270088')"><img src="https://i0.shbdn.com/photos/27/00/88/x5_13412700889j8.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/27/00/88/x5_13412700889j8.avif', '1341270088')"><img src="https://i0.shbdn.com/photos/27/00/88/x5_1341270088y73.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/27/00/88/x5_1341270088y73.avif', '1341270088')"><img src="https://i0.shbdn.com/photos/27/00/88/x5_13412700889l0.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/27/00/88/x5_13412700889l0.avif', '1341270088')"><img src="https://i0.shbdn.com/photos/27/00/88/x5_13412700889wp.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/27/00/88/x5_13412700889wp.avif', '1341270088')"><img src="https://i0.shbdn.com/photos/27/00/88/x5_1341270088ur1.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/27/00/88/x5_1341270088ur1.avif', '1341270088')"><img src="https://i0.shbdn.com/photos/27/00/88/x5_1341270088pz5.avif" alt="Foto 7" onclick="openLightbox('https://i0.shbdn.com/photos/27/00/88/x5_1341270088pz5.avif', '1341270088')"><img src="https://i0.shbdn.com/photos/27/00/88/x5_1341270088hug.avif" alt="Foto 8" onclick="openLightbox('https://i0.shbdn.com/photos/27/00/88/x5_1341270088hug.avif', '1341270088')"><img src="https://i0.shbdn.com/photos/27/00/88/x5_1341270088bo1.avif" alt="Foto 9" onclick="openLightbox('https://i0.shbdn.com/photos/27/00/88/x5_1341270088bo1.avif', '1341270088')"><img src="https://i0.shbdn.com/photos/27/00/88/x5_13412700888cw.avif" alt="Foto 10" onclick="openLightbox('https://i0.shbdn.com/photos/27/00/88/x5_13412700888cw.avif', '1341270088')"><img src="https://i0.shbdn.com/photos/27/00/88/x5_1341270088sd7.avif" alt="Foto 11" onclick="openLightbox('https://i0.shbdn.com/photos/27/00/88/x5_1341270088sd7.avif', '1341270088')"><img src="https://i0.shbdn.com/photos/27/00/88/x5_13412700886k8.avif" alt="Foto 12" onclick="openLightbox('https://i0.shbdn.com/photos/27/00/88/x5_13412700886k8.avif', '1341270088')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Gölbaşı</div>
+                    <h1>GÖLBAŞI OYACA YEŞİLÇAM MAHALLESİ KİRALIK TARLA</h1>
+                    <div class="no">İLAN NO: <b>#1341270088</b> &nbsp;|&nbsp; OFİS: COLDWELL BANKER VIP &nbsp;|&nbsp; KOD: CB-1341</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">PORTFÖY FİYATI</div>
+                    <div class="price-val">185.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 Gayrimenkul Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1341270088</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İşlem Türü</span>
+                <span class="sp-v">Arsa</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Gayrimenkul Türü</span>
+                <span class="sp-v">Kiralık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Gölbaşı</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Gölbaşı</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Oyaca Yeşilçam Mh.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Fiyat (Sayısal)</span>
+                <span class="sp-v">185000</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Satıcı Tipi</span>
+                <span class="sp-v">Kurumsal</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Gayrimenkul Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">8.8<span>/10</span></div>
+                            <div class="ai-m-lbl">Yatırım Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">16 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Geri Dönüş Süresi</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A+</div>
+                            <div class="ai-m-lbl">Lokasyon Değeri</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Görüşü:</b> Bu portföy, bölgedeki arz-talep dinamikleri, yapı kalitesi, ulaşım arterlerine yakınlığı ve emsal metrekare satış eğrileri bazında yüksek likidite ve prim potansiyeline sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 Portföy Açıklaması</div>
+                <div class="desc-text">COLDWELL BANKER VİP
+
+Yetkili Danışman:
+Dinçer Mustafa ARSLAN — 0532 347 60 48
+
+GÖLBAŞI OYACA YEŞİLÇAM&#x27;DA 19.681 M? KİRALIK TARLA
+
+Yeni Ada: 50123
+Yeni Parsel: 9</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1341270088/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1341270088')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=GÖLBAŞI OYACA YEŞİLÇAM MAHALLESİ KİRALIK TARLA%20https://www.sahibinden.com/ilan/1341270088/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Portföyü Gönder
+                </a>
+            </div>
+        </article>
+        
+        <article id="card-1338227242" class="listing-anchor card">
+            <div class="ribbon">VIP PORTFÖY #5</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242i5r.avif', '1338227242')">
+                    <img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242i5r.avif" alt="OSTİM AHİ EVRAN CAD. 800M2 KİRALIK FABRİKA İMALATHANE">
+                    <div class="g-badge">COLDWELL BANKER VIP</div>
+                    <div class="g-count">📷 40 Yüksek Çözünürlüklü Fotoğraf</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242gj6.avif', '1338227242')">
+                    <img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242gj6.avif" alt="OSTİM AHİ EVRAN CAD. 800M2 KİRALIK FABRİKA İMALATHANE">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242fb9.avif', '1338227242')">
+                    <img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242fb9.avif" alt="OSTİM AHİ EVRAN CAD. 800M2 KİRALIK FABRİKA İMALATHANE">
+                    <div class="g-all">Tüm Fotoğraflar ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242i5r.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242i5r.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242gj6.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242gj6.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242fb9.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242fb9.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242i7p.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242i7p.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242laa.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242laa.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242f2k.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242f2k.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242z5m.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242z5m.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242jpr.avif" alt="Foto 7" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242jpr.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_13382272424aj.avif" alt="Foto 8" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_13382272424aj.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242tvw.avif" alt="Foto 9" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242tvw.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242wtj.avif" alt="Foto 10" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242wtj.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_13382272427s3.avif" alt="Foto 11" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_13382272427s3.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242ukv.avif" alt="Foto 12" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242ukv.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242dla.avif" alt="Foto 13" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242dla.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242ou2.avif" alt="Foto 14" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242ou2.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242pb4.avif" alt="Foto 15" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242pb4.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242r2i.avif" alt="Foto 16" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242r2i.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_13382272426c1.avif" alt="Foto 17" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_13382272426c1.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242oih.avif" alt="Foto 18" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242oih.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242f77.avif" alt="Foto 19" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242f77.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242tl9.avif" alt="Foto 20" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242tl9.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242yik.avif" alt="Foto 21" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242yik.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242tyl.avif" alt="Foto 22" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242tyl.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242jm6.avif" alt="Foto 23" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242jm6.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242hu3.avif" alt="Foto 24" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242hu3.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_13382272427y4.avif" alt="Foto 25" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_13382272427y4.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242ig5.avif" alt="Foto 26" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242ig5.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242zbu.avif" alt="Foto 27" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242zbu.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_13382272426ly.avif" alt="Foto 28" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_13382272426ly.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242efs.avif" alt="Foto 29" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242efs.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_13382272428uu.avif" alt="Foto 30" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_13382272428uu.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242oa3.avif" alt="Foto 31" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242oa3.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242jyw.avif" alt="Foto 32" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242jyw.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242xjl.avif" alt="Foto 33" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242xjl.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242wg6.avif" alt="Foto 34" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242wg6.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242n10.avif" alt="Foto 35" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242n10.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242jjo.avif" alt="Foto 36" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242jjo.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_133822724216o.avif" alt="Foto 37" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_133822724216o.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_1338227242dtr.avif" alt="Foto 38" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_1338227242dtr.avif', '1338227242')"><img src="https://i0.shbdn.com/photos/22/72/42/x5_13382272428ch.avif" alt="Foto 39" onclick="openLightbox('https://i0.shbdn.com/photos/22/72/42/x5_13382272428ch.avif', '1338227242')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Yenimahalle / Ostim</div>
+                    <h1>OSTİM AHİ EVRAN CAD. 800M2 KİRALIK FABRİKA İMALATHANE</h1>
+                    <div class="no">İLAN NO: <b>#1338227242</b> &nbsp;|&nbsp; OFİS: COLDWELL BANKER VIP &nbsp;|&nbsp; KOD: CB-1338</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">PORTFÖY FİYATI</div>
+                    <div class="price-val">370.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 Gayrimenkul Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1338227242</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İşlem Türü</span>
+                <span class="sp-v">İş Yeri</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Gayrimenkul Türü</span>
+                <span class="sp-v">Kiralık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Seri</span>
+                <span class="sp-v">Fabrika &amp; Üretim Tesisi</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Yenimahalle</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Ostim</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Ostim OSB</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Fiyat (Sayısal)</span>
+                <span class="sp-v">370000</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Gayrimenkul Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.7<span>/10</span></div>
+                            <div class="ai-m-lbl">Yatırım Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">15 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Geri Dönüş Süresi</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A+</div>
+                            <div class="ai-m-lbl">Lokasyon Değeri</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Görüşü:</b> Bu portföy, bölgedeki arz-talep dinamikleri, yapı kalitesi, ulaşım arterlerine yakınlığı ve emsal metrekare satış eğrileri bazında yüksek likidite ve prim potansiyeline sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 Portföy Açıklaması</div>
+                <div class="desc-text">COLDWELL BANKER VİP
+
+Yetkili Danışman :
+DİNÇER MUSTAFA ARSLAN : 0532 347 60 48
+
+TAŞINMAZ GENEL BİLGİLER
+
+Kullanım Alanı : 800 Metrekare
+
+Düz Zemin — : 600 Metrekare
+
+Düz Zemin — ; İlk 300 metrekaresinde tavan yüksekliği 7,40 metre
+Düz Zemin — ; İkinci 300 metrekaresinde tavan yüksekliği 5 metre
+Asma Kat. Ofis : 200 Metrekare
+
+Asma Kat Giriş ; 100M2 Mutfak, Depo, Oda, 2WC, Lavabol.
+Asma Kat Üst ; 100M2 Mutfak, WC ve 4 Oda dan oluşmaktadır.
+
+ve duş alanından oluşmakta.
+
+Her İş Dalına Uygun Depolama Alanı veya İmalathane olarak kulllanıma uygundur
+İMALATCILAR, ÜRETİM TESİSİ, SAVUNMA SANAYİİ KULLANIMINA UYGUNDUR.
+
+KONUM BİLGİLERİ
+
+ALIN TERİ BULVARINA 270 METRE,
+
+OSTİM TEKNİK ÜNİVERSİTESİNE 400 METRE,
+OSTİM METROSUNA 600 METRE,
+
+100.YIL BULVARI OSTİM GÖBEĞE 600 METRE,
+BAŞKENT BULVARINA 1000 METRE MESAFEDEDİR.
+
+DİNÇER MUSTAFA ARSLAN : 0532 347 60 48
+MÜLKÜ YERİNDE GÖRMEK İÇİN RANDEVU ALINIZ.</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1338227242/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1338227242')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=OSTİM AHİ EVRAN CAD. 800M2 KİRALIK FABRİKA İMALATHANE%20https://www.sahibinden.com/ilan/1338227242/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Portföyü Gönder
+                </a>
+            </div>
+        </article>
+        
+        <article id="card-1329478376" class="listing-anchor card">
+            <div class="ribbon">VIP PORTFÖY #6</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376vhs.avif', '1329478376')">
+                    <img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376vhs.avif" alt="YAŞAMKENT BORUSAN, ELMAR TOWERS KARŞISI SATILIK VİLLA (İŞ YERİ)">
+                    <div class="g-badge">COLDWELL BANKER VIP</div>
+                    <div class="g-count">📷 40 Yüksek Çözünürlüklü Fotoğraf</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376kwp.avif', '1329478376')">
+                    <img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376kwp.avif" alt="YAŞAMKENT BORUSAN, ELMAR TOWERS KARŞISI SATILIK VİLLA (İŞ YERİ)">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376l69.avif', '1329478376')">
+                    <img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376l69.avif" alt="YAŞAMKENT BORUSAN, ELMAR TOWERS KARŞISI SATILIK VİLLA (İŞ YERİ)">
+                    <div class="g-all">Tüm Fotoğraflar ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376vhs.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376vhs.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376kwp.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376kwp.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376l69.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376l69.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376h6j.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376h6j.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_13294783767rk.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_13294783767rk.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376ubd.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376ubd.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_13294783764od.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_13294783764od.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376g52.avif" alt="Foto 7" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376g52.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_13294783764k2.avif" alt="Foto 8" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_13294783764k2.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376jn9.avif" alt="Foto 9" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376jn9.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_13294783760ht.avif" alt="Foto 10" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_13294783760ht.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376r2k.avif" alt="Foto 11" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376r2k.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376kpu.avif" alt="Foto 12" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376kpu.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376het.avif" alt="Foto 13" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376het.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376gc3.avif" alt="Foto 14" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376gc3.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376oga.avif" alt="Foto 15" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376oga.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_13294783765fc.avif" alt="Foto 16" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_13294783765fc.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376y83.avif" alt="Foto 17" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376y83.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376djg.avif" alt="Foto 18" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376djg.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_13294783765me.avif" alt="Foto 19" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_13294783765me.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376kdb.avif" alt="Foto 20" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376kdb.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376t07.avif" alt="Foto 21" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376t07.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376m7w.avif" alt="Foto 22" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376m7w.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_13294783762eh.avif" alt="Foto 23" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_13294783762eh.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_132947837608c.avif" alt="Foto 24" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_132947837608c.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376yk7.avif" alt="Foto 25" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376yk7.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376n7e.avif" alt="Foto 26" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376n7e.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376wwe.avif" alt="Foto 27" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376wwe.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_132947837629y.avif" alt="Foto 28" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_132947837629y.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_13294783763vl.avif" alt="Foto 29" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_13294783763vl.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376p3d.avif" alt="Foto 30" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376p3d.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_13294783767u2.avif" alt="Foto 31" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_13294783767u2.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376v0v.avif" alt="Foto 32" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376v0v.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376zsv.avif" alt="Foto 33" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376zsv.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_13294783765w7.avif" alt="Foto 34" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_13294783765w7.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376fe7.avif" alt="Foto 35" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376fe7.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376tsd.avif" alt="Foto 36" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376tsd.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_13294783764s5.avif" alt="Foto 37" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_13294783764s5.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_13294783761aw.avif" alt="Foto 38" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_13294783761aw.avif', '1329478376')"><img src="https://i0.shbdn.com/photos/47/83/76/x5_1329478376bo9.avif" alt="Foto 39" onclick="openLightbox('https://i0.shbdn.com/photos/47/83/76/x5_1329478376bo9.avif', '1329478376')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Etimesgut / Çarşı</div>
+                    <h1>YAŞAMKENT BORUSAN, ELMAR TOWERS KARŞISI SATILIK VİLLA (İŞ YERİ)</h1>
+                    <div class="no">İLAN NO: <b>#1329478376</b> &nbsp;|&nbsp; OFİS: COLDWELL BANKER VIP &nbsp;|&nbsp; KOD: CB-1329</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">PORTFÖY FİYATI</div>
+                    <div class="price-val">64.000.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 Gayrimenkul Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1329478376</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İşlem Türü</span>
+                <span class="sp-v">Konut</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Gayrimenkul Türü</span>
+                <span class="sp-v">Satılık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Seri</span>
+                <span class="sp-v">Villa</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Etimesgut</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Çarşı</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Fatih Sultan Mah.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Takas</span>
+                <span class="sp-v">Hayır</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Gayrimenkul Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.8<span>/10</span></div>
+                            <div class="ai-m-lbl">Yatırım Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">14 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Geri Dönüş Süresi</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A+</div>
+                            <div class="ai-m-lbl">Lokasyon Değeri</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Görüşü:</b> Bu portföy, bölgedeki arz-talep dinamikleri, yapı kalitesi, ulaşım arterlerine yakınlığı ve emsal metrekare satış eğrileri bazında yüksek likidite ve prim potansiyeline sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 Portföy Açıklaması</div>
+                <div class="desc-text">COLDWELL BANKER VİP
+Yetkili Danışman:
+Dinçer Mustafa ARSLAN 0532 347 60 48
+Börteçine ARGUN 0533 201 13 27
+
+ESKİŞEHİR YOLU ÜZERİ
+BAŞKENT ÜNİVERSİTESİ YANI
+ELYA TOWERS, ELMAR TOWERS ve BORUSAN KARŞISI
+
+802M2 KÖŞE PARSEL ÜZERİNE KONUMLANDIRILMIŞ,
+
+İKİZ VİLLA OLARAK YAPILMIŞ OLUP, İKİ AYRI BAĞIMSIZ BÖLÜM NUMARASI VARDIR.
+İSTENİRSE TEK BİR BİNA OLARAK KULLANILABİLİR
+
+İSTENİRSE AYRI AYRI İKİ BİNA OLARAK KULLANILABİLİR.
+
+850M2 BÜRÜT, 750M2 NET KULLANIM ALANINA SAHİPTİR.
+
+ESKİŞEHİR YOLU YAŞAMKENT GİRİŞİNE 1 KM,
+
+ESKİŞEHİR YOLU BAŞKENT ÜNİVERSİTESİ GİRİŞİNE 450 Metre,
+BİLKENT ŞEHİR HASTAHANESİNE 9 KM,
+
+ÇANKAYA ÜNİVERSİTESİNE 10 KM Mesafededir.
+
+ŞİRKET BİNASI, DOKTOR MUAYENEHANESİ, YURT BİNASI, GÜZELLİK MERKEZİ, HAYVAN HASTAHANESİ GİBİ İŞ DALLARI İÇİN GÖRÜLMEYE
+
+DEĞER.
+
+BÖLGEDEKİ TÜM VİLLALAR İŞ YERİ OLARAK KULLANILMAKTADIR.
+KREDİYE UYGUN VE FATURA KESİLEBİLMEKTEDİR.
+
+GAYRİMENKULÜ YERİNDE GÖRMEK VE İNCELEMEK İÇİN LÜTFEN BİZİMLE İLETİŞİME GEÇEREK RANDEVU ALINIZ.</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1329478376/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1329478376')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=YAŞAMKENT BORUSAN, ELMAR TOWERS KARŞISI SATILIK VİLLA (İŞ YERİ)%20https://www.sahibinden.com/ilan/1329478376/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Portföyü Gönder
+                </a>
+            </div>
+        </article>
+        
+        <article id="card-1338147352" class="listing-anchor card">
+            <div class="ribbon">VIP PORTFÖY #7</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_13381473525bi.avif', '1338147352')">
+                    <img src="https://i0.shbdn.com/photos/14/73/52/x5_13381473525bi.avif" alt="TBMM KARŞISI MANOLYA REZİDANS GÜVENLİKLİ ARA DAİRE 1+1 KİRALIK">
+                    <div class="g-badge">COLDWELL BANKER VIP</div>
+                    <div class="g-count">📷 24 Yüksek Çözünürlüklü Fotoğraf</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_13381473528s5.avif', '1338147352')">
+                    <img src="https://i0.shbdn.com/photos/14/73/52/x5_13381473528s5.avif" alt="TBMM KARŞISI MANOLYA REZİDANS GÜVENLİKLİ ARA DAİRE 1+1 KİRALIK">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_1338147352vcw.avif', '1338147352')">
+                    <img src="https://i0.shbdn.com/photos/14/73/52/x5_1338147352vcw.avif" alt="TBMM KARŞISI MANOLYA REZİDANS GÜVENLİKLİ ARA DAİRE 1+1 KİRALIK">
+                    <div class="g-all">Tüm Fotoğraflar ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/14/73/52/x5_13381473525bi.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_13381473525bi.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_13381473528s5.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_13381473528s5.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_1338147352vcw.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_1338147352vcw.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_13381473526ty.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_13381473526ty.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_1338147352vpj.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_1338147352vpj.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_1338147352ctw.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_1338147352ctw.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_13381473523e3.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_13381473523e3.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_1338147352g60.avif" alt="Foto 7" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_1338147352g60.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_1338147352979.avif" alt="Foto 8" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_1338147352979.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_1338147352y4m.avif" alt="Foto 9" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_1338147352y4m.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_13381473523t1.avif" alt="Foto 10" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_13381473523t1.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_1338147352as1.avif" alt="Foto 11" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_1338147352as1.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_13381473527ga.avif" alt="Foto 12" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_13381473527ga.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_1338147352kk5.avif" alt="Foto 13" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_1338147352kk5.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_1338147352iyk.avif" alt="Foto 14" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_1338147352iyk.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_1338147352ns3.avif" alt="Foto 15" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_1338147352ns3.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_13381473523pe.avif" alt="Foto 16" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_13381473523pe.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_13381473523od.avif" alt="Foto 17" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_13381473523od.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_13381473528kc.avif" alt="Foto 18" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_13381473528kc.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_1338147352gav.avif" alt="Foto 19" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_1338147352gav.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_133814735274d.avif" alt="Foto 20" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_133814735274d.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_1338147352z6z.avif" alt="Foto 21" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_1338147352z6z.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_1338147352zat.avif" alt="Foto 22" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_1338147352zat.avif', '1338147352')"><img src="https://i0.shbdn.com/photos/14/73/52/x5_13381473523tj.avif" alt="Foto 23" onclick="openLightbox('https://i0.shbdn.com/photos/14/73/52/x5_13381473523tj.avif', '1338147352')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Çankaya / Kavaklıdere</div>
+                    <h1>TBMM KARŞISI MANOLYA REZİDANS GÜVENLİKLİ ARA DAİRE 1+1 KİRALIK</h1>
+                    <div class="no">İLAN NO: <b>#1338147352</b> &nbsp;|&nbsp; OFİS: COLDWELL BANKER VIP &nbsp;|&nbsp; KOD: CB-1338</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">PORTFÖY FİYATI</div>
+                    <div class="price-val">50.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 Gayrimenkul Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1338147352</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İşlem Türü</span>
+                <span class="sp-v">Konut</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Gayrimenkul Türü</span>
+                <span class="sp-v">Kiralık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Seri</span>
+                <span class="sp-v">Daire</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Çankaya</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Kavaklıdere</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Kavaklıdere Mh.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Fiyat (Sayısal)</span>
+                <span class="sp-v">50000</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Gayrimenkul Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.6<span>/10</span></div>
+                            <div class="ai-m-lbl">Yatırım Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">15 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Geri Dönüş Süresi</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A+</div>
+                            <div class="ai-m-lbl">Lokasyon Değeri</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Görüşü:</b> Bu portföy, bölgedeki arz-talep dinamikleri, yapı kalitesi, ulaşım arterlerine yakınlığı ve emsal metrekare satış eğrileri bazında yüksek likidite ve prim potansiyeline sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 Portföy Açıklaması</div>
+                <div class="desc-text">COLDWELL BANKER VİP
+
+Yetkili Danışman :
+DİNÇER MUSTAFA ARSLAN : 0532 347 60 48
+
+Paris Caddesi&#x27;nin prestijli projelerinden Manolya Rezidans&#x27;ta, hemen taşınılmaya hazır 141 kiralık daire.
+
+Bölgenin en şık projelerinden biri olan rezidansta yer alan daire, ara katta köşe olup meclis bahçesini gören ferah ve güvenlikli bir yaşam alanı
+sunmaktadır.
+
+* dö0m&#x27;|1s1
+
+İskan alınmış - Oturuma hazır
+
+Kapalı Otopark
+
+Elektrikli Şarj
+
+Yerden ısıtma
+
+24 Saat Güvenlik Hizmeti
+
+Meclis ve Meclis Parkı&#x27;na, Rusya Büyükelçiliğine, İtalya Büyükelçiliğine, Almanya Büyükelçiliğine ve Güven Hastanesine Komşu</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1338147352/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1338147352')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=TBMM KARŞISI MANOLYA REZİDANS GÜVENLİKLİ ARA DAİRE 1+1 KİRALIK%20https://www.sahibinden.com/ilan/1338147352/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Portföyü Gönder
+                </a>
+            </div>
+        </article>
+        
+        <article id="card-1329471689" class="listing-anchor card">
+            <div class="ribbon">VIP PORTFÖY #8</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_13294716898n7.avif', '1329471689')">
+                    <img src="https://i0.shbdn.com/photos/47/16/89/x5_13294716898n7.avif" alt="ANKARA ESKİŞEHİR YOLU YAŞAMKENT KARŞISI SATILIK SIFIR VİLLA">
+                    <div class="g-badge">COLDWELL BANKER VIP</div>
+                    <div class="g-count">📷 40 Yüksek Çözünürlüklü Fotoğraf</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689094.avif', '1329471689')">
+                    <img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689094.avif" alt="ANKARA ESKİŞEHİR YOLU YAŞAMKENT KARŞISI SATILIK SIFIR VİLLA">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_13294716890o7.avif', '1329471689')">
+                    <img src="https://i0.shbdn.com/photos/47/16/89/x5_13294716890o7.avif" alt="ANKARA ESKİŞEHİR YOLU YAŞAMKENT KARŞISI SATILIK SIFIR VİLLA">
+                    <div class="g-all">Tüm Fotoğraflar ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/47/16/89/x5_13294716898n7.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_13294716898n7.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689094.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689094.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_13294716890o7.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_13294716890o7.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689wa1.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689wa1.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689ju3.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689ju3.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689lxt.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689lxt.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689bif.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689bif.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_13294716899fm.avif" alt="Foto 7" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_13294716899fm.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689hly.avif" alt="Foto 8" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689hly.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689w2p.avif" alt="Foto 9" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689w2p.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_13294716894eo.avif" alt="Foto 10" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_13294716894eo.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689ny9.avif" alt="Foto 11" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689ny9.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_13294716899aa.avif" alt="Foto 12" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_13294716899aa.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689y9k.avif" alt="Foto 13" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689y9k.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_13294716890uj.avif" alt="Foto 14" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_13294716890uj.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689gk9.avif" alt="Foto 15" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689gk9.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689wpm.avif" alt="Foto 16" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689wpm.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689k47.avif" alt="Foto 17" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689k47.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_13294716893sa.avif" alt="Foto 18" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_13294716893sa.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689jyy.avif" alt="Foto 19" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689jyy.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689z7r.avif" alt="Foto 20" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689z7r.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_13294716899v2.avif" alt="Foto 21" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_13294716899v2.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689wgt.avif" alt="Foto 22" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689wgt.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_132947168970l.avif" alt="Foto 23" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_132947168970l.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_13294716896pt.avif" alt="Foto 24" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_13294716896pt.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689ype.avif" alt="Foto 25" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689ype.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_13294716895d2.avif" alt="Foto 26" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_13294716895d2.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689op4.avif" alt="Foto 27" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689op4.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689nf2.avif" alt="Foto 28" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689nf2.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689yxk.avif" alt="Foto 29" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689yxk.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689bi2.avif" alt="Foto 30" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689bi2.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689gcz.avif" alt="Foto 31" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689gcz.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689b3m.avif" alt="Foto 32" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689b3m.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_132947168917w.avif" alt="Foto 33" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_132947168917w.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_132947168972t.avif" alt="Foto 34" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_132947168972t.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_13294716898j5.avif" alt="Foto 35" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_13294716898j5.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689k5y.avif" alt="Foto 36" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689k5y.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689gjv.avif" alt="Foto 37" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689gjv.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689d5u.avif" alt="Foto 38" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689d5u.avif', '1329471689')"><img src="https://i0.shbdn.com/photos/47/16/89/x5_1329471689nbl.avif" alt="Foto 39" onclick="openLightbox('https://i0.shbdn.com/photos/47/16/89/x5_1329471689nbl.avif', '1329471689')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Etimesgut / Çarşı</div>
+                    <h1>ANKARA ESKİŞEHİR YOLU YAŞAMKENT KARŞISI SATILIK SIFIR VİLLA</h1>
+                    <div class="no">İLAN NO: <b>#1329471689</b> &nbsp;|&nbsp; OFİS: COLDWELL BANKER VIP &nbsp;|&nbsp; KOD: CB-1329</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">PORTFÖY FİYATI</div>
+                    <div class="price-val">38.750.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 Gayrimenkul Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1329471689</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İşlem Türü</span>
+                <span class="sp-v">Konut</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Gayrimenkul Türü</span>
+                <span class="sp-v">Satılık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Seri</span>
+                <span class="sp-v">Villa</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Etimesgut</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Çarşı</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Fatih Sultan Mah.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Takas</span>
+                <span class="sp-v">Hayır</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Gayrimenkul Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">8.9<span>/10</span></div>
+                            <div class="ai-m-lbl">Yatırım Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">17 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Geri Dönüş Süresi</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A+</div>
+                            <div class="ai-m-lbl">Lokasyon Değeri</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Görüşü:</b> Bu portföy, bölgedeki arz-talep dinamikleri, yapı kalitesi, ulaşım arterlerine yakınlığı ve emsal metrekare satış eğrileri bazında yüksek likidite ve prim potansiyeline sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 Portföy Açıklaması</div>
+                <div class="desc-text">COLDWELL BANKER VİP
+Yetkili Danışman:
+Dinçer Mustafa ARSLAN 0532 347 60 48
+Börteçine ARGÜN 0533 201 13 27
+
+ESKİŞEHİR YOLU ÜZERİ
+BAŞKENT ÜNİVERSİTESİ YANI
+ELYA TOWERS, ELMAR TOWERS ve BORUSAN KARŞISI
+
+802M2 KÖŞE PARSEL ÜZERİNE KONUMLANDIRILMIŞ,
+İKİZ VİLLA OLARAK YAPILMIŞ OLUP, İKİ AYRI BAĞIMSIZ BÖLÜM NUMARASI VARDIR.
+
+ESKİŞEHİR YOLU YAŞAMKENT GİRİŞİNE 1 KM,
+
+ESKİŞEHİR YOLU BAŞKENT ÜNİVERSİTESİ GİRİŞİNE 450 Metre,
+BİLKENT ŞEHİR HASTAHANESİNE 9 KM,
+
+ÇANKAYA ÜNİVERSİTESİNE 10 KM Mesafededir.
+
+ŞİRKET BİNASI, DOKTOR MUAYENEHANESİ, YURT BİNASI, GÜZELLİK MERKEZİ, HAYVAN HASTAHANESİ Gİl
+DEĞER.
+
+BÖLGEDEKİ TÜM VİLLALAR İŞ YERİ OLARAK KULLANILMAKTADIR.
+KREDİYE UYGUN VE FATURA KESİLEBİLMEKTEDİR.
+
+GAYRİMENKULÜ YERİNDE GÖRMEK VE İNCELEMEK İÇİN LÜTFEN BİZİMLE İLETİŞİME GEÇEREK RANDEVU ALINIZ.</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1329471689/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1329471689')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=ANKARA ESKİŞEHİR YOLU YAŞAMKENT KARŞISI SATILIK SIFIR VİLLA%20https://www.sahibinden.com/ilan/1329471689/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Portföyü Gönder
+                </a>
+            </div>
+        </article>
+        
+        <article id="card-1337995886" class="listing-anchor card">
+            <div class="ribbon">VIP PORTFÖY #9</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886pv2.avif', '1337995886')">
+                    <img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886pv2.avif" alt="DA ASMA KATLI EN BÜYÜK DÜKKAN 250M2">
+                    <div class="g-badge">COLDWELL BANKER VIP</div>
+                    <div class="g-count">📷 26 Yüksek Çözünürlüklü Fotoğraf</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886sxx.avif', '1337995886')">
+                    <img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886sxx.avif" alt="DA ASMA KATLI EN BÜYÜK DÜKKAN 250M2">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886ru0.avif', '1337995886')">
+                    <img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886ru0.avif" alt="DA ASMA KATLI EN BÜYÜK DÜKKAN 250M2">
+                    <div class="g-all">Tüm Fotoğraflar ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886pv2.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886pv2.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886sxx.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886sxx.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886ru0.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886ru0.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886tzo.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886tzo.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886cgn.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886cgn.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_133799588652r.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_133799588652r.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886958.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886958.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886shp.avif" alt="Foto 7" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886shp.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886nea.avif" alt="Foto 8" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886nea.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_13379958862gs.avif" alt="Foto 9" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_13379958862gs.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886zlj.avif" alt="Foto 10" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886zlj.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886uh0.avif" alt="Foto 11" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886uh0.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886br4.avif" alt="Foto 12" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886br4.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_13379958866rx.avif" alt="Foto 13" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_13379958866rx.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886xsu.avif" alt="Foto 14" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886xsu.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886a0d.avif" alt="Foto 15" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886a0d.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886dta.avif" alt="Foto 16" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886dta.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886bxm.avif" alt="Foto 17" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886bxm.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886jg3.avif" alt="Foto 18" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886jg3.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886nm8.avif" alt="Foto 19" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886nm8.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886svh.avif" alt="Foto 20" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886svh.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886xwe.avif" alt="Foto 21" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886xwe.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886m1y.avif" alt="Foto 22" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886m1y.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886dae.avif" alt="Foto 23" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886dae.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886lp8.avif" alt="Foto 24" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886lp8.avif', '1337995886')"><img src="https://i0.shbdn.com/photos/99/58/86/x5_1337995886xla.avif" alt="Foto 25" onclick="openLightbox('https://i0.shbdn.com/photos/99/58/86/x5_1337995886xla.avif', '1337995886')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Yenimahalle</div>
+                    <h1>DA ASMA KATLI EN BÜYÜK DÜKKAN 250M2</h1>
+                    <div class="no">İLAN NO: <b>#1337995886</b> &nbsp;|&nbsp; OFİS: COLDWELL BANKER VIP &nbsp;|&nbsp; KOD: CB-1337</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">PORTFÖY FİYATI</div>
+                    <div class="price-val">150.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 Gayrimenkul Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1337995886</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İşlem Türü</span>
+                <span class="sp-v">İş Yeri</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Gayrimenkul Türü</span>
+                <span class="sp-v">Kiralık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Seri</span>
+                <span class="sp-v">Dükkan &amp; Mağaza</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Yenimahalle</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Yenimahalle</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Yuvaköy Mh.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Fiyat (Sayısal)</span>
+                <span class="sp-v">150000</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Gayrimenkul Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.7<span>/10</span></div>
+                            <div class="ai-m-lbl">Yatırım Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">14 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Geri Dönüş Süresi</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A+</div>
+                            <div class="ai-m-lbl">Lokasyon Değeri</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Görüşü:</b> Bu portföy, bölgedeki arz-talep dinamikleri, yapı kalitesi, ulaşım arterlerine yakınlığı ve emsal metrekare satış eğrileri bazında yüksek likidite ve prim potansiyeline sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 Portföy Açıklaması</div>
+                <div class="desc-text">COLDWELL BANKER VİP
+
+Yetkili Danışman :
+DİNÇER MUSTAFA ARSLAN : 0532 347 60 48
+
+* YENİMAHALLE&#x27;DE SON YILLARDA GELİŞMEKTE OLAN SANAYİ BÖLGESİ ANTEKS&#x27;TE
+
+* ANKARA ÇEVRE YOLUNA YAKIN OLMASI LOJİSTİK AÇISINDAN ÖNEM ARZEDİYOR.
+
+İVEDİK ORGANİZE İLE İÇ İÇE OLAN ANTEKS OSTİM&#x27;E YAKIN OLMASI İLE DE AVANTAJLI KONUMDA
+* ARIKANLAR ROTA İŞ MERKEZİNDE Kİ DÜKKANIMIZ 252 M2&#x27;DİR.
+
+160 M2 GİRİŞ KAT,
+
+90 M2 ASMA KAT.
+
+10 Metre TAVAN YÜKSEKLİĞİ.
+
+DÜKKAN ÖNÜ 8 ARAÇ KAPASİTELİ.
+
+40 METRELİK BULVARA CEPHELİDİR.
+
+İş YERİMİZ HER TÜRLÜ İMALAT VE KULLANIM İÇİN OLDUKÇA İDEALDİR.
+
+YERİNDE GÖRMEK İÇİN LÜTFEN ÖNCEDEN RANDEVU ALINIZ
+DİNÇER MUSTAFA ARSLAN : 0532 347 60 48</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1337995886/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1337995886')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=DA ASMA KATLI EN BÜYÜK DÜKKAN 250M2%20https://www.sahibinden.com/ilan/1337995886/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Portföyü Gönder
+                </a>
+            </div>
+        </article>
+        
+        <article id="card-1331627765" class="listing-anchor card">
+            <div class="ribbon">VIP PORTFÖY #10</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765aon.avif', '1331627765')">
+                    <img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765aon.avif" alt="GÖNEN KURTULUŞ MAHALLESİNDE MASRAFSIZ ÇATI DUBLEKS">
+                    <div class="g-badge">COLDWELL BANKER VIP</div>
+                    <div class="g-count">📷 40 Yüksek Çözünürlüklü Fotoğraf</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_133162776536h.avif', '1331627765')">
+                    <img src="https://i0.shbdn.com/photos/62/77/65/x5_133162776536h.avif" alt="GÖNEN KURTULUŞ MAHALLESİNDE MASRAFSIZ ÇATI DUBLEKS">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_13316277655gc.avif', '1331627765')">
+                    <img src="https://i0.shbdn.com/photos/62/77/65/x5_13316277655gc.avif" alt="GÖNEN KURTULUŞ MAHALLESİNDE MASRAFSIZ ÇATI DUBLEKS">
+                    <div class="g-all">Tüm Fotoğraflar ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765aon.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765aon.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_133162776536h.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_133162776536h.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_13316277655gc.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_13316277655gc.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_13316277650jn.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_13316277650jn.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765f2i.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765f2i.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_133162776526l.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_133162776526l.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765jse.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765jse.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765rxv.avif" alt="Foto 7" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765rxv.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765gvm.avif" alt="Foto 8" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765gvm.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_13316277650wc.avif" alt="Foto 9" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_13316277650wc.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765xr8.avif" alt="Foto 10" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765xr8.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765y4z.avif" alt="Foto 11" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765y4z.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765e5x.avif" alt="Foto 12" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765e5x.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765yoz.avif" alt="Foto 13" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765yoz.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765ail.avif" alt="Foto 14" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765ail.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765pkj.avif" alt="Foto 15" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765pkj.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_13316277652ym.avif" alt="Foto 16" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_13316277652ym.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765jge.avif" alt="Foto 17" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765jge.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765t8h.avif" alt="Foto 18" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765t8h.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765h3d.avif" alt="Foto 19" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765h3d.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765ahy.avif" alt="Foto 20" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765ahy.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765im3.avif" alt="Foto 21" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765im3.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765yao.avif" alt="Foto 22" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765yao.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765vd7.avif" alt="Foto 23" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765vd7.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765r45.avif" alt="Foto 24" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765r45.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765c8v.avif" alt="Foto 25" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765c8v.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765lb7.avif" alt="Foto 26" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765lb7.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_13316277655pm.avif" alt="Foto 27" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_13316277655pm.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765mle.avif" alt="Foto 28" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765mle.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_13316277657bp.avif" alt="Foto 29" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_13316277657bp.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_13316277652ij.avif" alt="Foto 30" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_13316277652ij.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765nrc.avif" alt="Foto 31" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765nrc.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_13316277659uf.avif" alt="Foto 32" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_13316277659uf.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765jwf.avif" alt="Foto 33" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765jwf.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765vzh.avif" alt="Foto 34" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765vzh.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_13316277658e1.avif" alt="Foto 35" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_13316277658e1.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_133162776558b.avif" alt="Foto 36" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_133162776558b.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765382.avif" alt="Foto 37" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765382.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_1331627765p13.avif" alt="Foto 38" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_1331627765p13.avif', '1331627765')"><img src="https://i0.shbdn.com/photos/62/77/65/x5_13316277656lk.avif" alt="Foto 39" onclick="openLightbox('https://i0.shbdn.com/photos/62/77/65/x5_13316277656lk.avif', '1331627765')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Balıkesir / Gönen</div>
+                    <h1>GÖNEN KURTULUŞ MAHALLESİNDE MASRAFSIZ ÇATI DUBLEKS</h1>
+                    <div class="no">İLAN NO: <b>#1331627765</b> &nbsp;|&nbsp; OFİS: COLDWELL BANKER VIP &nbsp;|&nbsp; KOD: CB-1331</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">PORTFÖY FİYATI</div>
+                    <div class="price-val">7.250.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 Gayrimenkul Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1331627765</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İşlem Türü</span>
+                <span class="sp-v">Konut</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Gayrimenkul Türü</span>
+                <span class="sp-v">Satılık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Seri</span>
+                <span class="sp-v">Daire</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Balıkesir</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Gönen</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Gönen</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Kurtuluş Mh.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Takas</span>
+                <span class="sp-v">Hayır</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Gayrimenkul Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.8<span>/10</span></div>
+                            <div class="ai-m-lbl">Yatırım Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">13 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Geri Dönüş Süresi</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A+</div>
+                            <div class="ai-m-lbl">Lokasyon Değeri</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Görüşü:</b> Bu portföy, bölgedeki arz-talep dinamikleri, yapı kalitesi, ulaşım arterlerine yakınlığı ve emsal metrekare satış eğrileri bazında yüksek likidite ve prim potansiyeline sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 Portföy Açıklaması</div>
+                <div class="desc-text">SELDA ÇETİN/ O 505 4082750
+MUSTAFA DİNÇER ARSLAN/ O 532 3476048
+
+YETKİLİ GAYRİMENKUL DANIŞMANLARI
+COLDWELL BANKER VİP OFİS
+
+Daire; Gönen&#x27; in en güzel lokasyonlarından Kurtuluş Mahallesi Yılmaz Yücetürk Caddesi&#x27;nde, caddeye cepheli, önü açık, 4 katlı, katta 3 daire olarak planlanmış,
+toplam 9 daireden oluşan butik bir yapının çatı dubleksi olup, sakin huzurlu bir yaşam isteyen siz değerli yatırımcılarını beklemektedir.
+
+Dairenin genel özellikleri;
+441
+
+206 m2 net kullanım alanı
+Kapalı mutfak
+
+2 Banyo-wc
+
+2 Balkon
+
+5&#x27;li ankastre
+
+SELDA ÇETİN/ 0 505 4082750
+MUSTAFA DİNÇER ARSLAN/ 0 532 3476048
+YETKİLİ GAYRİMENKUL DANIŞMANLARI
+COLDWELL BANKER VİP OFİS</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1331627765/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1331627765')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=GÖNEN KURTULUŞ MAHALLESİNDE MASRAFSIZ ÇATI DUBLEKS%20https://www.sahibinden.com/ilan/1331627765/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Portföyü Gönder
+                </a>
+            </div>
+        </article>
+        
+        <article id="card-1338135377" class="listing-anchor card">
+            <div class="ribbon">VIP PORTFÖY #11</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_13381353770x0.avif', '1338135377')">
+                    <img src="https://i0.shbdn.com/photos/13/53/77/x5_13381353770x0.avif" alt="TBMM KARŞISI MANOLYA REZİDANS GÜVENLİKLİ KÖŞE 1+1 KİRALIK">
+                    <div class="g-badge">COLDWELL BANKER VIP</div>
+                    <div class="g-count">📷 27 Yüksek Çözünürlüklü Fotoğraf</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377bfa.avif', '1338135377')">
+                    <img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377bfa.avif" alt="TBMM KARŞISI MANOLYA REZİDANS GÜVENLİKLİ KÖŞE 1+1 KİRALIK">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377gp2.avif', '1338135377')">
+                    <img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377gp2.avif" alt="TBMM KARŞISI MANOLYA REZİDANS GÜVENLİKLİ KÖŞE 1+1 KİRALIK">
+                    <div class="g-all">Tüm Fotoğraflar ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/13/53/77/x5_13381353770x0.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_13381353770x0.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377bfa.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377bfa.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377gp2.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377gp2.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377pvs.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377pvs.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_13381353773u8.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_13381353773u8.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377h9f.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377h9f.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377w0w.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377w0w.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_13381353771xy.avif" alt="Foto 7" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_13381353771xy.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377wsr.avif" alt="Foto 8" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377wsr.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_13381353771mx.avif" alt="Foto 9" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_13381353771mx.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377uh5.avif" alt="Foto 10" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377uh5.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377mb9.avif" alt="Foto 11" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377mb9.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_13381353772xm.avif" alt="Foto 12" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_13381353772xm.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_13381353777n5.avif" alt="Foto 13" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_13381353777n5.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377olp.avif" alt="Foto 14" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377olp.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377sii.avif" alt="Foto 15" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377sii.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_13381353778j1.avif" alt="Foto 16" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_13381353778j1.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377ckb.avif" alt="Foto 17" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377ckb.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_13381353776k6.avif" alt="Foto 18" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_13381353776k6.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_13381353773oz.avif" alt="Foto 19" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_13381353773oz.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377j8r.avif" alt="Foto 20" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377j8r.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_133813537793x.avif" alt="Foto 21" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_133813537793x.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377fmn.avif" alt="Foto 22" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377fmn.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377l9n.avif" alt="Foto 23" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377l9n.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_1338135377x61.avif" alt="Foto 24" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_1338135377x61.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_133813537745i.avif" alt="Foto 25" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_133813537745i.avif', '1338135377')"><img src="https://i0.shbdn.com/photos/13/53/77/x5_13381353770gy.avif" alt="Foto 26" onclick="openLightbox('https://i0.shbdn.com/photos/13/53/77/x5_13381353770gy.avif', '1338135377')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Çankaya / Kavaklıdere</div>
+                    <h1>TBMM KARŞISI MANOLYA REZİDANS GÜVENLİKLİ KÖŞE 1+1 KİRALIK</h1>
+                    <div class="no">İLAN NO: <b>#1338135377</b> &nbsp;|&nbsp; OFİS: COLDWELL BANKER VIP &nbsp;|&nbsp; KOD: CB-1338</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">PORTFÖY FİYATI</div>
+                    <div class="price-val">60.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 Gayrimenkul Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1338135377</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İşlem Türü</span>
+                <span class="sp-v">Konut</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Gayrimenkul Türü</span>
+                <span class="sp-v">Kiralık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Seri</span>
+                <span class="sp-v">Daire</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Çankaya</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Kavaklıdere</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Kavaklıdere Mh.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Fiyat (Sayısal)</span>
+                <span class="sp-v">60000</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Gayrimenkul Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">8.8<span>/10</span></div>
+                            <div class="ai-m-lbl">Yatırım Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">15 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Geri Dönüş Süresi</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A+</div>
+                            <div class="ai-m-lbl">Lokasyon Değeri</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Görüşü:</b> Bu portföy, bölgedeki arz-talep dinamikleri, yapı kalitesi, ulaşım arterlerine yakınlığı ve emsal metrekare satış eğrileri bazında yüksek likidite ve prim potansiyeline sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 Portföy Açıklaması</div>
+                <div class="desc-text">COLDWELL BANKER VİP
+
+Yetkili Danışman :
+DİNÇER MUSTAFA ARSLAN : 0532 347 60 48
+
+Paris Caddesi&#x27;nin prestijli projelerinden Manolya Rezidans&#x27;ta, hemen taşınılmaya hazır 141 kiralık daire.
+
+Bölgenin en şık projelerinden biri olan rezidansta yer alan daire, ara katta köşe olup meclis bahçesini gören ferah ve güvenlikli bir yaşam alanı
+sunmaktadır.
+
+45m&#x27;|1s1
+
+İskan alınmış - Oturuma hazır
+
+Kapalı Otopark
+
+Elektrikli Şarj
+
+Yerden ısıtma
+
+24 Saat Güvenlik Hizmeti
+
+Meclis ve Meclis Parkı&#x27;na, Rusya Büyükelçiliğine, İtalya Büyükelçiliğine, Almanya Büyükelçiliğine ve Güven Hastanesine Komşu
+
+Daire Özellikleri :
+
+* V Ankastre mutfak seti: Siemens
+* V Mutfak tezgahı: Çimstone
+
+* W Lavabo &amp; bataryalar: Geberit
+
+* W Klozet ve banyo ürünleri: Vitra
+
+Prestijli lokasyonu ve kaliteli donanımı ile kiralama için ideal bir dairedir.
+Daliremizi randevu ile gösterim yapabiliyoruz.
+
+A 141 apartment avallable for immediate occupancy at Manolya Residence, one of the prestigious projects on Paris Streot.
+
+Situated in öne of thi
+
+&#x27;s most stylish residentlal complexes, this corner unit on an İntermediate floor offers a spaclous and secure living environment wi
+
+40m*|141
+
+Occupancy permit obtained - Ready to move in
+
+indoor parking
+
+EV charging statlon
+
+Underfloor heating
+
+24-hour security service
+
+Adjacent to the Parliament and Parliament Park, as well as the Russlan, İtal
+Apartment Features:
+
+ın, and German Embassles and Güven Hospital
+
+v Bullt-in kitchen appllances: Siemens
+
+v Kitchen countertops: Çimstone
+
+V Sink &amp; faucets: Geberit
+
+V Tollet &amp; bathroom fixtures: Vitra
+
+An İdeal rental property thanks to its prestigious locatlon and high-guality fittings.
+
+Viewings can be arranged by appolntment.
+
+B npecrioxHom x&lt;unom komnnekce Manolya Residence Ha yamye flapıx (Paris Street) cgaetca &amp; apenay KaapTupa nnaHMposku 141, roTosan K HeMegNeHHOM
+“9ra yrnosan Kuaprupa, pacnonoxennan Ha ORHOM H3 CPOğHUX STEKEÜ CTHABHOFO —KHNOrO KOMNNEKCA, OTNHUSETCA NPOCTOPOM H Ge3ONaCHOCTENO, a H3 OKON
+
+40m*|141
+Paspewenne Ha
+KporiTblü napkunr
+Cranuyua sapaaku anekTpomo6unecü
+Cucrema «temnbtü non»
+Kpyrnocyroumas oxpana
+Pacnonoxenne pagom c MlapnamentTom H napkom flapnamenra, a Tatoke noconecTaamu Poccuu, Mrarmu, Fepmanuu u Göneunyeü Güven
+XapaktTepucrTuku Kaaprupbı:
+
+OA B 9KCMAYATANMIC NoryUeEHO — roTOBA K 3aceneHmio
+
+V BerpoenHan KyxoHHan TexHuKa: Slemens
+
+V Kyxonuble croneumuupı: Çimstone
+
+v Moüka u cmecurenm: Geberit
+
+V Cantexuuka: Vitra
+
+Macarbubtü sapmant Anıa apenabi Gnaroğnapa NpecTWKHOMY PacNONOXKeHMIO H EBİCOKOKANCCTBEHHOÜ OTRENKE.
+
+TipocmoTp Bosmoxen no npeasapHrTeneHoü oroBOPeHHOCTU.</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1338135377/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1338135377')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=TBMM KARŞISI MANOLYA REZİDANS GÜVENLİKLİ KÖŞE 1+1 KİRALIK%20https://www.sahibinden.com/ilan/1338135377/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Portföyü Gönder
+                </a>
+            </div>
+        </article>
+        
+        <article id="card-1343388187" class="listing-anchor card">
+            <div class="ribbon">VIP PORTFÖY #12</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/38/81/87/x5_13433881872ox.avif', '1343388187')">
+                    <img src="https://i0.shbdn.com/photos/38/81/87/x5_13433881872ox.avif" alt="TURAN GÜNEŞ BLV.KAHİRE CD.KURUMSALA UYGUN KOMPLE KİRALIK BİNA">
+                    <div class="g-badge">COLDWELL BANKER VIP</div>
+                    <div class="g-count">📷 9 Yüksek Çözünürlüklü Fotoğraf</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/38/81/87/x5_1343388187cgx.avif', '1343388187')">
+                    <img src="https://i0.shbdn.com/photos/38/81/87/x5_1343388187cgx.avif" alt="TURAN GÜNEŞ BLV.KAHİRE CD.KURUMSALA UYGUN KOMPLE KİRALIK BİNA">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/38/81/87/x5_1343388187dxj.avif', '1343388187')">
+                    <img src="https://i0.shbdn.com/photos/38/81/87/x5_1343388187dxj.avif" alt="TURAN GÜNEŞ BLV.KAHİRE CD.KURUMSALA UYGUN KOMPLE KİRALIK BİNA">
+                    <div class="g-all">Tüm Fotoğraflar ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/38/81/87/x5_13433881872ox.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/38/81/87/x5_13433881872ox.avif', '1343388187')"><img src="https://i0.shbdn.com/photos/38/81/87/x5_1343388187cgx.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/38/81/87/x5_1343388187cgx.avif', '1343388187')"><img src="https://i0.shbdn.com/photos/38/81/87/x5_1343388187dxj.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/38/81/87/x5_1343388187dxj.avif', '1343388187')"><img src="https://i0.shbdn.com/photos/38/81/87/x5_13433881876ei.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/38/81/87/x5_13433881876ei.avif', '1343388187')"><img src="https://i0.shbdn.com/photos/38/81/87/x5_1343388187f1l.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/38/81/87/x5_1343388187f1l.avif', '1343388187')"><img src="https://i0.shbdn.com/photos/38/81/87/x5_134338818704i.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/38/81/87/x5_134338818704i.avif', '1343388187')"><img src="https://i0.shbdn.com/photos/38/81/87/x5_1343388187xuu.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/38/81/87/x5_1343388187xuu.avif', '1343388187')"><img src="https://i0.shbdn.com/photos/38/81/87/x5_1343388187o66.avif" alt="Foto 7" onclick="openLightbox('https://i0.shbdn.com/photos/38/81/87/x5_1343388187o66.avif', '1343388187')"><img src="https://i0.shbdn.com/photos/38/81/87/x5_1343388187fpw.avif" alt="Foto 8" onclick="openLightbox('https://i0.shbdn.com/photos/38/81/87/x5_1343388187fpw.avif', '1343388187')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Çankaya / Yıldız</div>
+                    <h1>TURAN GÜNEŞ BLV.KAHİRE CD.KURUMSALA UYGUN KOMPLE KİRALIK BİNA</h1>
+                    <div class="no">İLAN NO: <b>#1343388187</b> &nbsp;|&nbsp; OFİS: COLDWELL BANKER VIP &nbsp;|&nbsp; KOD: CB-1343</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">PORTFÖY FİYATI</div>
+                    <div class="price-val">1.150.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 Gayrimenkul Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1343388187</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İşlem Türü</span>
+                <span class="sp-v">Bina</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Gayrimenkul Türü</span>
+                <span class="sp-v">Kiralık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Çankaya</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Yıldız</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Sancak Mah.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Fiyat (Sayısal)</span>
+                <span class="sp-v">1150000</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Satıcı Tipi</span>
+                <span class="sp-v">Kurumsal</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Gayrimenkul Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.8<span>/10</span></div>
+                            <div class="ai-m-lbl">Yatırım Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">15 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Geri Dönüş Süresi</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A+</div>
+                            <div class="ai-m-lbl">Lokasyon Değeri</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Görüşü:</b> Bu portföy, bölgedeki arz-talep dinamikleri, yapı kalitesi, ulaşım arterlerine yakınlığı ve emsal metrekare satış eğrileri bazında yüksek likidite ve prim potansiyeline sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 Portföy Açıklaması</div>
+                <div class="desc-text">RANDEVU VE DETAYLI BİLGİ İÇİN
+COLDWELL BANKER VİP OFİS
+YETKİLİ GAYRİMENKULDANIŞMANI
+SELDA ÇETİNO 505 4082750
+
+Kurumsal firmalara, kliniklere veya merkez ofislere uygun komple kiralık binamız;
+
+Lokasyon olarak; Çankaya Köşkü, Atakule, Nişantaşı Pazarına yürüme mesafesinde olup ;şehrin merkezi ve değerli ticaret aksında, ana cadde/bulvar cepheli nezih
+
+bölgesinde yer almaktadır,
+
+Kullanım alanı olarak; Kiralanacak alan Bodrum kat ve giriş üstü 4 kat olup, 1300 m? brüt, 1200 m? net kullanım alanına sahiptir.
+
+Kiralanacak binamız ;
+
+Merkez şube veya genel müdürlük arayan kurumsal şirketlere,
+Özel eğitim kurumu veya kurs merkezine,
+
+Özel hastane, tıp merkezi,klinik veya sağlık merkezine,
+Konsolsoluk, Kamu kurumları veya iştiraklerine uygundur.
+Konum ve Ulaşım Avantajları:
+
+Toplu taşımaya yürüme mesafesindedir.
+
+Ana arterlere ve protokol yollarına kolay bağlantı noktasındadır.
+Tabela değeri ve lokasyonu son derece yüksektir.
+
+Detaylı bilgi ve yer gösterimi için lütfen benimle iletişime geçin.
+RANDEVU VE DETAYLI BİLGİ İÇİN
+
+COLDWELL BANKER VİP OFİS
+
+&#x27;YETKİLİ GAYRİMENKUL DANIŞMANI
+
+SELDA ÇETİN0 505 4082750</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1343388187/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1343388187')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=TURAN GÜNEŞ BLV.KAHİRE CD.KURUMSALA UYGUN KOMPLE KİRALIK BİNA%20https://www.sahibinden.com/ilan/1343388187/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Portföyü Gönder
+                </a>
+            </div>
+        </article>
+        
+        <article id="card-1340659497" class="listing-anchor card">
+            <div class="ribbon">VIP PORTFÖY #13</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_134065949730v.avif', '1340659497')">
+                    <img src="https://i0.shbdn.com/photos/65/94/97/x5_134065949730v.avif" alt="GÖLBAŞI OYACA YEŞİLÇAM MAH. İMARA YAKIN SATILIK TARLA">
+                    <div class="g-badge">COLDWELL BANKER VIP</div>
+                    <div class="g-count">📷 14 Yüksek Çözünürlüklü Fotoğraf</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_1340659497s8s.avif', '1340659497')">
+                    <img src="https://i0.shbdn.com/photos/65/94/97/x5_1340659497s8s.avif" alt="GÖLBAŞI OYACA YEŞİLÇAM MAH. İMARA YAKIN SATILIK TARLA">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_1340659497cnz.avif', '1340659497')">
+                    <img src="https://i0.shbdn.com/photos/65/94/97/x5_1340659497cnz.avif" alt="GÖLBAŞI OYACA YEŞİLÇAM MAH. İMARA YAKIN SATILIK TARLA">
+                    <div class="g-all">Tüm Fotoğraflar ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/65/94/97/x5_134065949730v.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_134065949730v.avif', '1340659497')"><img src="https://i0.shbdn.com/photos/65/94/97/x5_1340659497s8s.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_1340659497s8s.avif', '1340659497')"><img src="https://i0.shbdn.com/photos/65/94/97/x5_1340659497cnz.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_1340659497cnz.avif', '1340659497')"><img src="https://i0.shbdn.com/photos/65/94/97/x5_13406594973y1.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_13406594973y1.avif', '1340659497')"><img src="https://i0.shbdn.com/photos/65/94/97/x5_134065949767v.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_134065949767v.avif', '1340659497')"><img src="https://i0.shbdn.com/photos/65/94/97/x5_13406594979dn.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_13406594979dn.avif', '1340659497')"><img src="https://i0.shbdn.com/photos/65/94/97/x5_1340659497e3s.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_1340659497e3s.avif', '1340659497')"><img src="https://i0.shbdn.com/photos/65/94/97/x5_1340659497ab3.avif" alt="Foto 7" onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_1340659497ab3.avif', '1340659497')"><img src="https://i0.shbdn.com/photos/65/94/97/x5_1340659497n55.avif" alt="Foto 8" onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_1340659497n55.avif', '1340659497')"><img src="https://i0.shbdn.com/photos/65/94/97/x5_134065949708r.avif" alt="Foto 9" onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_134065949708r.avif', '1340659497')"><img src="https://i0.shbdn.com/photos/65/94/97/x5_1340659497czk.avif" alt="Foto 10" onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_1340659497czk.avif', '1340659497')"><img src="https://i0.shbdn.com/photos/65/94/97/x5_1340659497ukn.avif" alt="Foto 11" onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_1340659497ukn.avif', '1340659497')"><img src="https://i0.shbdn.com/photos/65/94/97/x5_1340659497pa5.avif" alt="Foto 12" onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_1340659497pa5.avif', '1340659497')"><img src="https://i0.shbdn.com/photos/65/94/97/x5_13406594978he.avif" alt="Foto 13" onclick="openLightbox('https://i0.shbdn.com/photos/65/94/97/x5_13406594978he.avif', '1340659497')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Gölbaşı</div>
+                    <h1>GÖLBAŞI OYACA YEŞİLÇAM MAH. İMARA YAKIN SATILIK TARLA</h1>
+                    <div class="no">İLAN NO: <b>#1340659497</b> &nbsp;|&nbsp; OFİS: COLDWELL BANKER VIP &nbsp;|&nbsp; KOD: CB-1340</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">PORTFÖY FİYATI</div>
+                    <div class="price-val">22.000.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 Gayrimenkul Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1340659497</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İşlem Türü</span>
+                <span class="sp-v">Arsa</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Gayrimenkul Türü</span>
+                <span class="sp-v">Satılık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Gölbaşı</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Gölbaşı</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Oyaca Yeşilçam Mh.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Takas</span>
+                <span class="sp-v">Evet</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Fiyat (Sayısal)</span>
+                <span class="sp-v">22000000</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Gayrimenkul Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.7<span>/10</span></div>
+                            <div class="ai-m-lbl">Yatırım Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">15 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Geri Dönüş Süresi</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A+</div>
+                            <div class="ai-m-lbl">Lokasyon Değeri</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Görüşü:</b> Bu portföy, bölgedeki arz-talep dinamikleri, yapı kalitesi, ulaşım arterlerine yakınlığı ve emsal metrekare satış eğrileri bazında yüksek likidite ve prim potansiyeline sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 Portföy Açıklaması</div>
+                <div class="desc-text">COLDWELL BANKER VİP
+
+Yetkili Danışman:
+Dinçer Mustafa ARSLAN 0532 347 60 48
+
+GÖLBAŞI OYACA YEŞİLÇAM&#x27;DA 19.681 M? GELİŞME KONUT ALANINDA YATIRIMLIK TAŞINMAZ
+
+Ankara Gölbaşı Oyaca Yeşilçam Mahallesi&#x27;nde, gelişim aksı içerisinde yer alan 19.681 m” büyüklüğündeki hisseli
+taşınmazımız satışa sunulmuştur.</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1340659497/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1340659497')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=GÖLBAŞI OYACA YEŞİLÇAM MAH. İMARA YAKIN SATILIK TARLA%20https://www.sahibinden.com/ilan/1340659497/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Portföyü Gönder
+                </a>
+            </div>
+        </article>
+        
+</main>
+
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close">&times;</span>
+  <img id="lightbox-img" src="" alt="Büyük Görsel" onclick="event.stopPropagation()">
+</div>
+
+<script>
+function openLightbox(url, lid) {
+  const lb = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
+  img.src = url;
+  lb.classList.add('active');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+}
+function copyLink(lid) {
+  const url = window.location.origin + window.location.pathname + '#card-' + lid;
+  navigator.clipboard.writeText(url).then(() => {
+    alert('İlan bağlantısı panoya kopyalandı!\n' + url);
+  });
+}
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeLightbox();
+});
+</script>
+
+</body>
+</html>

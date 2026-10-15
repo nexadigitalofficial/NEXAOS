@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nexa AI — Gayrimenkul Analiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+<style>
+/* ═══════════════════════════════════════════════
+   ROOT & TOKENS
+═══════════════════════════════════════════════ */
+:root {
+  --bg:         #080c14;
+  --bg2:        #0d1320;
+  --bg3:        #111827;
+  --glass:      rgba(255,255,255,.04);
+  --glass2:     rgba(255,255,255,.07);
+  --border:     rgba(255,255,255,.09);
+  --border2:    rgba(255,255,255,.14);
+  --text:       #e8edf8;
+  --muted:      #8394ad;
+  --muted2:     #5a6a80;
+  --amber:      #f59e0b;
+  --amber2:     #fbbf24;
+  --amberDim:   rgba(245,158,11,.15);
+  --amberGlow:  rgba(245,158,11,.25);
+  --green:      #10b981;
+  --greenDim:   rgba(16,185,129,.15);
+  --red:        #f87171;
+  --redDim:     rgba(248,113,113,.15);
+  --blue:       #60a5fa;
+  --blueDim:    rgba(96,165,250,.12);
+  --r:          14px;
+  --r2:         20px;
+  --shadow:     0 8px 32px rgba(0,0,0,.5);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Noise texture overlay ─── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: .5;
+}
+
+/* ── Ambient glow ─── */
+.ambient {
+  position: fixed; pointer-events: none; z-index: 0; border-radius: 50%;
+  filter: blur(120px); opacity: .18;
+}
+.amb1 { width: 700px; height: 500px; background: #f59e0b; top: -200px; left: -150px; }
+.amb2 { width: 500px; height: 400px; background: #3b82f6; bottom: -100px; right: -100px; }
+
+/* ═══════════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════════ */
+.wrap { position: relative; z-index: 1; max-width: 1140px; margin: 0 auto; padding: 0 20px 60px; }
+
+/* ═══════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════ */
+header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(8,12,20,.82);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex; align-items: center; gap: 16px; height: 58px;
+}
+
+.logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px; letter-spacing: .01em;
+  color: var(--amber);
+  display: flex; align-items: center; gap: 10px;
+}
+.logo-badge {
+  background: var(--amberDim); border: 1px solid var(--amberGlow);
+  border-radius: 6px; padding: 2px 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 700; color: var(--amber); letter-spacing: .08em;
+}
+
+.nav-links { display: flex; gap: 8px; margin-left: auto; }
+.nav-links a {
+  text-decoration: none; color: var(--muted); font-size: 13px; font-weight: 500;
+  padding: 6px 12px; border-radius: 8px; transition: all .2s;
+}
+.nav-links a:hover { color: var(--text); background: var(--glass2); }
+
+/* ═══════════════════════════════════════════════
+   PAGE HERO
+═══════════════════════════════════════════════ */
+.page-hero {
+  padding: 48px 0 36px;
+  text-align: center;
+}
+.page-hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(28px, 5vw, 46px);
+  line-height: 1.15;
+  color: var(--text);
+}
+.page-hero h1 em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--amber2), #fb923c);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.page-hero p {
+  margin-top: 12px; color: var(--muted); font-size: 15px; max-width: 560px; margin-inline: auto;
+}
+
+/* ═══════════════════════════════════════════════
+   INPUT CARD
+═══════════════════════════════════════════════ */
+.input-card {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r2);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+/* Tabs */
+.tab-bar {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--border);
+}
+.tab-btn {
+  background: none; border: none; cursor: pointer;
+  padding: 14px 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px; font-weight: 600; color: var(--muted);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all .2s; border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.tab-btn .tab-icon { font-size: 16px; }
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active {
+  color: var(--amber);
+  border-bottom-color: var(--amber);
+  background: var(--amberDim);
+}
+
+/* Tab content */
+.tab-pane { display: none; padding: 28px; }
+.tab-pane.active { display: block; }
+
+/* ── URL Tab ─── */
+.url-input-wrap {
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+.url-field {
+  flex: 1; min-width: 260px;
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--r); padding: 14px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; color: var(--text); outline: none;
+  transition: border-color .2s;
+}
+.url-field:focus { border-color: var(--amber); }
+.url-field::placeholder { color: var(--muted2); }
+.badge-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.src-badge {
+  font-size: 11px; font-weight: 700; letter-spacing: .06em;
+  padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border2);
+  color: var(--muted); background: var(--glass);
+}
+.src-badge.green { color: var(--green); border-color: var(--green); background: var(--greenDim); }
+.src-badge.amber { color: var(--amber); border-color: var(--amber); background: var(--amberDim); }
+
+/* ── Photo Tab ─── */
+.drop-zone {
+  border: 2px dashed var(--border2); border-radius: var(--r2);
+  padding: 40px 20px; text-align: center; cursor: pointer;
+  transition: all .25s; position: relative;
+}
+.drop-zone:hover, .drop-zone.dragging {
+  border-color: var(--amber); background: var(--amberDim);
+}
+.drop-zone input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer;
+}
+.drop-icon { font-size: 38px; display: block; margin-bottom: 10px; }
+.drop-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.drop-sub { font-size: 12px; color: var(--muted); }
+
+.photo-preview-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 10px; margin-top: 16px;
+}
+.photo-thumb {
+  aspect-ratio: 1; border-radius: 10px; overflow: hidden;
+  border: 1px solid var(--border2); position: relative;
+}
+.photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb-remove {
+  position: absolute; top: 4px; right: 4px;
+  background: rgba(0,0,0,.7); border: none; border-radius: 50%;
+  color: #fff; width: 20px; height: 20px; cursor: pointer;
+  font-size: 12px; display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Manual Tab ─── */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.span2 { grid-column: span 2; }
+@media (max-width: 560px) { .form-group.span2 { grid-column: span 1; } }
+
+label { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+input, select, textarea {
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--r); padding: 12px 14px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px; color: var(--text); outline: none;
+  transition: border-color .2s; width: 100%;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--amber); }
+select option { background: var(--bg3); }
+textarea { resize: vertical; min-height: 80px; }
+
+/* ── Analyze Button ─── */
+.analyze-btn {
+  width: 100%; margin-top: 8px; padding: 16px;
+  background: linear-gradient(135deg, var(--amber), #fb923c);
+  border: none; border-radius: var(--r); cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px; font-weight: 800; letter-spacing: .04em;
+  color: #0b0f19; transition: all .25s;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.analyze-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 28px var(--amberGlow);
+}
+.analyze-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ═══════════════════════════════════════════════
+   LOADER
+═══════════════════════════════════════════════ */
+.loader-wrap {
+  display: none; text-align: center; padding: 60px 20px;
+}
+.loader-wrap.show { display: block; }
+
+.scan-anim {
+  width: 120px; height: 120px; margin: 0 auto 24px; position: relative;
+}
+.scan-ring {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 2px solid var(--border2);
+}
+.scan-ring.r1 { border-top-color: var(--amber); animation: spin 1s linear infinite; }
+.scan-ring.r2 { inset: 12px; border-top-color: transparent; border-right-color: var(--amber2); animation: spin 1.4s linear infinite reverse; }
+.scan-ring.r3 { inset: 24px; border-top-color: #fb923c; animation: spin 1.8s linear infinite; }
+.scan-house {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  font-size: 26px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loader-step {
+  font-size: 14px; color: var(--muted); margin-top: 8px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.loader-step span {
+  color: var(--amber); font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════
+   RESULTS
+═══════════════════════════════════════════════ */
+#results { display: none; }
+#results.show { display: block; }
+
+/* Property header bar */
+.prop-header {
+  background: linear-gradient(135deg, rgba(245,158,11,.12), rgba(251,146,60,.06));
+  border: 1px solid rgba(245,158,11,.25);
+  border-radius: var(--r2); padding: 24px 28px; margin: 32px 0 24px;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+  flex-wrap: wrap;
+}
+.prop-title-area h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(17px, 3vw, 24px); color: var(--text); margin-bottom: 6px;
+}
+.prop-meta { display: flex; gap: 16px; flex-wrap: wrap; }
+.prop-meta span {
+  font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px;
+}
+.prop-meta span strong { color: var(--text); }
+
+.prop-price-area { text-align: right; }
+.prop-price {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(20px, 3.5vw, 32px); color: var(--amber);
+}
+.prop-gen { font-size: 11px; color: var(--muted2); margin-top: 4px; }
+
+/* Verdict pills */
+.verdict-row { display: flex; gap: 10px; margin: 0 0 28px; flex-wrap: wrap; }
+.verdict-pill {
+  padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 800;
+  border: 1px solid; display: flex; align-items: center; gap: 6px;
+  animation: fadeUp .4s ease both;
+}
+.verdict-pill.green  { color: var(--green); border-color: var(--green); background: var(--greenDim); }
+.verdict-pill.red    { color: var(--red);   border-color: var(--red);   background: var(--redDim); }
+.verdict-pill.amber  { color: var(--amber); border-color: var(--amber); background: var(--amberDim); }
+.verdict-pill.blue   { color: var(--blue);  border-color: var(--blue);  background: var(--blueDim); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Section nav pills */
+.section-nav {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; position: sticky;
+  top: 58px; z-index: 10; padding: 12px 0; background: var(--bg);
+}
+.snav-btn {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: 20px; padding: 7px 14px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px; font-weight: 600; color: var(--muted);
+  cursor: pointer; transition: all .2s;
+}
+.snav-btn:hover { color: var(--text); border-color: var(--border2); }
+.snav-btn.active { color: var(--amber); border-color: var(--amber); background: var(--amberDim); }
+
+/* Analysis grid */
+.analysis-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+}
+@media (max-width: 700px) { .analysis-grid { grid-template-columns: 1fr; } }
+
+.a-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r2); padding: 22px 24px;
+  animation: fadeUp .5s ease both;
+  transition: border-color .2s, box-shadow .2s;
+}
+.a-card:hover { border-color: var(--border2); box-shadow: 0 4px 24px rgba(0,0,0,.4); }
+.a-card.span2 { grid-column: span 2; }
+@media (max-width: 700px) { .a-card.span2 { grid-column: span 1; } }
+
+.card-head {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
+}
+.card-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+.ci-amber { background: var(--amberDim); }
+.ci-green { background: var(--greenDim); }
+.ci-blue  { background: var(--blueDim); }
+.ci-red   { background: var(--redDim); }
+
+.card-title { font-size: 13px; font-weight: 800; color: var(--text); letter-spacing: .04em; text-transform: uppercase; }
+.card-sub   { font-size: 11px; color: var(--muted); }
+
+/* Score ring */
+.score-ring-wrap { display: flex; align-items: center; gap: 18px; margin-bottom: 16px; }
+.score-ring {
+  position: relative; width: 72px; height: 72px; flex-shrink: 0;
+}
+.score-ring svg { transform: rotate(-90deg); }
+.score-ring-bg { fill: none; stroke: var(--border2); stroke-width: 6; }
+.score-ring-fill { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+.score-ring-num {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--text);
+}
+.score-info { flex: 1; }
+.score-label { font-size: 16px; font-weight: 700; color: var(--text); }
+.score-reasoning { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+/* Price row */
+.price-row {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 14px;
+}
+.price-cell {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 12px 14px;
+}
+.price-cell-label { font-size: 10px; color: var(--muted2); text-transform: uppercase; letter-spacing: .07em; }
+.price-cell-val { font-size: 14px; font-weight: 700; color: var(--text); margin-top: 4px; }
+.price-cell-val.amber { color: var(--amber); }
+.price-cell-val.green { color: var(--green); }
+.price-cell-val.red   { color: var(--red); }
+
+/* Verdict badge */
+.verdict-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 800; margin-bottom: 10px;
+}
+
+/* Detail line */
+.detail-line { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* List style */
+.analysis-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.analysis-list li {
+  font-size: 13px; color: var(--muted); padding: 8px 12px;
+  background: var(--bg3); border-radius: 8px; border-left: 3px solid var(--border2);
+  line-height: 1.5;
+}
+.analysis-list li.positive { border-left-color: var(--green); }
+.analysis-list li.negative { border-left-color: var(--red); }
+.analysis-list li.neutral  { border-left-color: var(--amber); }
+.analysis-list li::before { margin-right: 6px; }
+.analysis-list li.positive::before { content: '✓'; color: var(--green); }
+.analysis-list li.negative::before { content: '✗'; color: var(--red); }
+.analysis-list li.neutral::before  { content: '◆'; color: var(--amber); }
+
+/* SWOT grid */
+.swot-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.swot-cell {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 14px;
+}
+.swot-header {
+  font-size: 10px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.swot-header.s { color: var(--green); }
+.swot-header.w { color: var(--red); }
+.swot-header.o { color: var(--blue); }
+.swot-header.t { color: #c084fc; }
+.swot-items { display: flex; flex-direction: column; gap: 5px; }
+.swot-item { font-size: 12px; color: var(--muted); display: flex; gap: 7px; line-height: 1.4; }
+
+/* Chips */
+.chip-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.chip {
+  font-size: 11px; font-weight: 600; padding: 4px 10px;
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: 6px; color: var(--muted);
+}
+
+/* Key-val pairs */
+.kv-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.kv-row:last-child { border-bottom: none; }
+.kv-key { font-size: 12px; color: var(--muted); }
+.kv-val { font-size: 13px; font-weight: 700; color: var(--text); }
+.kv-val.amber { color: var(--amber); }
+.kv-val.green { color: var(--green); }
+.kv-val.red   { color: var(--red); }
+
+/* Photo condition bar */
+.cond-bar-wrap { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
+.cond-bar-track {
+  flex: 1; height: 6px; background: var(--border2); border-radius: 3px; overflow: hidden;
+}
+.cond-bar-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+.cond-bar-label { font-size: 12px; font-weight: 700; min-width: 50px; text-align: right; }
+
+/* Advisor note box */
+.advisor-box {
+  background: linear-gradient(135deg, rgba(96,165,250,.06), rgba(96,165,250,.02));
+  border: 1px solid rgba(96,165,250,.2); border-radius: var(--r);
+  padding: 14px 16px; margin-bottom: 12px;
+}
+.advisor-box-label { font-size: 10px; font-weight: 900; letter-spacing: .1em; color: var(--blue); text-transform: uppercase; margin-bottom: 8px; }
+.advisor-box p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* Recommendation */
+.rec-verdict {
+  text-align: center; padding: 24px 0 16px;
+}
+.rec-text { font-family: 'DM Serif Display', serif; font-size: 42px; font-weight: 400; }
+.rec-text.AL    { color: var(--green); }
+.rec-text.GEÇ   { color: var(--red); }
+.rec-text.BEKLE { color: var(--amber); }
+.rec-conf { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+.rec-summary {
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--r); padding: 16px 18px;
+  font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 16px;
+}
+
+/* Action bar */
+.action-bar {
+  display: flex; gap: 10px; flex-wrap: wrap; padding: 24px 0;
+  border-top: 1px solid var(--border); margin-top: 32px;
+}
+.act-btn {
+  padding: 11px 20px; border-radius: var(--r); border: 1px solid var(--border2);
+  background: var(--glass); color: var(--text); cursor: pointer;
+  font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; gap: 8px; transition: all .2s;
+}
+.act-btn:hover { border-color: var(--amber); color: var(--amber); background: var(--amberDim); }
+.act-btn.primary {
+  background: var(--amberDim); border-color: var(--amber); color: var(--amber);
+}
+
+/* disclaimer */
+.disclaimer-box {
+  font-size: 11px; color: var(--muted2); text-align: center; padding: 16px;
+  border-top: 1px solid var(--border); line-height: 1.6;
+}
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: var(--r); padding: 12px 20px; font-size: 13px; font-weight: 600;
+  display: flex; align-items: center; gap: 10px; z-index: 1000;
+  opacity: 0; transition: all .3s; pointer-events: none; white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.ok  { border-color: var(--green); color: var(--green); }
+.toast.err { border-color: var(--red);   color: var(--red); }
+
+/* No-photo notice */
+.no-photo-notice {
+  background: rgba(251,191,36,.07); border: 1px dashed rgba(251,191,36,.3);
+  border-radius: var(--r); padding: 14px 16px;
+  font-size: 12px; color: var(--amber); display: flex; gap: 8px; align-items: center;
+}
+
+/* ── Responsive ─── */
+@media (max-width: 600px) {
+  .prop-header { flex-direction: column; }
+  .prop-price-area { text-align: left; }
+  .price-row { grid-template-columns: 1fr; }
+  .swot-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="ambient amb1"></div>
+<div class="ambient amb2"></div>
+
+<!-- ── HEADER ─────────────────────────────────── -->
+<header>
+  <div class="logo">
+    🏛 Nexa
+    <span class="logo-badge">AI ANALIZ</span>
+  </div>
+  <nav class="nav-links">
+    <a href="/">Site</a>
+    <a href="/crm">CRM</a>
+    <a href="/admin">Admin</a>
+  </nav>
+</header>
+
+<!-- ── MAIN ───────────────────────────────────── -->
+<main class="wrap">
+
+  <!-- Hero -->
+  <div class="page-hero">
+    <h1>Gayrimenkul <em>AI Analizi</em></h1>
+    <p>İlan linki, fotoğraf veya manuel giriş ile saniyeler içinde derinlemesine değerleme raporu.</p>
+  </div>
+
+  <!-- INPUT CARD -->
+  <div class="input-card" id="inputCard">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('url',this)">
+        <span class="tab-icon">🔗</span> İlan Linki
+      </button>
+      <button class="tab-btn" onclick="switchTab('photo',this)">
+        <span class="tab-icon">📸</span> Fotoğraflar
+      </button>
+      <button class="tab-btn" onclick="switchTab('manual',this)">
+        <span class="tab-icon">✏️</span> Manuel Giriş
+      </button>
+    </div>
+
+    <!-- TAB: URL -->
+    <div class="tab-pane active" id="tab-url">
+      <div class="url-input-wrap">
+        <input class="url-field" type="url" id="listingUrl"
+               placeholder="https://www.sahibinden.com/ilan/..." />
+      </div>
+      <div class="badge-row" style="margin-top:12px">
+        <span class="src-badge green">✓ Sahibinden</span>
+        <span class="src-badge green">✓ HepsiEmlak</span>
+        <span class="src-badge green">✓ Zingat</span>
+        <span class="src-badge green">✓ Emlakjet</span>
+        <span class="src-badge amber">~ Diğer</span>
+      </div>
+      <div style="margin-top:18px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:13px; color:var(--muted); letter-spacing:0; text-transform:none; font-weight:500;">
+          <input type="checkbox" id="alsoPhotos" style="width:16px;height:16px;accent-color:var(--amber);" />
+          Fotoğraflara da AI ile bak
+        </label>
+      </div>
+      <button class="analyze-btn" onclick="startAnalysis('url')" style="margin-top:20px">
+        <span>🔍</span> Analiz Et
+      </button>
+    </div>
+
+    <!-- TAB: PHOTO -->
+    <div class="tab-pane" id="tab-photo">
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="photoInput" accept="image/*" multiple onchange="handleFileSelect(this)" />
+        <span class="drop-icon">🖼</span>
+        <div class="drop-title">Fotoğrafları buraya sürükle veya tıkla</div>
+        <div class="drop-sub">JPG, PNG, WEBP · En fazla 8 fotoğraf · Gemini Vision ile analiz</div>
+      </div>
+      <div class="photo-preview-grid" id="photoGrid"></div>
+      <button class="analyze-btn" onclick="startAnalysis('photo')" style="margin-top:20px">
+        <span>🔬</span> Fotoğrafları Analiz Et
+      </button>
+    </div>
+
+    <!-- TAB: MANUAL -->
+    <div class="tab-pane" id="tab-manual">
+      <div class="form-grid">
+        <div class="form-group span2">
+          <label>Başlık / Açıklama</label>
+          <input type="text" id="m-title" placeholder="3+1 Satılık Daire, Çankaya..." />
+        </div>
+        <div class="form-group">
+          <label>Fiyat</label>
+          <input type="text" id="m-price" placeholder="5.500.000 TL" />
+        </div>
+        <div class="form-group">
+          <label>İlan Türü</label>
+          <select id="m-type">
+            <option value="Satılık">Satılık</option>
+            <option value="Kiralık">Kiralık</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Brüt Alan</label>
+          <input type="text" id="m-area" placeholder="120 m²" />
+        </div>
+        <div class="form-group">
+          <label>Oda / Salon</label>
+          <input type="text" id="m-rooms" placeholder="3+1" />
+        </div>
+        <div class="form-group">
+          <label>Kat / Toplam Kat</label>
+          <input type="text" id="m-floor" placeholder="5/8" />
+        </div>
+        <div class="form-group">
+          <label>Bina Yaşı</label>
+          <input type="text" id="m-age" placeholder="10 yıl" />
+        </div>
+        <div class="form-group span2">
+          <label>Konum</label>
+          <input type="text" id="m-location" placeholder="Çankaya, Ankara" />
+        </div>
+        <div class="form-group span2">
+          <label>Notlar / Özellikler</label>
+          <textarea id="m-notes" placeholder="Güney cephe, bakımlı, doğalgaz..."></textarea>
+        </div>
+      </div>
+      <button class="analyze-btn" onclick="startAnalysis('manual')" style="margin-top:8px">
+        <span>🧠</span> AI ile Değerle
+      </button>
+    </div>
+  </div><!-- /input-card -->
+
+  <!-- LOADER -->
+  <div class="loader-wrap" id="loader">
+    <div class="scan-anim">
+      <div class="scan-ring r1"></div>
+      <div class="scan-ring r2"></div>
+      <div class="scan-ring r3"></div>
+      <div class="scan-house">🏠</div>
+    </div>
+    <div class="loader-step" id="loaderStep"><span>Başlatılıyor...</span></div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results">
+
+    <!-- Prop header -->
+    <div class="prop-header" id="propHeader"></div>
+
+    <!-- Verdict pills -->
+    <div class="verdict-row" id="verdictRow"></div>
+
+    <!-- Section nav -->
+    <div class="section-nav">
+      <button class="snav-btn active" onclick="scrollToSec('secPrice',this)">💰 Fiyat</button>
+      <button class="snav-btn" onclick="scrollToSec('secInvest',this)">📈 Yatırım</button>
+      <button class="snav-btn" onclick="scrollToSec('secPhoto',this)">📸 Fotoğraf</button>
+      <button class="snav-btn" onclick="scrollToSec('secSwot',this)">⚖️ SWOT</button>
+      <button class="snav-btn" onclick="scrollToSec('secLocation',this)">📍 Konum</button>
+      <button class="snav-btn" onclick="scrollToSec('secAdvisor',this)">🎯 Danışman</button>
+      <button class="snav-btn" onclick="scrollToSec('secRec',this)">🏁 Sonuç</button>
+    </div>
+
+    <!-- Analysis grid -->
+    <div class="analysis-grid" id="analysisGrid"></div>
+
+    <!-- Action bar -->
+    <div class="action-bar">
+      <button class="act-btn primary" onclick="saveToCRM()">💾 CRM'e Kaydet</button>
+      <button class="act-btn" onclick="copyReport()">📋 JSON Kopyala</button>
+      <button class="act-btn" onclick="printReport()">🖨 Yazdır / PDF</button>
+      <button class="act-btn" onclick="resetAll()">🔄 Yeni Analiz</button>
+    </div>
+
+    <div class="disclaimer-box" id="disclaimer"></div>
+  </div><!-- /results -->
+
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════ -->
+<script>
+// ── State ─────────────────────────────────────────────────────────────────────
+let currentTab   = 'url';
+let uploadedB64  = [];   // [{mime, b64, dataUrl}, ...]
+let lastReport   = null;
+
+// ── Tab switching ─────────────────────────────────────────────────────────────
+function switchTab(tab, btn) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+// ── Drag & Drop ───────────────────────────────────────────────────────────────
+const dz = document.getElementById('dropZone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragging'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('dragging'));
+dz.addEventListener('drop', e => {
+  e.preventDefault(); dz.classList.remove('dragging');
+  handleFiles(Array.from(e.dataTransfer.files));
+});
+
+function handleFileSelect(input) { handleFiles(Array.from(input.files)); }
+
+function handleFiles(files) {
+  const toProcess = files.filter(f => f.type.startsWith('image/')).slice(0, 8 - uploadedB64.length);
+  toProcess.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const dataUrl = e.target.result;
+      const b64 = dataUrl.split(';base64,')[1];
+      const mime = file.type.split('/')[1] || 'jpeg';
+      uploadedB64.push({ mime, b64, dataUrl });
+      renderPhotoGrid();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderPhotoGrid() {
+  const grid = document.getElementById('photoGrid');
+  grid.innerHTML = uploadedB64.map((img, i) => `
+    <div class="photo-thumb">
+      <img src="${img.dataUrl}" alt="foto ${i+1}" />
+      <button class="thumb-remove" onclick="removePhoto(${i})">×</button>
+    </div>
+  `).join('');
+}
+
+function removePhoto(idx) {
+  uploadedB64.splice(idx, 1);
+  renderPhotoGrid();
+}
+
+// ── Analysis ──────────────────────────────────────────────────────────────────
+async function startAnalysis(mode) {
+  const loaderSteps = [
+    ['🔍', 'İlan verisi alınıyor...'],
+    ['🤖', 'Gemini Vision analiz ediyor...'],
+    ['📊', 'Piyasa karşılaştırması yapılıyor...'],
+    ['💡', 'Rapor oluşturuluyor...'],
+  ];
+
+  // Validation
+  if (mode === 'url') {
+    const url = document.getElementById('listingUrl').value.trim();
+    if (!url) return showToast('Lütfen bir ilan URL\'si girin.', 'err');
+  }
+  if (mode === 'photo' && uploadedB64.length === 0) {
+    return showToast('Lütfen en az bir fotoğraf yükleyin.', 'err');
+  }
+
+  // Show loader
+  document.getElementById('inputCard').style.display = 'none';
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('loader').classList.add('show');
+
+  let stepIdx = 0;
+  const stepEl = document.getElementById('loaderStep');
+  const stepInterval = setInterval(() => {
+    if (stepIdx < loaderSteps.length) {
+      const [ico, txt] = loaderSteps[stepIdx++];
+      stepEl.innerHTML = `<span>${ico} ${txt}</span>`;
+    }
+  }, 2000);
+
+  try {
+    let listingData  = null;
+    let manualData   = null;
+    let images       = [];
+
+    // ── 1. Scrape if URL mode ────────────────────────────────────────────────
+    if (mode === 'url') {
+      const url = document.getElementById('listingUrl').value.trim();
+      stepEl.innerHTML = '<span>🔍 İlan scrape ediliyor...</span>';
+      const scrapeResp = await fetch('/api/ai/scrape', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ url }),
+      });
+      const scrapeJson = await scrapeResp.json();
+      if (scrapeJson.ok) {
+        listingData = scrapeJson.data;
+      } else {
+        const errMsg = scrapeJson.data?.error || scrapeJson.error || 'İlan scrape edilemedi';
+        throw new Error('Scrape hatası: ' + errMsg + ' — Lütfen manuel giriş modunu deneyin.');
+      }
+      // Fotoğraf ekle seçeneği
+      if (document.getElementById('alsoPhotos').checked && uploadedB64.length > 0) {
+        images = uploadedB64.map(x => `data:image/${x.mime};base64,${x.b64}`);
+      }
+    }
+
+    // ── 2. Build data based on mode ──────────────────────────────────────────
+    if (mode === 'manual') {
+      manualData = {
+        manual_title:    document.getElementById('m-title').value,
+        manual_price:    document.getElementById('m-price').value,
+        manual_area:     document.getElementById('m-area').value,
+        manual_rooms:    document.getElementById('m-rooms').value,
+        manual_floor:    document.getElementById('m-floor').value,
+        manual_age:      document.getElementById('m-age').value,
+        manual_location: document.getElementById('m-location').value,
+        manual_notes:    document.getElementById('m-notes').value,
+        listing_type:    document.getElementById('m-type').value,
+      };
+    }
+
+    if (mode === 'photo') {
+      images = uploadedB64.map(x => `data:image/${x.mime};base64,${x.b64}`);
+    }
+
+    // ── 3. Analyze ───────────────────────────────────────────────────────────
+    stepEl.innerHTML = '<span>🤖 Gemini analiz ediyor...</span>';
+    const analyzeResp = await fetch('/api/ai/analyze', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        listing_data:    listingData,
+        manual_data:     manualData,
+        uploaded_images: images,
+      }),
+    });
+    const analyzeJson = await analyzeResp.json();
+
+    if (!analyzeJson.ok) {
+      const detail = analyzeJson.error || 'Bilinmeyen hata';
+      throw new Error(detail);
+    }
+
+    lastReport = analyzeJson.report;
+    renderResults(lastReport);
+
+  } catch (err) {
+    document.getElementById('inputCard').style.display = '';
+    showToast('Hata: ' + err.message, 'err');
+  } finally {
+    clearInterval(stepInterval);
+    document.getElementById('loader').classList.remove('show');
+  }
+}
+
+// ═══════════════════════════════════════════════
+// RENDER RESULTS
+// ═══════════════════════════════════════════════
+function renderResults(r) {
+  const ps = r.property_summary || {};
+  const pa = r.price_analysis   || {};
+  const ia = r.investment_analysis || {};
+  const ph = r.photo_analysis   || {};
+  const sw = r.swot              || {};
+  const la = r.location_analysis || {};
+  const an = r.advisor_notes    || {};
+  const rc = r.recommendation   || {};
+
+  // ── Prop header ─────────────────────────────────────────────────────────
+  document.getElementById('propHeader').innerHTML = `
+    <div class="prop-title-area">
+      <h2>${ps.title || 'Gayrimenkul Analizi'}</h2>
+      <div class="prop-meta">
+        ${ps.location ? `<span>📍 <strong>${ps.location}</strong></span>` : ''}
+        ${ps.area     ? `<span>📐 <strong>${ps.area}</strong></span>` : ''}
+        ${ps.rooms    ? `<span>🏠 <strong>${ps.rooms}</strong></span>` : ''}
+        ${ps.floor    ? `<span>🏢 <strong>${ps.floor}</strong></span>` : ''}
+        ${ps.building_age ? `<span>📅 <strong>${ps.building_age}</strong></span>` : ''}
+      </div>
+    </div>
+    <div class="prop-price-area">
+      <div class="prop-price">${ps.price || pa.listed_price || '—'}</div>
+      <div class="prop-gen">📅 ${r.generated_at || ''} · ${r.data_source || ''}</div>
+      ${r.has_photos ? `<div style="font-size:11px;color:var(--green);margin-top:4px">📸 ${r.photo_count} fotoğraf analiz edildi</div>` : ''}
+    </div>
+  `;
+
+  // ── Verdict pills ────────────────────────────────────────────────────────
+  const verdict = rc.verdict || 'BEKLE';
+  const vcls    = verdict === 'AL' ? 'green' : verdict === 'GEÇ' ? 'red' : 'amber';
+  const isco    = ia.investment_score || 0;
+  const iscls   = isco >= 7 ? 'green' : isco >= 5 ? 'amber' : 'red';
+  const pvcls   = pa.verdict === 'Uygun' || pa.verdict === 'Ucuz' ? 'green'
+                : pa.verdict === 'Pahalı' ? 'red' : 'amber';
+
+  document.getElementById('verdictRow').innerHTML = `
+    <span class="verdict-pill ${vcls}">${verdict === 'AL' ? '🟢' : verdict === 'GEÇ' ? '🔴' : '🟡'} ${verdict}</span>
+    <span class="verdict-pill ${pvcls}">💰 Fiyat: ${pa.verdict || '—'}</span>
+    <span class="verdict-pill ${iscls}">📊 Yatırım Skoru: ${isco}/10</span>
+    <span class="verdict-pill blue">🎯 Güven: ${rc.confidence || '—'}</span>
+  `;
+
+  // ── Analysis grid ────────────────────────────────────────────────────────
+  const grid = document.getElementById('analysisGrid');
+  grid.innerHTML = '';
+
+  // Card: Price Analysis (id=secPrice)
+  grid.appendChild(makeCard('secPrice', 'ci-amber', '💰', 'Fiyat Analizi', 'Piyasa karşılaştırması', `
+    <div class="price-row">
+      <div class="price-cell">
+        <div class="price-cell-label">İlan Fiyatı</div>
+        <div class="price-cell-val amber">${pa.listed_price || '—'}</div>
+      </div>
+      <div class="price-cell">
+        <div class="price-cell-label">Tahmini Gerçek Değer</div>
+        <div class="price-cell-val green">${pa.estimated_fair_value || '—'}</div>
+      </div>
+      <div class="price-cell">
+        <div class="price-cell-label">m² Birim Fiyatı</div>
+        <div class="price-cell-val">${pa.price_per_sqm || '—'}</div>
+      </div>
+      <div class="price-cell">
+        <div class="price-cell-label">Pazarlık Payı</div>
+        <div class="price-cell-val amber">${pa.negotiation_room || '—'}</div>
+      </div>
+    </div>
+    ${verdictBadge(pa.verdict)}
+    <p class="detail-line">${pa.market_comparison || ''}</p>
+    <p class="detail-line" style="margin-top:8px">${pa.verdict_detail || ''}</p>
+  `));
+
+  // Card: Investment Analysis (id=secInvest)
+  grid.appendChild(makeCard('secInvest', 'ci-green', '📈', 'Yatırım Analizi', 'Getiri & değer artışı', `
+    ${scoreRing(isco, ia.score_label, ia.reasoning)}
+    <div class="price-row" style="margin-top:14px">
+      <div class="price-cell">
+        <div class="price-cell-label">Tahmini Kira</div>
+        <div class="price-cell-val green">${ia.estimated_monthly_rent || '—'}</div>
+      </div>
+      <div class="price-cell">
+        <div class="price-cell-label">Brüt Getiri</div>
+        <div class="price-cell-val">${ia.gross_yield_pct != null ? '%' + ia.gross_yield_pct : '—'}</div>
+      </div>
+      <div class="price-cell">
+        <div class="price-cell-label">Geri Ödeme</div>
+        <div class="price-cell-val">${ia.payback_years != null ? ia.payback_years + ' yıl' : '—'}</div>
+      </div>
+      <div class="price-cell">
+        <div class="price-cell-label">5 Yıl Değer Artışı</div>
+        <div class="price-cell-val amber">${ia.value_increase_5yr || '—'}</div>
+      </div>
+    </div>
+    <div class="kv-row">
+      <span class="kv-key">Hedef Alıcı</span>
+      <span class="kv-val">${ia.target_buyer || '—'}</span>
+    </div>
+    <div class="kv-row">
+      <span class="kv-key">Tavsiye</span>
+      <span class="kv-val ${ia.verdict === 'AL' ? 'green' : ia.verdict === 'GEÇ' ? 'red' : 'amber'}">${ia.verdict || '—'}</span>
+    </div>
+  `));
+
+  // Card: Photo Analysis (id=secPhoto)
+  const hasPhoto = r.has_photos && ph.condition_score > 0;
+  const photoContent = hasPhoto ? `
+    ${condBar(ph.condition_score, ph.overall_condition)}
+    <div class="price-row" style="margin-bottom:14px">
+      <div class="price-cell">
+        <div class="price-cell-label">Zemin</div>
+        <div class="price-cell-val">${ph.flooring || '—'}</div>
+      </div>
+      <div class="price-cell">
+        <div class="price-cell-label">Doğal Işık</div>
+        <div class="price-cell-val">${ph.natural_light || '—'}</div>
+      </div>
+    </div>
+    ${ph.detected_rooms && ph.detected_rooms.length ? `<div class="chip-row" style="margin-bottom:12px">${ph.detected_rooms.map(x => `<span class="chip">${x}</span>`).join('')}</div>` : ''}
+    ${ph.positive_visuals && ph.positive_visuals.length ? `
+      <p style="font-size:11px;font-weight:800;color:var(--green);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px">Güçlü Özellikler</p>
+      <ul class="analysis-list" style="margin-bottom:12px">${ph.positive_visuals.map(x => `<li class="positive">${x}</li>`).join('')}</ul>
+    ` : ''}
+    ${ph.issues_detected && ph.issues_detected.length ? `
+      <p style="font-size:11px;font-weight:800;color:var(--red);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px">Tespit Edilen Sorunlar</p>
+      <ul class="analysis-list">${ph.issues_detected.map(x => `<li class="negative">${x}</li>`).join('')}</ul>
+    ` : ''}
+    ${ph.renovation_estimate ? `<div style="margin-top:10px;font-size:12px;color:var(--amber)">🔧 Tahmini Tadilat: ${ph.renovation_estimate}</div>` : ''}
+  ` : `<div class="no-photo-notice">⚠ Fotoğraf analizi yapılmadı. Fotoğraf yükleyerek görsel değerlendirme alabilirsiniz.</div>`;
+
+  grid.appendChild(makeCard('secPhoto', 'ci-blue', '📸', 'Fotoğraf Analizi', 'Gemini Vision görsel değerlendirme', photoContent));
+
+  // Card: SWOT (span2, id=secSwot)
+  grid.appendChild(makeCard('secSwot', 'ci-amber', '⚖️', 'SWOT Analizi', 'Güçlü/Zayıf/Fırsat/Tehdit', `
+    <div class="swot-grid">
+      ${swotCell('S', 'Güçlü Yönler', sw.strengths || [], 's')}
+      ${swotCell('W', 'Zayıf Yönler', sw.weaknesses || [], 'w')}
+      ${swotCell('O', 'Fırsatlar', sw.opportunities || [], 'o')}
+      ${swotCell('T', 'Tehditler', sw.threats || [], 't')}
+    </div>
+  `, true));
+
+  // Card: Location (id=secLocation)
+  const nbScore = la.neighborhood_score || 0;
+  grid.appendChild(makeCard('secLocation', 'ci-blue', '📍', 'Konum Analizi', 'Bölge & erişim değerlendirmesi', `
+    ${scoreRing(nbScore, la.development_outlook, la.comments, '#60a5fa')}
+    <div class="price-row" style="margin-top:14px">
+      <div class="price-cell">
+        <div class="price-cell-label">Ulaşım</div>
+        <div class="price-cell-val">${la.transport_access || '—'}</div>
+      </div>
+      <div class="price-cell">
+        <div class="price-cell-label">Deprem Riski</div>
+        <div class="price-cell-val ${la.earthquake_risk === 'Düşük' ? 'green' : la.earthquake_risk === 'Yüksek' ? 'red' : 'amber'}">${la.earthquake_risk || '—'}</div>
+      </div>
+    </div>
+    ${la.nearby_amenities && la.nearby_amenities.length ? `<div class="chip-row" style="margin-top:4px">${la.nearby_amenities.map(x => `<span class="chip">${x}</span>`).join('')}</div>` : ''}
+  `));
+
+  // Card: Advisor Notes (id=secAdvisor)
+  grid.appendChild(makeCard('secAdvisor', 'ci-blue', '🎯', 'Danışman Notları', 'Sadece danışman görür', `
+    ${an.talking_points && an.talking_points.length ? `
+      <div class="advisor-box">
+        <div class="advisor-box-label">💬 Müşteriye Söylenecek Noktalar</div>
+        <ul class="analysis-list">${an.talking_points.map(x => `<li class="positive">${x}</li>`).join('')}</ul>
+      </div>
+    ` : ''}
+    ${an.objections_to_prepare && an.objections_to_prepare.length ? `
+      <div class="advisor-box">
+        <div class="advisor-box-label">⚡ Olası İtirazlar</div>
+        <ul class="analysis-list">${an.objections_to_prepare.map(x => `<li class="negative">${x}</li>`).join('')}</ul>
+      </div>
+    ` : ''}
+    ${an.closing_suggestion ? `
+      <div class="advisor-box">
+        <div class="advisor-box-label">🔑 Kapanış Stratejisi</div>
+        <p>${an.closing_suggestion}</p>
+      </div>
+    ` : ''}
+    ${an.red_flags && an.red_flags.length ? `
+      <div style="background:var(--redDim);border:1px solid rgba(248,113,113,.2);border-radius:var(--r);padding:14px 16px;">
+        <div style="font-size:10px;font-weight:900;letter-spacing:.1em;color:var(--red);text-transform:uppercase;margin-bottom:8px">🚩 Kırmızı Bayraklar</div>
+        <ul class="analysis-list">${an.red_flags.map(x => `<li class="negative">${x}</li>`).join('')}</ul>
+      </div>
+    ` : ''}
+  `));
+
+  // Card: Recommendation (span2, id=secRec)
+  const recCls = rc.verdict === 'AL' ? 'AL' : rc.verdict === 'GEÇ' ? 'GEÇ' : 'BEKLE';
+  grid.appendChild(makeCard('secRec', `ci-${recCls === 'AL' ? 'green' : recCls === 'GEÇ' ? 'red' : 'amber'}`, '🏁', 'Genel Tavsiye', 'AI analizi sonucu', `
+    <div class="rec-verdict">
+      <div class="rec-text ${recCls}">${rc.verdict || '—'}</div>
+      <div class="rec-conf">Güven Seviyesi: ${rc.confidence || '—'}</div>
+    </div>
+    <div class="rec-summary">${rc.summary || ''}</div>
+    ${rc.next_steps && rc.next_steps.length ? `
+      <p style="font-size:11px;font-weight:800;color:var(--amber);letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px">Sonraki Adımlar</p>
+      <ul class="analysis-list">${rc.next_steps.map(x => `<li class="neutral">${x}</li>`).join('')}</ul>
+    ` : ''}
+  `, true));
+
+  // Disclaimer
+  document.getElementById('disclaimer').textContent = r.disclaimer || '';
+
+  // Show results
+  document.getElementById('results').classList.add('show');
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Animate score rings after render
+  setTimeout(animateScoreRings, 200);
+}
+
+// ── Card builder ──────────────────────────────────────────────────────────────
+function makeCard(id, iconCls, icon, title, sub, inner, span2 = false) {
+  const div = document.createElement('div');
+  div.className = 'a-card' + (span2 ? ' span2' : '');
+  div.id = id;
+  div.innerHTML = `
+    <div class="card-head">
+      <div class="card-icon ${iconCls}">${icon}</div>
+      <div>
+        <div class="card-title">${title}</div>
+        <div class="card-sub">${sub}</div>
+      </div>
+    </div>
+    ${inner}
+  `;
+  return div;
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function verdictBadge(verdict) {
+  if (!verdict) return '';
+  const cls = verdict === 'Uygun' || verdict === 'Ucuz' ? 'green' : verdict === 'Pahalı' ? 'red' : 'amber';
+  const ico = cls === 'green' ? '✓' : cls === 'red' ? '✗' : '~';
+  return `<div class="verdict-badge" style="background:var(--${cls}Dim);color:var(--${cls});border:1px solid var(--${cls});margin-bottom:12px">${ico} ${verdict}</div>`;
+}
+
+function scoreRing(score, label, reasoning, color = '#f59e0b') {
+  const pct = Math.min(Math.max(score, 0), 10) / 10;
+  const r   = 30;
+  const circ = 2 * Math.PI * r;
+  const dash = circ * pct;
+  return `
+    <div class="score-ring-wrap">
+      <div class="score-ring">
+        <svg viewBox="0 0 72 72" width="72" height="72">
+          <circle class="score-ring-bg" cx="36" cy="36" r="${r}" />
+          <circle class="score-ring-fill" cx="36" cy="36" r="${r}"
+            stroke="${color}"
+            stroke-dasharray="${circ}"
+            stroke-dashoffset="${circ - dash}"
+            data-target="${circ - dash}" data-circ="${circ}" />
+        </svg>
+        <div class="score-ring-num">${score}</div>
+      </div>
+      <div class="score-info">
+        <div class="score-label">${label || ''}</div>
+        <div class="score-reasoning">${reasoning || ''}</div>
+      </div>
+    </div>
+  `;
+}
+
+function condBar(score, label) {
+  const pct = Math.min(Math.max(score, 0), 10) * 10;
+  const color = score >= 7 ? '#10b981' : score >= 5 ? '#f59e0b' : '#f87171';
+  return `
+    <div class="cond-bar-wrap">
+      <div class="cond-bar-track">
+        <div class="cond-bar-fill" style="width:${pct}%;background:${color}"></div>
+      </div>
+      <div class="cond-bar-label" style="color:${color}">${label || ''}</div>
+    </div>
+  `;
+}
+
+function swotCell(letter, title, items, cls) {
+  return `
+    <div class="swot-cell">
+      <div class="swot-header ${cls}">${letter} — ${title}</div>
+      <div class="swot-items">
+        ${items.map(x => `<div class="swot-item"><span>•</span>${x}</div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function animateScoreRings() {
+  document.querySelectorAll('.score-ring-fill').forEach(el => {
+    const target = parseFloat(el.getAttribute('data-target'));
+    const circ   = parseFloat(el.getAttribute('data-circ'));
+    el.style.strokeDashoffset = circ;
+    requestAnimationFrame(() => {
+      el.style.transition = 'stroke-dashoffset 1s ease';
+      el.style.strokeDashoffset = target;
+    });
+  });
+}
+
+// ── Section scroll ────────────────────────────────────────────────────────────
+function scrollToSec(id, btn) {
+  document.querySelectorAll('.snav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────────
+async function saveToCRM() {
+  if (!lastReport) return showToast('Henüz analiz yapılmadı.', 'err');
+
+  // UID'yi localStorage'dan veya hard-code'dan al
+  const uid = localStorage.getItem('nexaUID') || prompt('Firebase UID girin (CRM\'e kaydetmek için):');
+  if (!uid) return;
+  localStorage.setItem('nexaUID', uid);
+
+  try {
+    const resp = await fetch('/api/ai/save-to-crm', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        uid,
+        report: lastReport,
+        url: document.getElementById('listingUrl').value || '',
+      }),
+    });
+    const data = await resp.json();
+    if (data.ok) showToast('✓ CRM\'e kaydedildi', 'ok');
+    else showToast('Hata: ' + data.error, 'err');
+  } catch (e) {
+    showToast('Bağlantı hatası', 'err');
+  }
+}
+
+function copyReport() {
+  if (!lastReport) return;
+  navigator.clipboard.writeText(JSON.stringify(lastReport, null, 2))
+    .then(() => showToast('✓ JSON panoya kopyalandı', 'ok'))
+    .catch(() => showToast('Kopyalama başarısız', 'err'));
+}
+
+function printReport() {
+  window.print();
+}
+
+function resetAll() {
+  lastReport = null;
+  uploadedB64 = [];
+  document.getElementById('photoGrid').innerHTML = '';
+  document.getElementById('listingUrl').value = '';
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('inputCard').style.display = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function showToast(msg, type = 'ok') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.className = 'toast', 3200);
+}
+</script>
+</body>
+</html>
