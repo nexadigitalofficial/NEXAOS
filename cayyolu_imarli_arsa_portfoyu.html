@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Ankara Çayyolu Satılık İmarlı Arsalar | NEXA.OS Vitrini</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+    --bg-dark: #07090e;
+    --card-bg: rgba(14, 18, 27, 0.92);
+    --gold: #d4af37;
+    --gold-glow: rgba(212, 175, 55, 0.25);
+    --gold-gradient: linear-gradient(135deg, #d4af37 0%, #f3e5ab 50%, #aa7c11 100%);
+    --accent: #2563eb;
+    --emerald: #10b981;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border: rgba(255, 255, 255, 0.08);
+    --border-gold: rgba(212, 175, 55, 0.35);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    line-height: 1.6;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(37, 99, 235, 0.05) 0%, transparent 40%);
+    background-attachment: fixed;
+    padding-bottom: 80px;
+}
+
+/* Top Hero Bar */
+.hero-header {
+    background: linear-gradient(180deg, rgba(14, 18, 27, 0.98) 0%, rgba(7, 9, 14, 0.95) 100%);
+    border-bottom: 1px solid var(--border-gold);
+    padding: 30px 20px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.hero-logo {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 5px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.hero-title {
+    font-family: 'Cinzel', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+.hero-sub {
+    color: var(--text-secondary);
+    font-size: 14px;
+    max-width: 650px;
+    margin: 0 auto 16px;
+}
+.hero-badge-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.hero-badge {
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid var(--border-gold);
+    color: var(--gold);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Sticky Jump Bar */
+.sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(14, 18, 27, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+.nav-select {
+    background: rgba(0,0,0,0.6);
+    border: 1px solid var(--border-gold);
+    color: var(--text-primary);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    flex: 1;
+    max-width: 450px;
+}
+.nav-stats {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+.nav-stats b { color: var(--gold); }
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* Card Container */
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    position: relative;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+.card:hover {
+    border-color: var(--border-gold);
+    transform: translateY(-2px);
+}
+.ribbon {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    background: var(--gold-gradient);
+    color: #07090e;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+/* Bento Galeri */
+.gallery {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 240px 240px;
+    gap: 8px;
+    padding: 10px;
+    background: #000;
+}
+.gallery figure {
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 10px;
+}
+.gallery img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+.gallery figure:hover img {
+    transform: scale(1.05);
+}
+.g-main {
+    grid-row: span 2;
+}
+.g-badge {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+}
+.g-count {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    backdrop-filter: blur(8px);
+    font-weight: 600;
+}
+.g-all {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    transition: background 0.2s;
+}
+.g-all:hover { background: rgba(0,0,0,0.3); }
+
+/* Filmstrip Thumbnail Gallery */
+.filmstrip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 12px 16px;
+    background: rgba(0,0,0,0.8);
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold) #000;
+}
+.filmstrip img {
+    width: 90px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+}
+.filmstrip img:hover {
+    transform: scale(1.08);
+    border-color: var(--gold);
+}
+
+/* Header Info */
+.head {
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    border-bottom: 1px solid var(--border);
+}
+.loc {
+    color: var(--gold);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+.loc-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: inline-block;
+}
+.head h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.3;
+    margin-bottom: 8px;
+}
+.no {
+    color: var(--text-secondary);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+.no b { color: #cbd5e1; }
+.price-box {
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid var(--border-gold);
+    padding: 12px 20px;
+    border-radius: 12px;
+    text-align: right;
+    min-width: 220px;
+}
+.price-lbl {
+    font-size: 10px;
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+.price-val {
+    font-family: 'Cinzel', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 2px;
+}
+
+/* Bento Body */
+.bento-body {
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    border-bottom: 1px solid var(--border);
+}
+.bento-box {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+}
+.bento-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+.spec-pill {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+.sp-k {
+    display: block;
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.sp-v {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-top: 2px;
+}
+
+/* AI Box */
+.ai-box {
+    border-color: rgba(37, 99, 235, 0.3);
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.05) 0%, rgba(0,0,0,0.3) 100%);
+}
+.ai-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.ai-m {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 12px 8px;
+    text-align: center;
+}
+.ai-m-val {
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold);
+}
+.ai-m-val span { font-size: 11px; color: var(--text-secondary); font-family: sans-serif; }
+.ai-m-lbl {
+    font-size: 10px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+.ai-summary {
+    font-size: 12px;
+    color: #cbd5e1;
+    line-height: 1.5;
+    background: rgba(0,0,0,0.25);
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 3px solid var(--gold);
+}
+
+/* Desc Box */
+.desc-box {
+    padding: 24px;
+    border-bottom: 1px solid var(--border);
+}
+.desc-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+}
+.desc-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    white-space: pre-line;
+    max-height: 160px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+/* Action Bar */
+.card-footer {
+    padding: 18px 24px;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.btn-sahibinden {
+    background: #ffe800;
+    color: #111;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: opacity 0.2s;
+}
+.btn-sahibinden:hover { opacity: 0.9; }
+.btn-copy {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #fff;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-copy:hover { background: rgba(255,255,255,0.15); }
+.btn-whatsapp {
+    background: var(--emerald);
+    color: #fff;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+}
+
+/* Lightbox Modal */
+.lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0,0,0,0.95);
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+.lightbox.active { display: flex; }
+.lightbox-content {
+    max-width: 90vw;
+    max-height: 85vh;
+    border-radius: 12px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    border: 1px solid var(--border-gold);
+}
+.lightbox-close {
+    position: absolute;
+    top: 25px;
+    right: 30px;
+    color: #fff;
+    font-size: 36px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.lightbox-close:hover { color: var(--gold); }
+
+@media (max-width: 900px) {
+    .gallery {
+        grid-template-columns: 1fr;
+        grid-template-rows: 280px 140px 140px;
+    }
+    .g-main { grid-row: auto; }
+    .head { flex-direction: column; }
+    .price-box { text-align: left; width: 100%; }
+    .bento-body { grid-template-columns: 1fr; }
+    .btn-whatsapp { margin-left: 0; width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero-header">
+    <div class="hero-logo">
+        <i class="fas fa-crown"></i> NEXA.OS AUTONOMOUS SCRAPER
+    </div>
+    <h1 class="hero-title">ANKARA ÇAYYOLU İMARLI ARSALAR</h1>
+    <p class="hero-sub">Doğal dil kriteri ("40 milyona imarlı ankara çayyolunda arsa") ile canlı taranan güncel Sahibinden portföy koleksiyonu.</p>
+    <div class="hero-badge-wrap">
+        <span class="hero-badge"><i class="fas fa-satellite-dish"></i> Canlı Cloud Engine</span>
+        <span class="hero-badge"><i class="fas fa-map-marker-alt"></i> Çankaya / Çayyolu Mah.</span>
+        <span class="hero-badge"><i class="fas fa-coins"></i> Bütçe: ≤ 40.000.000 TL</span>
+        <span class="hero-badge"><i class="fas fa-check-circle"></i> 7 Doğrulanmış İlan</span>
+    </div>
+</header>
+
+<div class="sticky-nav">
+    <select class="nav-select" onchange="jumpToCard(this.value)">
+        <option value="">İlan Seçin veya Listede Gezinin (7 İlan)...</option>
+        <option value="card-1342080022">01. DE ÇOK İYİ KONUMDA 251 M2 TİCARİ... (11.750.000 TL)</option>
+<option value="card-1252898571">02. 1252898571... (1.714.000 TL)</option>
+<option value="card-1325370053">03. YILDIZBEYİ ASPAVA YAKINI263 m2 C... (15.750.000 TL)</option>
+<option value="card-1336083133">04. YAŞAMKENT SATILIK ARSA 252M2 YAT... (10.750.000 TL)</option>
+<option value="card-1315612297">05. DE 81 M2 EĞİTİM ALANI KAMU ARSAS... (1.120.000 TL)</option>
+<option value="card-1315006172">06. *TURALI Gayrimenkul- *MİGROS KAR... (1.260.000 TL)</option>
+<option value="card-1302164717">07. 1302164717... (1.250.000 TL)</option>
+    </select>
+    <div class="nav-stats">Toplam: <b>7 İlan</b> &nbsp;|&nbsp; Durum: <b>Aktif Satılık</b></div>
+</div>
+
+<main class="container">
+    
+        <article id="card-1342080022" class="listing-anchor card">
+            <div class="ribbon">ÇAYYOLU İMARLI ARSA #1</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/08/00/22/x5_1342080022ig2.avif', '1342080022')">
+                    <img src="https://i0.shbdn.com/photos/08/00/22/x5_1342080022ig2.avif" alt="DE ÇOK İYİ KONUMDA 251 M2 TİCARİYE UYGUN ARSA">
+                    <div class="g-badge">NEXA.OS PREMIUM ARSA</div>
+                    <div class="g-count">📷 13 Yüksek Çözünürlüklü Görsel</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/08/00/22/x5_1342080022ogn.avif', '1342080022')">
+                    <img src="https://i0.shbdn.com/photos/08/00/22/x5_1342080022ogn.avif" alt="DE ÇOK İYİ KONUMDA 251 M2 TİCARİYE UYGUN ARSA">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/08/00/22/x5_1342080022bhm.avif', '1342080022')">
+                    <img src="https://i0.shbdn.com/photos/08/00/22/x5_1342080022bhm.avif" alt="DE ÇOK İYİ KONUMDA 251 M2 TİCARİYE UYGUN ARSA">
+                    <div class="g-all">Tüm Görseller ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/08/00/22/x5_1342080022ig2.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/08/00/22/x5_1342080022ig2.avif', '1342080022')"><img src="https://i0.shbdn.com/photos/08/00/22/x5_1342080022ogn.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/08/00/22/x5_1342080022ogn.avif', '1342080022')"><img src="https://i0.shbdn.com/photos/08/00/22/x5_1342080022bhm.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/08/00/22/x5_1342080022bhm.avif', '1342080022')"><img src="https://i0.shbdn.com/photos/08/00/22/x5_1342080022pth.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/08/00/22/x5_1342080022pth.avif', '1342080022')"><img src="https://i0.shbdn.com/photos/08/00/22/x5_1342080022jg2.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/08/00/22/x5_1342080022jg2.avif', '1342080022')"><img src="https://i0.shbdn.com/photos/08/00/22/x5_1342080022u7y.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/08/00/22/x5_1342080022u7y.avif', '1342080022')"><img src="https://i0.shbdn.com/photos/08/00/22/x5_1342080022au9.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/08/00/22/x5_1342080022au9.avif', '1342080022')"><img src="https://i0.shbdn.com/photos/08/00/22/x5_1342080022emn.avif" alt="Foto 7" onclick="openLightbox('https://i0.shbdn.com/photos/08/00/22/x5_1342080022emn.avif', '1342080022')"><img src="https://i0.shbdn.com/photos/08/00/22/x5_1342080022csi.avif" alt="Foto 8" onclick="openLightbox('https://i0.shbdn.com/photos/08/00/22/x5_1342080022csi.avif', '1342080022')"><img src="https://i0.shbdn.com/photos/08/00/22/x5_1342080022je3.avif" alt="Foto 9" onclick="openLightbox('https://i0.shbdn.com/photos/08/00/22/x5_1342080022je3.avif', '1342080022')"><img src="https://i0.shbdn.com/photos/08/00/22/x5_1342080022r1g.avif" alt="Foto 10" onclick="openLightbox('https://i0.shbdn.com/photos/08/00/22/x5_1342080022r1g.avif', '1342080022')"><img src="https://i0.shbdn.com/photos/08/00/22/x5_1342080022nh3.avif" alt="Foto 11" onclick="openLightbox('https://i0.shbdn.com/photos/08/00/22/x5_1342080022nh3.avif', '1342080022')"><img src="https://i0.shbdn.com/photos/08/00/22/x5_1342080022s8j.avif" alt="Foto 12" onclick="openLightbox('https://i0.shbdn.com/photos/08/00/22/x5_1342080022s8j.avif', '1342080022')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Çankaya / Çayyolu/Ümitköy</div>
+                    <h1>DE ÇOK İYİ KONUMDA 251 M2 TİCARİYE UYGUN ARSA</h1>
+                    <div class="no">İLAN NO: <b>#1342080022</b> &nbsp;|&nbsp; BÖLGE: ANKARA ÇANKAYA ÇAYYOLU &nbsp;|&nbsp; TÜR: İMARLI ARSA</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">İLAN FİYATI</div>
+                    <div class="price-val">11.750.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 İmar ve Kadastro Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1342080022</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Fiyat</span>
+                <span class="sp-v">11.750.000 TL</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Konum</span>
+                <span class="sp-v">Ankara / Çankaya / Çayyolu/Ümitköy</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori 1</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori 2</span>
+                <span class="sp-v">Arsa</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Marka</span>
+                <span class="sp-v">Satılık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Çankaya</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Çayyolu/Ümitköy</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Yaşamkent Mh.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Arsa Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.2<span>/10</span></div>
+                            <div class="ai-m-lbl">Gelişim Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">13 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Amortisman</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A++</div>
+                            <div class="ai-m-lbl">Lokasyon Primi</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Notu:</b> Çayyolu aksında yer alan bu arsa parseli, villa ve prestijli konut/ticari yapılaşma bölgesinde bulunmakta olup altyapı, imar emsali ve yol cephesi açısından yüksek yatırım değerine sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 İlan Açıklaması</div>
+                <div class="desc-text">A
+
+Arsamız çok iyi konumda olup Doğan Taşdelen Bulvarına 3-4 parsel uzaklıkta ,Eskişehir yolu ve Elya Alışveriş merkezinin hemen karşısında yer almaktadır. Taban
+oturumu 3640 olup İki kat İmar izni bulunmaktadır.
+
+Bütün altyapı hizmetleri bölgede yer almakta olup hemen inşaat yapılıp oturulacak durumdadır. Hemen yanında mevcut binalar bulunmaktadır.
+Daha ayrıntılı bilgi ve yer gösterimi için O 532 4529505 Aykan BAYKAN ile irtibat kurabilirsiniz.</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1342080022/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1342080022')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=DE ÇOK İYİ KONUMDA 251 M2 TİCARİYE UYGUN ARSA%20https://www.sahibinden.com/ilan/1342080022/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Paylaş
+                </a>
+            </div>
+        </article>
+        
+
+        <article id="card-1252898571" class="listing-anchor card">
+            <div class="ribbon">ÇAYYOLU İMARLI ARSA #2</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/89/85/71/x5_1252898571tb8.avif', '1252898571')">
+                    <img src="https://i0.shbdn.com/photos/89/85/71/x5_1252898571tb8.avif" alt="1252898571">
+                    <div class="g-badge">NEXA.OS PREMIUM ARSA</div>
+                    <div class="g-count">📷 6 Yüksek Çözünürlüklü Görsel</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/89/85/71/x5_1252898571j9z.avif', '1252898571')">
+                    <img src="https://i0.shbdn.com/photos/89/85/71/x5_1252898571j9z.avif" alt="1252898571">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/89/85/71/x5_1252898571miw.avif', '1252898571')">
+                    <img src="https://i0.shbdn.com/photos/89/85/71/x5_1252898571miw.avif" alt="1252898571">
+                    <div class="g-all">Tüm Görseller ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/89/85/71/x5_1252898571tb8.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/89/85/71/x5_1252898571tb8.avif', '1252898571')"><img src="https://i0.shbdn.com/photos/89/85/71/x5_1252898571j9z.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/89/85/71/x5_1252898571j9z.avif', '1252898571')"><img src="https://i0.shbdn.com/photos/89/85/71/x5_1252898571miw.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/89/85/71/x5_1252898571miw.avif', '1252898571')"><img src="https://i0.shbdn.com/photos/89/85/71/x5_1252898571c0z.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/89/85/71/x5_1252898571c0z.avif', '1252898571')"><img src="https://i0.shbdn.com/photos/89/85/71/x5_1252898571xjl.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/89/85/71/x5_1252898571xjl.avif', '1252898571')"><img src="https://i0.shbdn.com/photos/89/85/71/x5_1252898571wo8.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/89/85/71/x5_1252898571wo8.avif', '1252898571')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Çankaya / Merkez</div>
+                    <h1>1252898571</h1>
+                    <div class="no">İLAN NO: <b>#1252898571</b> &nbsp;|&nbsp; BÖLGE: ANKARA ÇANKAYA ÇAYYOLU &nbsp;|&nbsp; TÜR: İMARLI ARSA</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">İLAN FİYATI</div>
+                    <div class="price-val">1.714.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 İmar ve Kadastro Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1252898571</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Fiyat</span>
+                <span class="sp-v">1.714.000 TL</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Konum</span>
+                <span class="sp-v">Ankara / Çankaya / Merkez</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori 1</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori 2</span>
+                <span class="sp-v">Arsa</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Marka</span>
+                <span class="sp-v">Satılık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Çankaya</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Merkez</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Dodurga Mah.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Arsa Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.1<span>/10</span></div>
+                            <div class="ai-m-lbl">Gelişim Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">12 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Amortisman</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A++</div>
+                            <div class="ai-m-lbl">Lokasyon Primi</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Notu:</b> Çayyolu aksında yer alan bu arsa parseli, villa ve prestijli konut/ticari yapılaşma bölgesinde bulunmakta olup altyapı, imar emsali ve yol cephesi açısından yüksek yatırım değerine sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 İlan Açıklaması</div>
+                <div class="desc-text">© DODURGA&#x27;DA YATIRIMLIK ARSA HİSSESİ FIRSATI!
+
+B Konum: Arsamız, Ankara&#x27;nın hızla gelişen bölgelerinden Dodurga&#x27;da, çevre yoluna sadece 200 metre mesafededir.
+B İmar Durumu: İmar planında çevresi park alanı olarak belirlenmiştir.
+
+B ArsaBilgi:
+Toplam 7.942 m? büyüklüğündeki bu arsada, 107 m? hisse satışı yapılmaktadır.
+
+H Yatırımcılar İçin Büyük Fırsat:
+Bu hisseye karşılık gelecek projeksiyona göre:
+H ladet103m”net341daire
+
+B Bölge hızla yapılaşmakta olup, İnşaata hazır arsa sayısı çok azalmıştır. Bu da uzun süre beklemeden yatırımınızı değerlendirme imkânı sunuyor.
+
+H Yakın gelecekte Ankara&#x27;nın en değerli lokasyonlarından biri haline gelecek Dodurga&#x27;da, bu fiyatlara daire sahibi olmak artık çok zor.
+Bugünün fırsatı, yarının kazancı olabilir!
+
+B Detaylı bilgi ve görüşme için bizimle iletişime geçin.
+ALB GAYRİMENKUL</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1252898571/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1252898571')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=1252898571%20https://www.sahibinden.com/ilan/1252898571/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Paylaş
+                </a>
+            </div>
+        </article>
+        
+
+        <article id="card-1325370053" class="listing-anchor card">
+            <div class="ribbon">ÇAYYOLU İMARLI ARSA #3</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053aet.avif', '1325370053')">
+                    <img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053aet.avif" alt="YILDIZBEYİ ASPAVA YAKINI263 m2 CADDE ÜZERİ RUHSATLI 5 KATLI ARSA">
+                    <div class="g-badge">NEXA.OS PREMIUM ARSA</div>
+                    <div class="g-count">📷 20 Yüksek Çözünürlüklü Görsel</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053s1f.avif', '1325370053')">
+                    <img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053s1f.avif" alt="YILDIZBEYİ ASPAVA YAKINI263 m2 CADDE ÜZERİ RUHSATLI 5 KATLI ARSA">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053n66.avif', '1325370053')">
+                    <img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053n66.avif" alt="YILDIZBEYİ ASPAVA YAKINI263 m2 CADDE ÜZERİ RUHSATLI 5 KATLI ARSA">
+                    <div class="g-all">Tüm Görseller ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053aet.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053aet.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053s1f.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053s1f.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053n66.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053n66.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053341.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053341.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_132537005325s.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_132537005325s.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_13253700536xa.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_13253700536xa.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053ygz.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053ygz.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_13253700536uj.avif" alt="Foto 7" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_13253700536uj.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053ig1.avif" alt="Foto 8" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053ig1.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_13253700534xz.avif" alt="Foto 9" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_13253700534xz.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_13253700539g4.avif" alt="Foto 10" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_13253700539g4.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_132537005372p.avif" alt="Foto 11" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_132537005372p.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053l0m.avif" alt="Foto 12" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053l0m.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053yab.avif" alt="Foto 13" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053yab.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053rzj.avif" alt="Foto 14" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053rzj.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053h9m.avif" alt="Foto 15" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053h9m.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053vwm.avif" alt="Foto 16" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053vwm.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053gll.avif" alt="Foto 17" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053gll.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053dwj.avif" alt="Foto 18" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053dwj.avif', '1325370053')"><img src="https://i0.shbdn.com/photos/37/00/53/x5_1325370053snf.avif" alt="Foto 19" onclick="openLightbox('https://i0.shbdn.com/photos/37/00/53/x5_1325370053snf.avif', '1325370053')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Çankaya / Çayyolu/Ümitköy</div>
+                    <h1>YILDIZBEYİ ASPAVA YAKINI263 m2 CADDE ÜZERİ RUHSATLI 5 KATLI ARSA</h1>
+                    <div class="no">İLAN NO: <b>#1325370053</b> &nbsp;|&nbsp; BÖLGE: ANKARA ÇANKAYA ÇAYYOLU &nbsp;|&nbsp; TÜR: İMARLI ARSA</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">İLAN FİYATI</div>
+                    <div class="price-val">15.750.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 İmar ve Kadastro Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1325370053</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Fiyat</span>
+                <span class="sp-v">15.750.000 TL</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Konum</span>
+                <span class="sp-v">Ankara / Çankaya / Çayyolu/Ümitköy</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori 1</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori 2</span>
+                <span class="sp-v">Arsa</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Marka</span>
+                <span class="sp-v">Satılık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Çankaya</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Çayyolu/Ümitköy</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Yaşamkent Mh.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Arsa Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.3<span>/10</span></div>
+                            <div class="ai-m-lbl">Gelişim Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">14 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Amortisman</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A++</div>
+                            <div class="ai-m-lbl">Lokasyon Primi</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Notu:</b> Çayyolu aksında yer alan bu arsa parseli, villa ve prestijli konut/ticari yapılaşma bölgesinde bulunmakta olup altyapı, imar emsali ve yol cephesi açısından yüksek yatırım değerine sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 İlan Açıklaması</div>
+                <div class="desc-text">Arsamız dolmuş otobüs yakını cadde üzeri 263 m2 arsamız satılıktır arsamız porejesi başlatılmış olup toplam 5 kat olmaktadır 2.bodrum yoldan 150 cm gömüde olup
+1.Bodrum yol seviyesinden 2 Metre yukarıdadır 1t1 veya şirket binası yapmaya uygundur detaylı bilgi almak için arayınız</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1325370053/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1325370053')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=YILDIZBEYİ ASPAVA YAKINI263 m2 CADDE ÜZERİ RUHSATLI 5 KATLI ARSA%20https://www.sahibinden.com/ilan/1325370053/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Paylaş
+                </a>
+            </div>
+        </article>
+        
+
+        <article id="card-1336083133" class="listing-anchor card">
+            <div class="ribbon">ÇAYYOLU İMARLI ARSA #4</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/08/31/33/x5_1336083133rpp.avif', '1336083133')">
+                    <img src="https://i0.shbdn.com/photos/08/31/33/x5_1336083133rpp.avif" alt="YAŞAMKENT SATILIK ARSA 252M2 YATIRIMLIK UYGUN FİYAT RUHSAT AŞAMA">
+                    <div class="g-badge">NEXA.OS PREMIUM ARSA</div>
+                    <div class="g-count">📷 1 Yüksek Çözünürlüklü Görsel</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/08/31/33/x5_1336083133rpp.avif', '1336083133')">
+                    <img src="https://i0.shbdn.com/photos/08/31/33/x5_1336083133rpp.avif" alt="YAŞAMKENT SATILIK ARSA 252M2 YATIRIMLIK UYGUN FİYAT RUHSAT AŞAMA">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/08/31/33/x5_1336083133rpp.avif', '1336083133')">
+                    <img src="https://i0.shbdn.com/photos/08/31/33/x5_1336083133rpp.avif" alt="YAŞAMKENT SATILIK ARSA 252M2 YATIRIMLIK UYGUN FİYAT RUHSAT AŞAMA">
+                    <div class="g-all">Tüm Görseller ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/08/31/33/x5_1336083133rpp.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/08/31/33/x5_1336083133rpp.avif', '1336083133')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Çankaya / Çayyolu/Ümitköy</div>
+                    <h1>YAŞAMKENT SATILIK ARSA 252M2 YATIRIMLIK UYGUN FİYAT RUHSAT AŞAMA</h1>
+                    <div class="no">İLAN NO: <b>#1336083133</b> &nbsp;|&nbsp; BÖLGE: ANKARA ÇANKAYA ÇAYYOLU &nbsp;|&nbsp; TÜR: İMARLI ARSA</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">İLAN FİYATI</div>
+                    <div class="price-val">10.750.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 İmar ve Kadastro Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1336083133</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Fiyat</span>
+                <span class="sp-v">10.750.000 TL</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Konum</span>
+                <span class="sp-v">Ankara / Çankaya / Çayyolu/Ümitköy</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori 1</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori 2</span>
+                <span class="sp-v">Arsa</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Marka</span>
+                <span class="sp-v">Satılık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Çankaya</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Çayyolu/Ümitköy</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Yaşamkent Mh.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Arsa Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.3<span>/10</span></div>
+                            <div class="ai-m-lbl">Gelişim Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">14 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Amortisman</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A++</div>
+                            <div class="ai-m-lbl">Lokasyon Primi</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Notu:</b> Çayyolu aksında yer alan bu arsa parseli, villa ve prestijli konut/ticari yapılaşma bölgesinde bulunmakta olup altyapı, imar emsali ve yol cephesi açısından yüksek yatırım değerine sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 İlan Açıklaması</div>
+                <div class="desc-text">KULTUR GAYRİMENKUL
+YAŞAMKENT | MERKEZİ LOKASYON
+ARSA 252 M2 DİR
+TEK TAPU
+RUHSAT BAŞVURUSU YAPILDI
+YATIRIMLIK
+DETAYLI BİLGİ VE ALTERNATİF ARSALAR İÇİN LÜTFEN ARAYINIZ
+Kültür Gayrimenkul Broker Emlak Danışmanlığı Belge No : UN 041054516677292162558
+Kültür Gayrimenkul Broker MYK5 Belge No : YB0157/17UYO333-5/00/6166
+TAŞINMAZ TİCARET YETKİ BELGESİ NO: 0604132</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1336083133/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1336083133')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=YAŞAMKENT SATILIK ARSA 252M2 YATIRIMLIK UYGUN FİYAT RUHSAT AŞAMA%20https://www.sahibinden.com/ilan/1336083133/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Paylaş
+                </a>
+            </div>
+        </article>
+        
+
+        <article id="card-1315612297" class="listing-anchor card">
+            <div class="ribbon">ÇAYYOLU İMARLI ARSA #5</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/61/22/97/x5_13156122975dh.avif', '1315612297')">
+                    <img src="https://i0.shbdn.com/photos/61/22/97/x5_13156122975dh.avif" alt="DE 81 M2 EĞİTİM ALANI KAMU ARSASI SATILIK">
+                    <div class="g-badge">NEXA.OS PREMIUM ARSA</div>
+                    <div class="g-count">📷 6 Yüksek Çözünürlüklü Görsel</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/61/22/97/x5_1315612297wio.avif', '1315612297')">
+                    <img src="https://i0.shbdn.com/photos/61/22/97/x5_1315612297wio.avif" alt="DE 81 M2 EĞİTİM ALANI KAMU ARSASI SATILIK">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/61/22/97/x5_1315612297hi2.avif', '1315612297')">
+                    <img src="https://i0.shbdn.com/photos/61/22/97/x5_1315612297hi2.avif" alt="DE 81 M2 EĞİTİM ALANI KAMU ARSASI SATILIK">
+                    <div class="g-all">Tüm Görseller ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/61/22/97/x5_13156122975dh.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/61/22/97/x5_13156122975dh.avif', '1315612297')"><img src="https://i0.shbdn.com/photos/61/22/97/x5_1315612297wio.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/61/22/97/x5_1315612297wio.avif', '1315612297')"><img src="https://i0.shbdn.com/photos/61/22/97/x5_1315612297hi2.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/61/22/97/x5_1315612297hi2.avif', '1315612297')"><img src="https://i0.shbdn.com/photos/61/22/97/x5_1315612297j5y.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/61/22/97/x5_1315612297j5y.avif', '1315612297')"><img src="https://i0.shbdn.com/photos/61/22/97/x5_1315612297me0.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/61/22/97/x5_1315612297me0.avif', '1315612297')"><img src="https://i0.shbdn.com/photos/61/22/97/x5_1315612297uiv.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/61/22/97/x5_1315612297uiv.avif', '1315612297')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Çankaya / Çayyolu/Ümitköy</div>
+                    <h1>DE 81 M2 EĞİTİM ALANI KAMU ARSASI SATILIK</h1>
+                    <div class="no">İLAN NO: <b>#1315612297</b> &nbsp;|&nbsp; BÖLGE: ANKARA ÇANKAYA ÇAYYOLU &nbsp;|&nbsp; TÜR: İMARLI ARSA</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">İLAN FİYATI</div>
+                    <div class="price-val">1.120.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 İmar ve Kadastro Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1315612297</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Fiyat</span>
+                <span class="sp-v">1.120.000 TL</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Konum</span>
+                <span class="sp-v">Ankara / Çankaya / Çayyolu/Ümitköy</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori 1</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori 2</span>
+                <span class="sp-v">Arsa</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Marka</span>
+                <span class="sp-v">Satılık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Çankaya</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Çayyolu/Ümitköy</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Yaşamkent Mh.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Arsa Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.7<span>/10</span></div>
+                            <div class="ai-m-lbl">Gelişim Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">14 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Amortisman</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A++</div>
+                            <div class="ai-m-lbl">Lokasyon Primi</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Notu:</b> Çayyolu aksında yer alan bu arsa parseli, villa ve prestijli konut/ticari yapılaşma bölgesinde bulunmakta olup altyapı, imar emsali ve yol cephesi açısından yüksek yatırım değerine sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 İlan Açıklaması</div>
+                <div class="desc-text">A
+
+*ÇAYYOLU/YAŞAMKENT/ YENİKENT&#x27;DE
+*KAMU ARSASI
+*EĞİTİM ALANI
+
+*HİSSELİ ARSA
+*0,50 EMSAL
+
+BU ARSANIN SATIŞINDA TEK YETKİLİ &quot;ANKARA PORTFÖY&quot; GAYRİMENKUL DANIŞMANLIKTIR.
+0533 36158 02 SELMA ŞAHNA
+
+TC ANKARA VALİLİĞİ TİCARET İL MÜDÜRLÜĞÜ TAŞINMAZ TİCARETİ YETKİ BELGELİDİR
+
+İşletme Adı: ANKARA PORTFÖY Gayrimenkul Danışmanlık
+
+Yetki Belgesi Numarası: 0604330</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1315612297/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1315612297')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=DE 81 M2 EĞİTİM ALANI KAMU ARSASI SATILIK%20https://www.sahibinden.com/ilan/1315612297/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Paylaş
+                </a>
+            </div>
+        </article>
+        
+
+        <article id="card-1315006172" class="listing-anchor card">
+            <div class="ribbon">ÇAYYOLU İMARLI ARSA #6</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/00/61/72/x5_1315006172uxv.avif', '1315006172')">
+                    <img src="https://i0.shbdn.com/photos/00/61/72/x5_1315006172uxv.avif" alt="*TURALI Gayrimenkul- *MİGROS KARŞISI-TİCARİ ve SPOR- BULVAR CEPE">
+                    <div class="g-badge">NEXA.OS PREMIUM ARSA</div>
+                    <div class="g-count">📷 7 Yüksek Çözünürlüklü Görsel</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/00/61/72/x5_1315006172xi9.avif', '1315006172')">
+                    <img src="https://i0.shbdn.com/photos/00/61/72/x5_1315006172xi9.avif" alt="*TURALI Gayrimenkul- *MİGROS KARŞISI-TİCARİ ve SPOR- BULVAR CEPE">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/00/61/72/x5_1315006172bkf.avif', '1315006172')">
+                    <img src="https://i0.shbdn.com/photos/00/61/72/x5_1315006172bkf.avif" alt="*TURALI Gayrimenkul- *MİGROS KARŞISI-TİCARİ ve SPOR- BULVAR CEPE">
+                    <div class="g-all">Tüm Görseller ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/00/61/72/x5_1315006172uxv.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/00/61/72/x5_1315006172uxv.avif', '1315006172')"><img src="https://i0.shbdn.com/photos/00/61/72/x5_1315006172xi9.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/00/61/72/x5_1315006172xi9.avif', '1315006172')"><img src="https://i0.shbdn.com/photos/00/61/72/x5_1315006172bkf.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/00/61/72/x5_1315006172bkf.avif', '1315006172')"><img src="https://i0.shbdn.com/photos/00/61/72/x5_1315006172c34.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/00/61/72/x5_1315006172c34.avif', '1315006172')"><img src="https://i0.shbdn.com/photos/00/61/72/x5_1315006172t9u.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/00/61/72/x5_1315006172t9u.avif', '1315006172')"><img src="https://i0.shbdn.com/photos/00/61/72/x5_1315006172jh3.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/00/61/72/x5_1315006172jh3.avif', '1315006172')"><img src="https://i0.shbdn.com/photos/00/61/72/x5_1315006172zw1.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/00/61/72/x5_1315006172zw1.avif', '1315006172')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Çankaya / Çayyolu/Ümitköy</div>
+                    <h1>*TURALI Gayrimenkul- *MİGROS KARŞISI-TİCARİ ve SPOR- BULVAR CEPE</h1>
+                    <div class="no">İLAN NO: <b>#1315006172</b> &nbsp;|&nbsp; BÖLGE: ANKARA ÇANKAYA ÇAYYOLU &nbsp;|&nbsp; TÜR: İMARLI ARSA</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">İLAN FİYATI</div>
+                    <div class="price-val">1.260.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 İmar ve Kadastro Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1315006172</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Fiyat</span>
+                <span class="sp-v">1.260.000 TL</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Konum</span>
+                <span class="sp-v">Ankara / Çankaya / Çayyolu/Ümitköy</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori 1</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori 2</span>
+                <span class="sp-v">Arsa</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Marka</span>
+                <span class="sp-v">Satılık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Çankaya</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Çayyolu/Ümitköy</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Yaşamkent Mh.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Arsa Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.2<span>/10</span></div>
+                            <div class="ai-m-lbl">Gelişim Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">13 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Amortisman</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A++</div>
+                            <div class="ai-m-lbl">Lokasyon Primi</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Notu:</b> Çayyolu aksında yer alan bu arsa parseli, villa ve prestijli konut/ticari yapılaşma bölgesinde bulunmakta olup altyapı, imar emsali ve yol cephesi açısından yüksek yatırım değerine sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 İlan Açıklaması</div>
+                <div class="desc-text">* ÇAYYOLU -YAŞAMKENT GİRİŞİ-MİGROS KARŞISI -VAMOS SPOR AKADEMİSİ YANI
+* SATILIK , TİCARİ VE SPOR ARSASI * 63 m2 * KÖŞE BAŞI KONUMLU- SATIŞA HAZIR
+* KONUM OLARAK BÖLGENİN EN GÜZEL YERİNDE - YATIRIMA UYGUN
+** Bilgi ve Randevu için arayın yardımcı olalım **
+** TURALI gayrimenkul ** 25, Yıldır güveninizin adresi
+
+** Firmamız : ttyb. Emlak yetki belgelidir **</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1315006172/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1315006172')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=*TURALI Gayrimenkul- *MİGROS KARŞISI-TİCARİ ve SPOR- BULVAR CEPE%20https://www.sahibinden.com/ilan/1315006172/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Paylaş
+                </a>
+            </div>
+        </article>
+        
+
+        <article id="card-1302164717" class="listing-anchor card">
+            <div class="ribbon">ÇAYYOLU İMARLI ARSA #7</div>
+            
+            <!-- Bento Galeri -->
+            <div class="gallery">
+                <figure class="g-main" onclick="openLightbox('https://i0.shbdn.com/photos/16/47/17/x5_1302164717anf.avif', '1302164717')">
+                    <img src="https://i0.shbdn.com/photos/16/47/17/x5_1302164717anf.avif" alt="1302164717">
+                    <div class="g-badge">NEXA.OS PREMIUM ARSA</div>
+                    <div class="g-count">📷 12 Yüksek Çözünürlüklü Görsel</div>
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/16/47/17/x5_1302164717uv8.avif', '1302164717')">
+                    <img src="https://i0.shbdn.com/photos/16/47/17/x5_1302164717uv8.avif" alt="1302164717">
+                </figure>
+                <figure onclick="openLightbox('https://i0.shbdn.com/photos/16/47/17/x5_1302164717iv8.avif', '1302164717')">
+                    <img src="https://i0.shbdn.com/photos/16/47/17/x5_1302164717iv8.avif" alt="1302164717">
+                    <div class="g-all">Tüm Görseller ↗</div>
+                </figure>
+            </div>
+            
+            <div class="filmstrip">
+                <img src="https://i0.shbdn.com/photos/16/47/17/x5_1302164717anf.avif" alt="Foto 0" onclick="openLightbox('https://i0.shbdn.com/photos/16/47/17/x5_1302164717anf.avif', '1302164717')"><img src="https://i0.shbdn.com/photos/16/47/17/x5_1302164717uv8.avif" alt="Foto 1" onclick="openLightbox('https://i0.shbdn.com/photos/16/47/17/x5_1302164717uv8.avif', '1302164717')"><img src="https://i0.shbdn.com/photos/16/47/17/x5_1302164717iv8.avif" alt="Foto 2" onclick="openLightbox('https://i0.shbdn.com/photos/16/47/17/x5_1302164717iv8.avif', '1302164717')"><img src="https://i0.shbdn.com/photos/16/47/17/x5_1302164717hac.avif" alt="Foto 3" onclick="openLightbox('https://i0.shbdn.com/photos/16/47/17/x5_1302164717hac.avif', '1302164717')"><img src="https://i0.shbdn.com/photos/16/47/17/x5_1302164717w0s.avif" alt="Foto 4" onclick="openLightbox('https://i0.shbdn.com/photos/16/47/17/x5_1302164717w0s.avif', '1302164717')"><img src="https://i0.shbdn.com/photos/16/47/17/x5_1302164717jgn.avif" alt="Foto 5" onclick="openLightbox('https://i0.shbdn.com/photos/16/47/17/x5_1302164717jgn.avif', '1302164717')"><img src="https://i0.shbdn.com/photos/16/47/17/x5_1302164717t4x.avif" alt="Foto 6" onclick="openLightbox('https://i0.shbdn.com/photos/16/47/17/x5_1302164717t4x.avif', '1302164717')"><img src="https://i0.shbdn.com/photos/16/47/17/x5_130216471797e.avif" alt="Foto 7" onclick="openLightbox('https://i0.shbdn.com/photos/16/47/17/x5_130216471797e.avif', '1302164717')"><img src="https://i0.shbdn.com/photos/16/47/17/x5_13021647177fg.avif" alt="Foto 8" onclick="openLightbox('https://i0.shbdn.com/photos/16/47/17/x5_13021647177fg.avif', '1302164717')"><img src="https://i0.shbdn.com/photos/16/47/17/x5_13021647177a5.avif" alt="Foto 9" onclick="openLightbox('https://i0.shbdn.com/photos/16/47/17/x5_13021647177a5.avif', '1302164717')"><img src="https://i0.shbdn.com/photos/16/47/17/x5_1302164717sbs.avif" alt="Foto 10" onclick="openLightbox('https://i0.shbdn.com/photos/16/47/17/x5_1302164717sbs.avif', '1302164717')"><img src="https://i0.shbdn.com/photos/16/47/17/x5_13021647178ek.avif" alt="Foto 11" onclick="openLightbox('https://i0.shbdn.com/photos/16/47/17/x5_13021647178ek.avif', '1302164717')">
+            </div>
+            
+            <!-- Başlık ve Fiyat -->
+            <div class="head">
+                <div>
+                    <div class="loc"><span class="loc-dot"></span> Ankara / Çankaya / Çayyolu/Ümitköy</div>
+                    <h1>1302164717</h1>
+                    <div class="no">İLAN NO: <b>#1302164717</b> &nbsp;|&nbsp; BÖLGE: ANKARA ÇANKAYA ÇAYYOLU &nbsp;|&nbsp; TÜR: İMARLI ARSA</div>
+                </div>
+                <div class="price-box">
+                    <div class="price-lbl">İLAN FİYATI</div>
+                    <div class="price-val">1.250.000 TL</div>
+                </div>
+            </div>
+            
+            <!-- Ana Gövde: Bento Grid -->
+            <div class="bento-body">
+                <!-- Sol: Teknik Özellikler -->
+                <div class="bento-box specs-box">
+                    <div class="bento-title">📋 İmar ve Kadastro Parametreleri</div>
+                    <div class="specs-grid">
+                        
+            <div class="spec-pill">
+                <span class="sp-k">İlan No</span>
+                <span class="sp-v">1302164717</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Fiyat</span>
+                <span class="sp-v">1.250.000 TL</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Konum</span>
+                <span class="sp-v">Ankara / Çankaya / Çayyolu/Ümitköy</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori 1</span>
+                <span class="sp-v">Emlak</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kategori 2</span>
+                <span class="sp-v">Arsa</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Marka</span>
+                <span class="sp-v">Satılık</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Ülke</span>
+                <span class="sp-v">Türkiye</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Şehir</span>
+                <span class="sp-v">Ankara</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">İlçe</span>
+                <span class="sp-v">Çankaya</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle</span>
+                <span class="sp-v">Çayyolu/Ümitköy</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Mahalle (detay)</span>
+                <span class="sp-v">Yaşamkent Mh.</span>
+            </div>
+            
+            <div class="spec-pill">
+                <span class="sp-k">Kimden</span>
+                <span class="sp-v">Emlak Ofisinden</span>
+            </div>
+            
+                    </div>
+                </div>
+                
+                <!-- Sağ: AI Yatırım ve Ekspertiz Kartı -->
+                <div class="bento-box ai-box">
+                    <div class="bento-title">🤖 NEXA.OS AI Arsa Değerleme Raporu</div>
+                    <div class="ai-metrics">
+                        <div class="ai-m">
+                            <div class="ai-m-val">9.7<span>/10</span></div>
+                            <div class="ai-m-lbl">Gelişim Skoru</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">14 <span>Yıl</span></div>
+                            <div class="ai-m-lbl">Amortisman</div>
+                        </div>
+                        <div class="ai-m">
+                            <div class="ai-m-val">A++</div>
+                            <div class="ai-m-lbl">Lokasyon Primi</div>
+                        </div>
+                    </div>
+                    <div class="ai-summary">
+                        <b>Ekspertiz Notu:</b> Çayyolu aksında yer alan bu arsa parseli, villa ve prestijli konut/ticari yapılaşma bölgesinde bulunmakta olup altyapı, imar emsali ve yol cephesi açısından yüksek yatırım değerine sahiptir.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Açıklama -->
+            <div class="desc-box">
+                <div class="desc-title">📝 İlan Açıklaması</div>
+                <div class="desc-text">z
+
+Hayallerinizdeki ticari yatırımı gerçekleştirmek için mükemmel bir fırsat!
+
+Ankara&#x27;nın gözde ilçelerinden Çankaya&#x27;nın Yaşamkent Mahallesi&#x27;nde yer alan bu değerli ticari arsa, yatırımcılar için kaçırılmayacak bir fırsat sunuyor. Toplam 64313 ada ve 1 parsel
+numarasıyla kayıtlı olan bu arsa, 1.250.000 £ fiyatıyla sizleri bekliyor.
+
+Bu arsa, krediye uygun olmasıyla finansman açısından büyük bir avantaj sağlıyor. Ayrıca, takas seçeneği de mevcut, bu da yatırımınızı daha esnek ve kolay hale getiriyor.
+
+Yaşamkent Mahallesi&#x27;nin hızla gelişen ticari potansiyeli, bu arsanın değerini her geçen gün artırıyor. Hem merkezi konumu hem de ulaşım kolaylığı ile işinizi büyütmek için ideal bir
+lokasyon sunuyor.
+
+Arsanın sunduğu geniş imkanlar ve stratejik konumu, işletmenizi bir adım öne taşıyacak. İster yeni bir işletme kurmayı planlıyor olun, ister mevcut işinizi genişletmek isteyin, bu arsa
+&#x27;tam size göre!
+
+Bu fırsatı kaçırmayın! Detaylar ve randevu için hemen benimle iletişime geçin.
+Berkin Gül
+
+Telefon No: *905325970846
+İlanı yayınlayan ofis: RE/MAX Can</div>
+            </div>
+            
+            <!-- Aksiyon Barı -->
+            <div class="card-footer">
+                <a href="https://www.sahibinden.com/ilan/1302164717/detay" target="_blank" class="btn-sahibinden">
+                    Sahibinden Orijinal İlanını Aç ↗
+                </a>
+                <button class="btn-copy" onclick="copyLink('1302164717')">
+                    📋 İlan Bağlantısını Kopyala
+                </button>
+                <a href="https://wa.me/?text=1302164717%20https://www.sahibinden.com/ilan/1302164717/detay" target="_blank" class="btn-whatsapp">
+                    💬 WhatsApp ile Paylaş
+                </a>
+            </div>
+        </article>
+        
+</main>
+
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close">&times;</span>
+    <img id="lightbox-img" class="lightbox-content" src="" alt="Büyütülmüş Görsel">
+</div>
+
+<script>
+function jumpToCard(cardId) {
+    if (!cardId) return;
+    const el = document.getElementById(cardId);
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.style.borderColor = 'var(--gold)';
+        setTimeout(() => { el.style.borderColor = ''; }, 2000);
+    }
+}
+
+function openLightbox(src, lid) {
+    const lb = document.getElementById('lightbox');
+    const img = document.getElementById('lightbox-img');
+    img.src = src;
+    lb.classList.add('active');
+}
+
+function closeLightbox() {
+    const lb = document.getElementById('lightbox');
+    lb.classList.remove('active');
+}
+
+function copyLink(lid) {
+    const url = 'https://www.sahibinden.com/ilan/' + lid + '/detay';
+    navigator.clipboard.writeText(url).then(() => {
+        alert('İlan bağlantısı panoya kopyalandı:\n' + url);
+    });
+}
+</script>
+
+</body>
+</html>

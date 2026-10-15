@@ -21,6 +21,7 @@ jobs/
 detay_html/
 cache_cb_danisman/
 cache_bayat/
+cache_cayyolu_arsa/
 
 # Logs and temporary databases
 *.log
