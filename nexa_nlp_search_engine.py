@@ -62,8 +62,8 @@ class GeoRegistry:
         
         # Stem Turkish suffixes from tokens for matching
         def stem_token(tok: str) -> str:
-            # Strip locative/ablative/genitive suffixes
-            s = re.sub(r"(?:daki|deki|dan|den|tan|ten|da|de|ta|te|nin|nın|ın|in|ya|ye)$", "", tok)
+            # Strip locative/ablative/genitive/pronominal suffixes (-ndaki, -ndeki, -ndan, -nden, -nda, -nde, -daki, etc.)
+            s = re.sub(r"(?:ndaki|ndeki|ndan|nden|nda|nde|undaki|ündeki|ındaki|indeki|daki|deki|taki|teki|dan|den|tan|ten|da|de|ta|te|nin|nın|nun|nün|in|ın|un|ün|ya|ye)$", "", tok)
             return s if len(s) >= 3 else tok
 
         norm_tokens = [stem_token(t) for t in raw_tokens]
@@ -103,8 +103,7 @@ class GeoRegistry:
                             break
                     break
 
-        # 3. Match Neighborhood (within district)
-        # Exclude common search keywords from accidental neighborhood matching
+        # 3. Match Neighborhood (within district, or within province if district was omitted)
         NEIGH_STOPWORDS = {"yeni", "eski", "merkez", "orta", "satilik", "kiralik", "villa", "daire", "arsa", "tarla", "konut", "ilanlar", "ilan"}
         if found_district:
             self.cur.execute(
@@ -113,18 +112,57 @@ class GeoRegistry:
             )
             neigh_rows = self.cur.fetchall()
             for nid, nname, nslug in neigh_rows:
-                # If slug is a stopword, require exact 'mahalle' mention
                 if nslug in NEIGH_STOPWORDS and not any(m in text.lower() for m in [f"{nslug} mah", f"{nslug} mh"]):
                     continue
                 if nslug in all_tokens:
                     found_neighborhood = {"id": nid, "name": nname, "slug": nslug}
                     found_neighborhood_slug = nslug
                     break
+        elif found_province:
+            # District was omitted (e.g. "Ankara Çayyolunda arsa" -> Çayyolu is in Çankaya)
+            self.cur.execute(
+                "SELECT id, district_id, name, slug FROM neighborhoods WHERE province_id = ? ORDER BY length(slug) DESC",
+                (found_province["id"],)
+            )
+            neigh_rows = self.cur.fetchall()
+            for nid, did, nname, nslug in neigh_rows:
+                if nslug in NEIGH_STOPWORDS and not any(m in text.lower() for m in [f"{nslug} mah", f"{nslug} mh"]):
+                    continue
+                if nslug in all_tokens:
+                    found_neighborhood = {"id": nid, "name": nname, "slug": nslug}
+                    found_neighborhood_slug = nslug
+                    self.cur.execute("SELECT id, name, slug FROM districts WHERE id = ?", (did,))
+                    drow = self.cur.fetchone()
+                    if drow:
+                        found_district = {"id": drow[0], "province_id": found_province["id"], "name": drow[1], "slug": drow[2]}
+                    break
+        else:
+            # Check all neighborhoods across Turkey if neither province nor district was mentioned
+            for tok in all_tokens:
+                if len(tok) >= 5 and tok not in NEIGH_STOPWORDS:
+                    self.cur.execute(
+                        "SELECT id, province_id, district_id, name, slug FROM neighborhoods WHERE slug = ?",
+                        (tok,)
+                    )
+                    nrow = self.cur.fetchone()
+                    if nrow:
+                        nid, pid, did, nname, nslug = nrow
+                        found_neighborhood = {"id": nid, "name": nname, "slug": nslug}
+                        found_neighborhood_slug = nslug
+                        self.cur.execute("SELECT id, name, slug FROM districts WHERE id = ?", (did,))
+                        drow = self.cur.fetchone()
+                        if drow:
+                            found_district = {"id": drow[0], "province_id": pid, "name": drow[1], "slug": drow[2]}
+                        self.cur.execute("SELECT id, name, slug FROM provinces WHERE id = ?", (pid,))
+                        prow = self.cur.fetchone()
+                        if prow:
+                            found_province = {"id": prow[0], "name": prow[1], "slug": prow[2]}
+                        break
 
         # 4. Fallback: Check if there's a custom mevki/ada token right in text (e.g. bozburunadalari)
         custom_mevki = None
         if found_district and not found_neighborhood_slug:
-            EXCLUDE_MEVKI = ["satilik", "kiralik", "hisseli", "tapu", "parsel", "arsa", "villa", "daire", "fiyat", "yeni", "milyon", "bin", "metrekare", "katli", "odali", "yasinda", "artan", "azalan", "getir", "olan"]
+            EXCLUDE_MEVKI = ["satilik", "kiralik", "hisseli", "tapu", "parsel", "arsa", "villa", "daire", "fiyat", "yeni", "milyon", "bin", "metrekare", "katli", "odali", "yasinda", "artan", "azalan", "getir", "olan", "imarli"]
             for tok in raw_tokens:
                 if tok not in [found_province["slug"] if found_province else "", found_district["slug"]] and len(tok) >= 5:
                     if not any(k in tok for k in EXCLUDE_MEVKI):
@@ -220,13 +258,15 @@ class SahibindenUrlBuilder:
     }
     
     IMAR_DURUMU_MAP = {
-        "eğitim": 1312094,
-        "konut": 1312085,
         "ticari": 1312086,
         "sanayi": 1312088,
         "tarla": 1312090,
         "bağ & bahçe": 1312091,
-        "bağ bahçe": 1312091
+        "bağ bahçe": 1312091,
+        "eğitim": 1312094,
+        "konut": 1312085,
+        "imarlı": 1312085,
+        "imarli": 1312085
     }
     
     KAKS_EMSAL_MAP = {
@@ -492,6 +532,13 @@ class NexaNlpToLink:
                 if m_min is None and m_max is None:
                     m_min, m_max = self._extract_m2_range(prompt)
 
+                imar_dur = g_data.get("imar_durumu")
+                if not imar_dur:
+                    for imar_key in SahibindenUrlBuilder.IMAR_DURUMU_MAP:
+                        if imar_key in prompt.lower():
+                            imar_dur = imar_key
+                            break
+
                 builder = SahibindenUrlBuilder(
                     category=cat,
                     location_path=loc_path,
@@ -508,7 +555,7 @@ class NexaNlpToLink:
                     ada_max=g_data.get("ada_max"),
                     parsel_min=g_data.get("parsel_min"),
                     parsel_max=g_data.get("parsel_max"),
-                    imar_durumu=g_data.get("imar_durumu"),
+                    imar_durumu=imar_dur,
                     kaks_emsal=g_data.get("kaks_emsal"),
                     sorting=sort
                 )
