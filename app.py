@@ -10925,6 +10925,14 @@ def serve_nexaos():
     """NEXA.OS Unified PropTech Command Center Doğrudan Giriş"""
     return _route_index()
 
+@app.route("/ygt")
+def serve_ygt_showcase():
+    """Yiğit Narin CB VIP Portföy Vitrini"""
+    try:
+        return send_from_directory("templates", "ygt.html")
+    except Exception as e:
+        return f"ygt.html bulunamadı: {e}", 404
+
 @app.route("/app")
 def mobile_app_view():
     """NEXA OS Ultra Native Mobile App Shell (App Store Feel)"""
