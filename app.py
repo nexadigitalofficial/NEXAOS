@@ -6445,6 +6445,59 @@ def _route_nlp_search_parse():
         return jsonify({"error": f"NLP Çözümleme Hatası: {str(e)}"}), 500
 
 
+# =============================================================================
+# NEXA ORBIT™ | AUTONOMOUS REVERSE-CMA API ROUTES
+# =============================================================================
+@app.route("/api/orbit/analyze", methods=["POST"])
+def _route_orbit_analyze():
+    data = request.get_json(force=True, silent=True) or {}
+    mode = data.get("mode", "scenario2")
+    target_input = (data.get("target_id") or data.get("target_url") or "").strip()
+    search_url = (data.get("search_url") or "").strip()
+    try:
+        multiplier = float(data.get("price_multiplier", 1.28))
+    except Exception:
+        multiplier = 1.28
+
+    if not target_input:
+        return jsonify({"ok": False, "error": "Hedef ilan ID veya URL'si belirtilmelidir."}), 400
+
+    try:
+        from nexa_reverse_cma_engine import NexaOrbitReverseCMA
+        orbit = NexaOrbitReverseCMA()
+
+        if mode == "scenario1":
+            if not search_url:
+                return jsonify({"ok": False, "error": "Senaryo 1 için pazar arama URL'si zorunludur."}), 400
+            res = orbit.run_scenario_1(search_url, target_input)
+        else:
+            res = orbit.run_scenario_2(target_input, price_corridor_multiplier=multiplier)
+
+        return jsonify({
+            "ok": True,
+            "result": res,
+            "report_url": "/orbit/report"
+        })
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"ok": False, "error": f"NEXA Orbit Engine Hatası: {str(e)}"}), 500
+
+
+@app.route("/orbit/report")
+@app.route("/orbit")
+def _route_orbit_report():
+    from pathlib import Path
+    p1 = Path(r"C:\Users\USER\Desktop\NEXA_ORBIT_TERSINE_EMSAL_ANALIZI.html")
+    p2 = Path(r"C:\Users\USER\Desktop\NEXA_ORBIT_SENARYO_1_ANALIZ.html")
+    p3 = Path(r"C:\Users\USER\Desktop\MUSTAFA_KEMAL_OFIS_PIYASA_ANALIZI.html")
+    for target in [p1, p2, p3]:
+        if target.exists():
+            with open(target, "r", encoding="utf-8") as f:
+                return f.read(), 200, {"Content-Type": "text/html; charset=utf-8"}
+    return "<h1>Rapor henüz oluşturulmadı. Lütfen arayüzden Orbit analizini başlatın.</h1>", 404
+
+
 @app.route("/api/start", methods=["POST"])
 def _route_start():
     data = request.get_json(force=True, silent=True) or {}

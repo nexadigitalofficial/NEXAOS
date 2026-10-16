@@ -44,6 +44,14 @@ test_*.html
 test_*.pdf
 test_pw.pdf
 cb_store_screenshot.jpg
+search_*.jpg
+table_crop.png
+test_psi_*.json
+parsed_search_rows.json
+calc_stats.py
+test_load.py
+parse_rows.py
+build_clean_dataset.py
 *.tmp
 *.bak
 
