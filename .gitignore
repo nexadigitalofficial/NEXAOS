@@ -80,3 +80,7 @@ nexascout/token*.json
 *- Kopya*
 *- Kopya.*
 *-Kopya*
+ 
+cache_beytepe_arsa/
+ilan_*.json
+test_location_*

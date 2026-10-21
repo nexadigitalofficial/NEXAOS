@@ -345,6 +345,18 @@ footer b{color:var(--gold-soft);}
             <label class="switch"><input type="checkbox" id="sh_cd_fallback" checked><span class="slider"></span></label>
           </div>
         </div>
+        <div class="field">
+          <div class="toggle-row">
+            <span style="font-weight:600;color:var(--gold-light);">Tekil İlan Modu (Doğrudan Detay & Vitrin)</span>
+            <label class="switch"><input type="checkbox" id="sh_is_single"><span class="slider"></span></label>
+          </div>
+        </div>
+        <div class="field">
+          <div class="toggle-row">
+            <span style="font-weight:600;color:var(--gold-light);">SeleniumBase UC (#gmap Pini & PageSpeed Fallback)</span>
+            <label class="switch"><input type="checkbox" id="sh_prefer_uc" checked><span class="slider"></span></label>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -974,6 +986,8 @@ function startJob(jobType) {
     payload.delay = parseFloat(document.getElementById('sh_delay').value) || 5;
     payload.limit = parseInt(document.getElementById('sh_limit').value) || 0;
     payload.cd_fallback = document.getElementById('sh_cd_fallback').checked;
+    payload.is_single = document.getElementById('sh_is_single') ? document.getElementById('sh_is_single').checked : false;
+    payload.prefer_uc = document.getElementById('sh_prefer_uc') ? document.getElementById('sh_prefer_uc').checked : true;
     payload.ollama = "{{ default_ollama }}";
     payload.model = "{{ default_model }}";
     payload.gemini_api_key = document.getElementById('sh_gemini_api_key').value.trim();
@@ -1538,6 +1552,26 @@ async function runOrbitAnalysis(mode) {
   }
 }
 
+</script>
+<script>
+// Auto-detect single listing on URL paste
+document.addEventListener("DOMContentLoaded", function() {
+    const shUrl = document.getElementById('sh_url');
+    if (shUrl) {
+        function checkUrlSingle() {
+            const v = (shUrl.value || '').trim();
+            const singleToggle = document.getElementById('sh_is_single');
+            const ucToggle = document.getElementById('sh_prefer_uc');
+            if (v.includes('/ilan/') && (v.includes('/detay') || v.match(/-\d{7,12}/))) {
+                if (singleToggle) singleToggle.checked = true;
+                if (ucToggle) ucToggle.checked = true;
+            }
+        }
+        shUrl.addEventListener('input', checkUrlSingle);
+        shUrl.addEventListener('paste', () => setTimeout(checkUrlSingle, 50));
+        checkUrlSingle();
+    }
+});
 </script>
 </body>
 </html>

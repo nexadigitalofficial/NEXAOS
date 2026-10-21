@@ -356,6 +356,9 @@ _PSI_DESC_SELECTOR_HINTS = [
     "classifiedDescription",
     "classified-detail",
     "classifiedProperties",
+    "classified-location",
+    "classifiedLocation",
+    "gmap",
 ]
 
 # OCR için Tesseract dil paketi (Türkçe). Sistemde `tur.traineddata` kurulu
@@ -380,6 +383,9 @@ CD_FILE_SUFFIX = "__cd"  # {listing_id}__cd.html olarak kaydedilir
 CLASSIFIED_PROPERTIES_FRAGMENT = "classifiedProperties"
 PROP_FILE_SUFFIX = "__prop"  # {listing_id}__prop.html olarak kaydedilir
 
+CLASSIFIED_LOCATION_FRAGMENT = "classified-location"
+LOC_FILE_SUFFIX = "__loc"    # {listing_id}__loc.html olarak kaydedilir
+
 
 def _strip_fragment(url: str) -> str:
     return url.split("#", 1)[0]
@@ -403,6 +409,16 @@ def _build_classified_properties_url(base_url: str) -> str:
     """
     clean = _strip_fragment(base_url).rstrip("/")
     return f"{clean}/#{CLASSIFIED_PROPERTIES_FRAGMENT}"
+
+
+def _build_classified_location_url(base_url: str) -> str:
+    """
+    Verilen detay URL'sine (varsa mevcut fragment'i temizleyip)
+    '#classified-location' fragment'ini ekler.
+    ".../detay" veya ".../detay/" → ".../detay/#classified-location"
+    """
+    clean = _strip_fragment(base_url).rstrip("/")
+    return f"{clean}/#{CLASSIFIED_LOCATION_FRAGMENT}"
 
 # Sahibinden detay URL formatı  (ID'den otomatik türetilemezse bu search URL'si kullanılır)
 SB_SEARCH_URL  = "https://www.sahibinden.com/arama?query_text={id}"
@@ -981,16 +997,56 @@ class CFBypassEngine:
         if self.proxy_str:
             kwargs["proxy"] = self.proxy_str
 
-        # 1. Aşama: SeleniumBase UC ile indirmeyi dene
-        if _SELENIUMBASE:
+        # 1. Aşama: Google PageSpeed API ile buluttan indir (Hızlı, sıfır bot engeli, sıfır login yönlendirmesi)
+        print(f"\n  [API] {len(summaries)} ilan PageSpeed Bulut Motoru ile taranıyor...")
+        for idx, summary in enumerate(summaries, 1):
+            if stop_event is not None and stop_event.is_set():
+                break
+
+            target_path = out_dir / f"{summary.listing_id}.html"
+            # Önceden indirilmişse atla
+            if target_path.exists() and target_path.stat().st_size > 500:
+                paths.append(target_path)
+                print(f"  [{idx:02d}/{len(summaries):02d}] [MEVCUT] {summary.listing_id} diskten okundu.")
+                continue
+
+            target_fetch_url = summary.detail_url if "#" in summary.detail_url else _build_classified_detail_url(summary.detail_url)
+            print(f"  [{idx:02d}/{len(summaries):02d}] [PSI] {summary.listing_id} — {summary.title[:45]}")
+            psi_data = _psi_api_fetch(target_fetch_url, timeout=35)
+            if psi_data and "lighthouseResult" in psi_data:
+                lr = psi_data.get("lighthouseResult", {})
+                net_items = lr.get("audits", {}).get("network-requests", {}).get("details", {}).get("items", [])
+                html_parts = [
+                    "<!DOCTYPE html><html><head><meta charset='utf-8'>",
+                    f"<title>PageSpeed Insights - {summary.listing_id}</title></head><body>",
+                    f"<div id='lh-root'><h1>{target_fetch_url}</h1>",
+                ]
+                for it in net_items:
+                    u = it.get("url", "")
+                    html_parts.append(f"<a href=\"{u}\">{u}</a><br>")
+                html_parts.append("</div></body></html>")
+                target_path.write_text("\n".join(html_parts), encoding="utf-8")
+                with open(out_dir / f"{summary.listing_id}_psi.json", "w", encoding="utf-8") as jf:
+                    json.dump(psi_data, jf, ensure_ascii=False, indent=2)
+                paths.append(target_path)
+                print(f"    [OK] PageSpeed API ile başarıyla kaydedildi: {target_path.name}")
+            else:
+                print(f"    [WARN] PageSpeed ile alınamadı, fallback listesine alındı: {summary.listing_id}")
+
+        # 2. Aşama: Alınamayan veya eksik kalan ilanlar için SeleniumBase UC Fallback
+        saved_ids = {p.stem for p in paths}
+        missing_summaries = [s for s in summaries if s.listing_id not in saved_ids]
+
+        if missing_summaries and _SELENIUMBASE:
+            print(f"\n  [FALLBACK] {len(missing_summaries)} eksik ilan için SeleniumBase UC deneniyor...")
             try:
                 with SB(**kwargs) as sb:
-                    for idx, summary in enumerate(summaries, 1):
+                    for idx, summary in enumerate(missing_summaries, 1):
                         if stop_event is not None and stop_event.is_set():
                             break
 
                         target_path = out_dir / f"{summary.listing_id}.html"
-                        print(f"  [{idx:02d}/{len(summaries):02d}] {summary.listing_id} — {summary.title[:45]}")
+                        print(f"  [{idx:02d}/{len(missing_summaries):02d}] {summary.listing_id} — {summary.title[:45]}")
                         print(f"    URL: {summary.detail_url}")
 
                         try:
@@ -1014,46 +1070,12 @@ class CFBypassEngine:
                         except Exception as err:
                             print(f"    [ERR] {summary.listing_id} SeleniumBase hatası: {err}")
                             if "session deleted" in str(err).lower() or "invalid session" in str(err).lower():
-                                print("    [WARN] Tarayıcı oturumu koptu, kalan ilanlar PageSpeed Bulut Motoruna devrediliyor...")
                                 break
 
-                        if delay > 0 and idx < len(summaries):
+                        if delay > 0 and idx < len(missing_summaries):
                             time.sleep(delay)
             except Exception as e:
                 print(f"    [ERR] SeleniumBase toplu oturum hatası: {e}")
-
-        # 2. Aşama: Alınamayan veya eksik kalan ilanları PageSpeed API ile tamamla (Self-Healing)
-        saved_ids = {p.stem for p in paths}
-        missing_summaries = [s for s in summaries if s.listing_id not in saved_ids]
-
-        if missing_summaries:
-            print(f"\n  [API] {len(missing_summaries)} eksik ilan PageSpeed Bulut Motoru ile tamamlanıyor...")
-            for s in missing_summaries:
-                if stop_event is not None and stop_event.is_set():
-                    break
-                target_path = out_dir / f"{s.listing_id}.html"
-                target_fetch_url = s.detail_url if "#" in s.detail_url else _build_classified_detail_url(s.detail_url)
-                print(f"    [PSI] {s.listing_id} çekiliyor... ({target_fetch_url[:55]})")
-                psi_data = _psi_api_fetch(target_fetch_url, timeout=35)
-                if psi_data and "lighthouseResult" in psi_data:
-                    lr = psi_data.get("lighthouseResult", {})
-                    net_items = lr.get("audits", {}).get("network-requests", {}).get("details", {}).get("items", [])
-                    html_parts = [
-                        "<!DOCTYPE html><html><head><meta charset='utf-8'>",
-                        f"<title>PageSpeed Insights - {s.listing_id}</title></head><body>",
-                        f"<div id='lh-root'><h1>{target_fetch_url}</h1>",
-                    ]
-                    for it in net_items:
-                        u = it.get("url", "")
-                        html_parts.append(f"<a href=\"{u}\">{u}</a><br>")
-                    html_parts.append("</div></body></html>")
-                    target_path.write_text("\n".join(html_parts), encoding="utf-8")
-                    with open(out_dir / f"{s.listing_id}_psi.json", "w", encoding="utf-8") as jf:
-                        json.dump(psi_data, jf, ensure_ascii=False, indent=2)
-                    paths.append(target_path)
-                    print(f"    [OK] PageSpeed API ile başarıyla kaydedildi: {target_path.name}")
-                else:
-                    print(f"    [WARN] PageSpeed API ile de alınamadı: {s.listing_id}")
 
         return paths
 
@@ -1326,6 +1348,7 @@ def step3_pagespeed_details(
     skip: bool,
     stop_event=None,
     cd_fallback: bool = True,
+    prefer_uc: bool = False,
 ) -> List[Path]:
     """
     Her ilan için detay sayfasını PageSpeed üzerinden çeker.
@@ -1342,30 +1365,34 @@ def step3_pagespeed_details(
     out_dir.mkdir(exist_ok=True)
     detail_paths: List[Path] = []
 
-    # ── Eğer tekil ilan ise: Önce SeleniumBase UC, başarısızsa PageSpeed Bulut Motoru ile çek ──
+    # ── Eğer tekil ilan ise: Opsiyona göre SeleniumBase UC veya PageSpeed Bulut Motoru + Karşılıklı Fallback ──
     is_single = len(summaries) == 1 and bool(detect_single_listing_id(summaries[0].detail_url))
     if is_single:
         summary = summaries[0]
         p = out_dir / f"{summary.listing_id}.html"
-        html = None
+        use_uc_first = prefer_uc or (os.getenv("PREFER_SELENIUM_UC", "0").lower() in ("1", "true", "yes"))
 
-        if _SELENIUMBASE:
-            _sep("TEKİL İLAN MODU — SeleniumBase UC ile deneniyor")
+        # A) Eğer prefer_uc aktifse: ÖNCE SeleniumBase UC dene (Ham DOM & Doğrudan #gmap Bina Pini)
+        if use_uc_first and _SELENIUMBASE:
+            _sep("TEKİL İLAN — Önce SeleniumBase UC ile deneniyor (Birebir DOM & #gmap Koordinatı)")
             print(f"  Hedef: {summary.detail_url}")
             try:
                 engine = CFBypassEngine()
                 html = engine.fetch_page(summary.detail_url)
-                if html:
+                if html and len(html) > 10000 and "giris" not in html[:3000] and not any(s in html[:3000] for s in CF_SIGNALS):
                     p.write_text(html, encoding="utf-8")
-                    print(f"    [OK] Kaydedildi: {p.name} ({len(html)//1024} KB)")
+                    print(f"    ✓ [OK] SeleniumBase UC ile başarıyla kaydedildi: {p.name} ({len(html)//1024} KB)")
                     detail_paths.append(p)
                     return detail_paths
+                else:
+                    print("    ⚠ [FALLBACK] SeleniumBase UC içeriği yetersiz veya Cloudflare/giriş engeline takıldı.")
+                    print("    ➜ Ana sistemimiz olan Google PageSpeed Cloud Motoru devreye alınıyor...")
             except Exception as e:
-                print(f"    [WARN] SeleniumBase UC hatası: {e}")
+                print(f"    ✗ [FALLBACK] SeleniumBase UC hatası: {e}")
+                print("    ➜ Ana sistemimiz olan Google PageSpeed Cloud Motoru devreye alınıyor...")
 
-        # SeleniumBase başarısız olursa veya Cloudflare takılırsa: PageSpeed Bulut Motoru ile çek
-        # Kullanıcı kuralı: Tekil ilanlarda #classified-detail ve #classifiedProperties hedeflenir
-        print("  [API] SeleniumBase doğrudan erişemedi, PageSpeed Bulut Motoru devreye giriyor...")
+        # B) PageSpeed Bulut Motoru (Ana sistem: %100 Cloudflare ve Giriş Engeli Bypass)
+        print("  [API] Tekil ilan PageSpeed Bulut Motoru ile taranıyor...")
         target_fetch_url = (
             summary.detail_url
             if "#" in summary.detail_url
@@ -1392,9 +1419,24 @@ def step3_pagespeed_details(
             print(f"    [OK] PageSpeed ile buluttan başarıyla çekildi: {p.name}")
             detail_paths.append(p)
             return detail_paths
-        else:
-            print("    [ERR] PageSpeed ile de tekil ilan sayfası çekilemedi!")
-            return detail_paths
+
+        # C) Eğer use_uc_first aktif değildiyse ve PageSpeed başarısız olduysa, SeleniumBase UC Fallback'i dene
+        if not use_uc_first and _SELENIUMBASE:
+            _sep("FALLBACK — SeleniumBase UC ile deneniyor")
+            print(f"  Hedef: {summary.detail_url}")
+            try:
+                engine = CFBypassEngine()
+                html = engine.fetch_page(summary.detail_url)
+                if html:
+                    p.write_text(html, encoding="utf-8")
+                    print(f"    [OK] Kaydedildi: {p.name} ({len(html)//1024} KB)")
+                    detail_paths.append(p)
+                    return detail_paths
+            except Exception as e:
+                print(f"    [WARN] SeleniumBase UC hatası: {e}")
+
+        print("    [ERR] Tekil ilan sayfası çekilemedi!")
+        return detail_paths
 
     if skip:
         print("  ⏭  Adım atlandı, mevcut dosyalar kullanılıyor.\n")
@@ -1407,11 +1449,10 @@ def step3_pagespeed_details(
                 print(f"  ✗ Bulunamadı (atlanacak): {p.name}")
         return detail_paths
 
-    # ── Toplu ilan: SeleniumBase UC ile seri indirme (PageSpeed hatasını ve 429 kotasını atlar) ──
-    if _SELENIUMBASE:
-        _sep(f"TOPLU İLAN MODU ({len(summaries)} İlan) — SeleniumBase UC ile çekiliyor")
-        engine = CFBypassEngine()
-        return engine.fetch_pages_bulk(summaries, out_dir, delay=delay, stop_event=stop_event)
+    # ── Toplu ilan: PageSpeed Bulut Motoru ile indirme (Sıfır bot/login engeli, SeleniumBase Fallback) ──
+    _sep(f"TOPLU İLAN MODU ({len(summaries)} İlan) — PageSpeed Bulut Motoru ile çekiliyor")
+    engine = CFBypassEngine()
+    return engine.fetch_pages_bulk(summaries, out_dir, delay=delay, stop_event=stop_event)
 
     if not _SELENIUM:
         raise ImportError("pip install selenium webdriver-manager")
@@ -4571,65 +4612,601 @@ def build_luxury_card_html(detail: Dict, standalone: bool = True, anchor_id: str
 """
 
 
-def build_luxury_cards_page(details: List[Dict]) -> str:
-    """Tüm ilanları tek sayfada, sticky nav + hızlı geçiş menüsüyle birleştirir."""
-    if not details:
-        return "<html><body style='background:#0a0a0b;color:#8f8e8a;font-family:sans-serif;" \
-               "display:flex;align-items:center;justify-content:center;height:100vh;'>" \
-               "Hiç ilan üretilmedi.</body></html>"
+def build_elite_luxury_html(details_list, page_title="NEXA.OS Ultra Luxury Portföy"):
+    cards_html = []
+    maps_js = []
+    lightboxes_js = []
+    
+    for idx, d in enumerate(details_list):
+        lid = str(d.get("listing_id") or f"listing_{idx}")
+        title = d.get("title", "Gayrimenkul Portföyü")
+        price = d.get("price", "—")
+        loc_val = d.get("loc_str") or d.get("location")
+        if isinstance(loc_val, dict):
+            loc_str = " / ".join([v for v in [loc_val.get("il"), loc_val.get("ilce"), loc_val.get("mahalle")] if v]) or "Ankara"
+        elif isinstance(loc_val, str) and loc_val.strip():
+            loc_str = loc_val.strip()
+        else:
+            loc_str = "Ankara"
+        specs = d.get("specs", {})
+        
+        photos = [p.replace(".avif", ".jpg") for p in d.get("photos", []) if p and "blank" not in p]
+        if not photos:
+            photos = ["https://i0.shbdn.com/photos/80/43/54/1340804354ovc.jpg"]
+            
+        hero_img = photos[0]
+        b1 = photos[1] if len(photos) > 1 else hero_img
+        b2 = photos[2] if len(photos) > 2 else hero_img
+        b3 = photos[3] if len(photos) > 3 else hero_img
+        b4 = photos[4] if len(photos) > 4 else hero_img
+        
+        coords = d.get("coordinates")
+        if isinstance(coords, dict):
+            lat = coords.get("lat") or d.get("lat") or 39.92077
+            lon = coords.get("lon") or d.get("lon") or 32.85411
+        else:
+            lat = d.get("lat") or 39.92077
+            lon = d.get("lon") or 32.85411
+        if isinstance(lat, str):
+            try: lat = float(lat)
+            except: lat = 39.92077
+        if isinstance(lon, str):
+            try: lon = float(lon)
+            except: lon = 32.85411
+            
+        gmaps_url = d.get("google_maps_url") or f"https://www.google.com/maps/search/?api=1&query={lat},{lon}"
+        directions_url = d.get("directions_url") or f"https://www.google.com/maps/dir/Current+Location/{lat},{lon}"
+        street_view_url = d.get("street_view_url") or f"http://maps.google.com/maps?q=&layer=c&cbll={lat},{lon}&cbp=11,0,0,0,0"
+        
+        desc = d.get("raw_description") or d.get("description", "")
+        ai = d.get("ai_analysis") or {}
+        ai_text = ai.get("text", "")
+        
+        # Pillars
+        m2_brut = specs.get("m² (Brüt)") or specs.get("m²") or "—"
+        m2_net = specs.get("m² (Net)") or "—"
+        oda = specs.get("Bölüm & Oda Sayısı") or specs.get("Oda Sayısı") or "—"
+        kat = specs.get("Bulunduğu Kat") or "—"
+        bina_yasi = specs.get("Bina Yaşı") or "—"
+        tapu = specs.get("Tapu Durumu") or "Kat Mülkiyeti"
+        
+        # Specs rows
+        specs_rows = []
+        for sk, sv in specs.items():
+            if sk not in ["Koordinat", "Tam Konum", "LH Toplam Kural", "LH Başarısız", "LH Başarılı", "LH Orta", "LH Bilgi", "LH FAIL Kurallar"]:
+                specs_rows.append(f'<div class="spec-row"><span class="spec-k">{sk}:</span><span class="spec-v">{sv}</span></div>')
+        specs_rows.append(f'<div class="spec-row"><span class="spec-k">Doğrudan CBS Pini:</span><span class="spec-v" style="color:var(--gold);font-family:monospace;">{lat:.6f}, {lon:.6f}</span></div>')
+        specs_html = "\n".join(specs_rows[:16])
+        
+        photos_json = json.dumps(photos, ensure_ascii=False)
+        
+        ai_box_html = ""
+        if ai_text:
+            ai_box_html = f"""
+            <div class="card-panel" style="border-left: 3px solid var(--gold);">
+                <div class="panel-header">
+                    <h3 class="panel-title" style="color: var(--gold-light);">🤖 NEXA AI Uzman & Yatırım Değerlendirmesi</h3>
+                </div>
+                <div style="color: #E2E8F0; font-size: 0.95rem; line-height: 1.8; white-space: pre-line;">{ai_text}</div>
+            </div>
+            """
 
-    if len(details) == 1:
-        return build_luxury_card_html(details[0])
+        card_html = f"""
+        <article class="listing-wrapper" id="ilan-{lid}">
+            <!-- HERO HEADER -->
+            <section class="hero-header">
+                <div class="hero-left">
+                    <div class="listing-tag">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        PRESTİJLİ PORTFÖY · #{lid}
+                    </div>
+                    <h1 class="hero-title">{title}</h1>
+                    <div class="hero-location">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        <span>{loc_str}</span>
+                    </div>
+                </div>
+                <div class="price-badge">
+                    <div class="price-label">Fiyat Bilgisi</div>
+                    <div class="price-value">{price}</div>
+                    <div class="price-sub">Brüt {m2_brut} m² · {oda} · {tapu}</div>
+                </div>
+            </section>
 
-    anchors = []
-    bodies = []
-    for i, d in enumerate(details):
-        anchor_id = f"ilan-{d.get('listing_id') or i}"
-        anchors.append((anchor_id, d.get("title") or f"İlan {i+1}", d.get("price") or ""))
-        bodies.append(build_luxury_card_html(d, standalone=False, anchor_id=anchor_id))
-    merged_body = "\n<hr style='border:none;border-top:1px solid #28282c;margin:0;'>\n".join(bodies)
+            <!-- BENTO GALLERY -->
+            <section class="bento-grid">
+                <div class="bento-item bento-hero" onclick="openLightbox('{lid}', 0)">
+                    <img src="{hero_img}" alt="{title}" loading="eager">
+                </div>
+                <div class="bento-item" onclick="openLightbox('{lid}', 1)">
+                    <img src="{b1}" alt="{title} Foto 2" loading="lazy">
+                </div>
+                <div class="bento-item" onclick="openLightbox('{lid}', 2)">
+                    <img src="{b2}" alt="{title} Foto 3" loading="lazy">
+                </div>
+                <div class="bento-item" onclick="openLightbox('{lid}', 3)">
+                    <img src="{b3}" alt="{title} Foto 4" loading="lazy">
+                </div>
+                <div class="bento-item" onclick="openLightbox('{lid}', 4)">
+                    <img src="{b4}" alt="{title} Foto 5" loading="lazy">
+                    <div class="bento-more-overlay">
+                        <span class="more-count">+{len(photos)}</span>
+                        <span class="more-text">Tüm Fotoğrafları Gör</span>
+                    </div>
+                </div>
+            </section>
 
-    options = "".join(
-        f'<option value="{_lux_esc(aid)}">{_lux_esc(t)[:42]} — {_lux_esc(p)}</option>'
-        for aid, t, p in anchors
-    )
-    first_photos = next((d.get("photos") for d in details if d.get("photos")), [])
-    og_image = f'<meta property="og:image" content="{_lux_esc(first_photos[0])}">' if first_photos else ""
+            <!-- MAIN TWO COLUMN CONTENT -->
+            <div class="main-layout">
+                <div class="col-left">
+                    <!-- STATS PILLARS -->
+                    <div class="stats-grid">
+                        <div class="stat-pillar"><div class="stat-label">Brüt Alan</div><div class="stat-val">{m2_brut} m²</div></div>
+                        <div class="stat-pillar"><div class="stat-label">Net Alan</div><div class="stat-val">{m2_net} m²</div></div>
+                        <div class="stat-pillar"><div class="stat-label">Oda / Bölüm</div><div class="stat-val">{oda}</div></div>
+                        <div class="stat-pillar"><div class="stat-label">Kat</div><div class="stat-val">{kat}</div></div>
+                        <div class="stat-pillar"><div class="stat-label">Bina Yaşı</div><div class="stat-val">{bina_yasi} Yıl</div></div>
+                        <div class="stat-pillar"><div class="stat-label">Tapu Durumu</div><div class="stat-val" style="font-size:0.95rem;">{tapu}</div></div>
+                    </div>
 
-    return f"""<!DOCTYPE html>
-<html lang="tr"><head><meta charset="UTF-8">
-<title>NEXA.OS · {len(details)} Ultra Luxury İlan</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta property="og:title" content="NEXA.OS — {len(details)} Ultra Luxury İlan">
-{og_image}
-{_LUX_FAVICON}
-{_LUX_FONTS}<style>{_LUX_STYLE}</style></head>
+                    <!-- SPECS TABLE -->
+                    <div class="card-panel">
+                        <div class="panel-header">
+                            <h2 class="panel-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                                Gayrimenkul Künyesi & Nitelikleri
+                            </h2>
+                            <span style="font-size: 0.75rem; color: var(--gold);">Doğrudan Veri Ayrıştırması</span>
+                        </div>
+                        <div class="specs-list">
+                            {specs_html}
+                        </div>
+                    </div>
+
+                    {ai_box_html}
+
+                    <!-- DESCRIPTION -->
+                    <div class="card-panel">
+                        <div class="panel-header">
+                            <h2 class="panel-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line></svg>
+                                Portföy Tanıtımı & Açıklaması
+                            </h2>
+                        </div>
+                        <div style="color: #CBD5E1; font-size: 0.95rem; line-height: 1.8; white-space: pre-line;">
+{desc if desc else "Detaylı portföy açıklaması bu ilan için hazırlanıyor."}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-right">
+                    <!-- LEAFLET GIS HARITA KARTI -->
+                    <div class="card-panel">
+                        <div class="panel-header">
+                            <h2 class="panel-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                                Birebir Konum & Çevre Analizi
+                            </h2>
+                        </div>
+                        
+                        <div id="map_{lid}" class="lux-map" style="height:380px; width:100%; border-radius:14px; border:1px solid var(--border-glass); z-index:10;"></div>
+
+                        <div class="map-coords-bar">
+                            <span>Bina Pini: <strong>{lat:.6f}, {lon:.6f}</strong></span>
+                            <span style="color:#10B981; font-weight:600;">#gmap Doğrulandı</span>
+                        </div>
+
+                        <div class="map-actions">
+                            <a href="{gmaps_url}" target="_blank" class="map-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                Google Harita
+                            </a>
+                            <a href="{directions_url}" target="_blank" class="map-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+                                Yol Tarifi
+                            </a>
+                            <a href="{street_view_url}" target="_blank" class="map-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+                                360° Cadde
+                            </a>
+                        </div>
+
+                        <!-- BROKER CARD -->
+                        <div class="broker-card">
+                            <div class="broker-avatar">YN</div>
+                            <div class="broker-info">
+                                <h4>Yiğit Narin</h4>
+                                <p>Coldwell Banker VIP Ankara</p>
+                                <span style="font-size: 0.75rem; color: #94A3B8;">Lüks Konut & Ticari Gayrimenkul Uzmanı</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+        """
+        cards_html.append(card_html)
+        
+        # Add map JS
+        map_code = f"""
+        (function() {{
+            try {{
+                const mapEl = document.getElementById('map_{lid}');
+                if (mapEl) {{
+                    const m_{lid} = L.map('map_{lid}', {{
+                        center: [{lat}, {lon}],
+                        zoom: 16,
+                        zoomControl: true,
+                        scrollWheelZoom: false
+                    }});
+                    L.tileLayer('https://{{s}}.basemaps.cartocdn.com/rastertiles/voyager/{{z}}/{{x}}/{{y}}{{r}}.png', {{
+                        attribution: '&copy; CARTO &copy; OpenStreetMap',
+                        maxZoom: 19
+                    }}).addTo(m_{lid});
+                    const rIcon = L.divIcon({{
+                        className: 'radar-pin-container',
+                        html: '<div class=\"radar-pin\"></div>',
+                        iconSize: [22, 22],
+                        iconAnchor: [11, 11]
+                    }});
+                    L.marker([{lat}, {lon}], {{ icon: rIcon }}).addTo(m_{lid})
+                     .bindPopup('<div style=\"font-family:sans-serif;padding:4px;\"><strong>{title[:35]}</strong><br><span style=\"color:#D4AF37;\">{price}</span></div>');
+                }}
+            }} catch(e) {{ console.error("Map init error for {lid}:", e); }}
+        }})();
+        """
+        maps_js.append(map_code)
+        
+        lightbox_code = f'GALLERY_PHOTOS["{lid}"] = {photos_json};'
+        lightboxes_js.append(lightbox_code)
+
+    all_cards_merged = "\n<div class=\"listing-separator\"></div>\n".join(cards_html)
+    all_maps_js = "\n".join(maps_js)
+    all_lightboxes_js = "\n".join(lightboxes_js)
+    
+    # Jump dropdown if multiple
+    jump_dropdown = ""
+    if len(details_list) > 1:
+        opts = "".join(f'<option value="ilan-{d.get("listing_id") or i}">{d.get("title", "")[:35]} — {d.get("price", "")}</option>' for i, d in enumerate(details_list))
+        jump_dropdown = f"""
+        <div class="nexa-jump">
+            <select onchange="document.getElementById(this.value)?.scrollIntoView({{behavior:'smooth'}})">
+                <option value="">↳ {len(details_list)} İlan Arasında Hızlı Geçiş…</option>
+                {opts}
+            </select>
+        </div>
+        """
+
+    full_page = f"""<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{page_title} | NEXA.OS Ultra Luxury</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <style>
+        :root {{
+            --bg-deep: #060911;
+            --bg-card: rgba(13, 21, 39, 0.72);
+            --bg-card-hover: rgba(19, 31, 58, 0.85);
+            --gold: #D4AF37;
+            --gold-light: #F6E2A0;
+            --gold-dark: #9A7B38;
+            --gold-gradient: linear-gradient(135deg, #F8E7B2 0%, #D4AF37 50%, #9A7B38 100%);
+            --navy-surface: #0B132B;
+            --border-glass: rgba(212, 175, 55, 0.22);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --text-gold: #E5C378;
+            --shadow-glow: 0 0 35px rgba(212, 175, 55, 0.18);
+        }}
+
+        * {{ margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }}
+
+        body {{
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-deep);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(11, 19, 43, 0.6) 0%, transparent 50%),
+                linear-gradient(180deg, #060911 0%, #0A1020 50%, #060911 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }}
+
+        .luxury-nav {{
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background: rgba(6, 9, 17, 0.88);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-glass);
+            padding: 0.9rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }}
+        .brand-crest {{ display: flex; align-items: center; gap: 14px; }}
+        .crest-icon {{
+            width: 38px; height: 38px;
+            background: var(--gold-gradient);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Cinzel', serif; font-weight: 900; color: #060911; font-size: 1.25rem;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }}
+        .brand-text h1 {{
+            font-family: 'Cinzel', serif; font-size: 1.05rem; font-weight: 700; letter-spacing: 2px; color: #FFFFFF;
+        }}
+        .brand-text p {{
+            font-size: 0.65rem; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase;
+        }}
+
+        .nav-actions {{ display: flex; gap: 12px; align-items: center; }}
+        .badge-live {{
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #34D399; padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 600;
+            display: flex; align-items: center; gap: 6px;
+        }}
+        .badge-live::before {{
+            content: ''; width: 6px; height: 6px; background: #34D399; border-radius: 50%; box-shadow: 0 0 8px #34D399;
+        }}
+
+        .nexa-jump select {{
+            background: rgba(11, 19, 43, 0.8);
+            border: 1px solid var(--border-glass);
+            color: var(--gold-light);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            outline: none;
+            cursor: pointer;
+        }}
+
+        .container {{ max-width: 1380px; margin: 0 auto; padding: 2.5rem 1.5rem; }}
+        .listing-wrapper {{ margin-bottom: 4rem; padding-bottom: 3rem; border-bottom: 1px solid var(--border-subtle); }}
+        .listing-separator {{ height: 2px; background: linear-gradient(90deg, transparent, var(--border-glass), transparent); margin: 3rem 0; }}
+
+        .hero-header {{
+            margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.5rem;
+            border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.8rem;
+        }}
+        .hero-left {{ flex: 1; min-width: 320px; }}
+        .listing-tag {{
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(212, 175, 55, 0.12); border: 1px solid var(--border-glass); padding: 4px 12px; border-radius: 6px;
+            font-size: 0.75rem; color: var(--gold-light); font-weight: 600; letter-spacing: 1px; margin-bottom: 0.8rem;
+        }}
+        .hero-title {{
+            font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: #FFFFFF; line-height: 1.25; margin-bottom: 0.6rem;
+        }}
+        .hero-location {{ display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 0.95rem; }}
+        .hero-location svg {{ width: 18px; height: 18px; stroke: var(--gold); }}
+
+        .price-badge {{ text-align: right; }}
+        .price-label {{ font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; }}
+        .price-value {{
+            font-family: 'Cinzel', serif; font-size: 2.8rem; font-weight: 800; background: var(--gold-gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1;
+        }}
+        .price-sub {{ font-size: 0.85rem; color: var(--gold-light); margin-top: 4px; }}
+
+        /* BENTO GALLERY */
+        .bento-grid {{
+            display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 240px 240px; gap: 14px; margin-bottom: 2.5rem; border-radius: 20px; overflow: hidden;
+        }}
+        .bento-item {{ position: relative; cursor: pointer; overflow: hidden; background: #111827; }}
+        .bento-item img {{ width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }}
+        .bento-item:hover img {{ transform: scale(1.04); }}
+        .bento-hero {{ grid-column: 1 / 2; grid-row: 1 / 3; }}
+        .bento-more-overlay {{
+            position: absolute; inset: 0; background: rgba(6, 9, 17, 0.78); backdrop-filter: blur(4px);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; color: #FFFFFF; transition: background 0.3s;
+        }}
+        .bento-item:hover .bento-more-overlay {{ background: rgba(6, 9, 17, 0.65); }}
+        .more-count {{ font-family: 'Cinzel', serif; font-size: 2.2rem; font-weight: 700; color: var(--gold-light); }}
+        .more-text {{ font-size: 0.78rem; letter-spacing: 1.5px; text-transform: uppercase; }}
+
+        /* TWO COLUMN MAIN CONTENT */
+        .main-layout {{ display: grid; grid-template-columns: 2fr 1.15fr; gap: 2rem; align-items: start; }}
+        .card-panel {{
+            background: var(--bg-card); backdrop-filter: blur(16px); border: 1px solid var(--border-glass); border-radius: 18px; padding: 1.8rem; margin-bottom: 1.8rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }}
+        .panel-header {{
+            display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem; margin-bottom: 1.2rem;
+        }}
+        .panel-title {{
+            font-family: 'Cinzel', serif; font-size: 1.15rem; font-weight: 700; color: #FFFFFF; display: flex; align-items: center; gap: 10px;
+        }}
+        .panel-title svg {{ width: 20px; height: 20px; stroke: var(--gold); }}
+
+        /* STATS PILLARS */
+        .stats-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }}
+        .stat-pillar {{
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px; text-align: center; transition: all 0.3s;
+        }}
+        .stat-pillar:hover {{ border-color: var(--border-glass); background: rgba(212, 175, 55, 0.05); transform: translateY(-2px); }}
+        .stat-label {{ font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }}
+        .stat-val {{ font-family: 'Cinzel', serif; font-size: 1.25rem; font-weight: 700; color: var(--gold-light); }}
+
+        /* SPECS TABLE */
+        .specs-list {{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }}
+        .spec-row {{ display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed rgba(255, 255, 255, 0.06); font-size: 0.88rem; }}
+        .spec-k {{ color: var(--text-muted); }}
+        .spec-v {{ color: #FFFFFF; font-weight: 600; }}
+
+        .map-coords-bar {{
+            margin-top: 10px; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px;
+            background: rgba(11, 19, 43, 0.6); border-radius: 10px; font-size: 0.82rem; color: var(--text-muted);
+        }}
+        .map-coords-bar span strong {{ color: var(--gold); font-family: monospace; font-size: 0.9rem; }}
+        .map-actions {{ display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }}
+        .map-btn {{
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 10px 8px;
+            color: var(--text-main); text-decoration: none; font-size: 0.78rem; font-weight: 600; transition: all 0.2s;
+        }}
+        .map-btn:hover {{ background: rgba(212, 175, 55, 0.15); border-color: var(--gold); color: var(--gold-light); }}
+
+        /* GOLDEN RADAR PULSE PIN */
+        .radar-pin {{
+            width: 22px; height: 22px; background: #D4AF37; border: 3px solid #FFFFFF; border-radius: 50%;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.8); position: relative;
+        }}
+        .radar-pin::after {{
+            content: ''; position: absolute; top: -10px; left: -10px; width: 36px; height: 36px; border-radius: 50%;
+            border: 2px solid #D4AF37; animation: radarPulse 1.8s infinite;
+        }}
+        @keyframes radarPulse {{ 0% {{ transform: scale(0.6); opacity: 1; }} 100% {{ transform: scale(2.2); opacity: 0; }} }}
+
+        /* BROKER BADGE */
+        .broker-card {{
+            background: linear-gradient(135deg, rgba(13, 21, 39, 0.9) 0%, rgba(20, 32, 60, 0.7) 100%);
+            border: 1px solid var(--border-glass); border-radius: 16px; padding: 1.5rem; display: flex; align-items: center; gap: 16px; margin-top: 1.5rem;
+        }}
+        .broker-avatar {{
+            width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--gold); background: #1E293B;
+            display: flex; align-items: center; justify-content: center; font-family: 'Cinzel', serif; font-weight: 700; color: var(--gold); font-size: 1.3rem;
+        }}
+        .broker-info h4 {{ font-size: 1rem; color: #FFFFFF; font-weight: 700; }}
+        .broker-info p {{ font-size: 0.78rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }}
+
+        /* LIGHTBOX MODAL */
+        .lightbox-modal {{
+            position: fixed; inset: 0; z-index: 9999; background: rgba(0, 0, 0, 0.94); backdrop-filter: blur(10px);
+            display: none; align-items: center; justify-content: center; padding: 2rem;
+        }}
+        .lightbox-modal.active {{ display: flex; }}
+        .lightbox-img-wrapper {{ position: relative; max-width: 90vw; max-height: 85vh; display: flex; align-items: center; justify-content: center; }}
+        .lightbox-img-wrapper img {{
+            max-width: 90vw; max-height: 85vh; object-fit: contain; border-radius: 12px; box-shadow: 0 0 50px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1);
+        }}
+        .lightbox-close {{
+            position: absolute; top: 20px; right: 25px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            color: #FFF; width: 44px; height: 44px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+        }}
+        .lightbox-close:hover {{ background: rgba(212, 175, 55, 0.4); }}
+        .lightbox-nav {{
+            position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+            color: #FFF; width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+        }}
+        .lightbox-nav:hover {{ background: rgba(212, 175, 55, 0.5); }}
+        .lightbox-prev {{ left: 25px; }}
+        .lightbox-next {{ right: 25px; }}
+        .lightbox-counter {{
+            position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7);
+            padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; color: var(--gold-light); border: 1px solid var(--border-glass);
+        }}
+
+        @media (max-width: 900px) {{
+            .main-layout {{ grid-template-columns: 1fr; }}
+            .bento-grid {{ grid-template-columns: 1fr 1fr; grid-template-rows: auto; }}
+            .bento-hero {{ grid-column: 1 / 3; height: 280px; }}
+            .specs-list {{ grid-template-columns: 1fr; }}
+        }}
+    </style>
+</head>
 <body>
-<nav class="nexa-nav"><div class="inner">
-  <a class="nexa-brand" href="#"><span class="dot"></span>NEXA<b>.OS</b></a>
-  <div class="nexa-actions">
-    <div class="nexa-jump">
-      <select onchange="jumpTo(this.value)">
-        <option value="">↳ {len(details)} ilan arasında atla…</option>
-        {options}
-      </select>
+    <header class="luxury-nav">
+        <div class="brand-crest">
+            <div class="crest-icon">N</div>
+            <div class="brand-text">
+                <h1>NEXA.OS INTELLIGENCE</h1>
+                <p>Ultra Luxury Portfolio · Verified Direct DOM</p>
+            </div>
+        </div>
+        <div class="nav-actions">
+            {jump_dropdown}
+            <span class="badge-live">SELENIUMBASE UC & DOM AKTİF</span>
+            <button onclick="window.print()" style="background:rgba(212,175,55,0.15);border:1px solid var(--border-glass);color:var(--gold-light);padding:6px 14px;border-radius:8px;font-size:0.8rem;cursor:pointer;">🖨 Yazdır</button>
+        </div>
+    </header>
+
+    <main class="container">
+        {all_cards_merged}
+    </main>
+
+    <!-- UNIVERSAL LIGHTBOX MODAL -->
+    <div id="lightboxModal" class="lightbox-modal">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <button class="lightbox-nav lightbox-prev" onclick="prevPhoto()">&#10094;</button>
+        <button class="lightbox-nav lightbox-next" onclick="nextPhoto()">&#10095;</button>
+        <div class="lightbox-img-wrapper">
+            <img id="lightboxImg" src="" alt="Tam Boyut Görsel">
+        </div>
+        <div id="lightboxCounter" class="lightbox-counter">1 / 1</div>
     </div>
-    <button class="nexa-btn" onclick="copyLink()">🔗 Paylaş</button>
-    <button class="nexa-btn" onclick="window.print()">🖨 Yazdır</button>
-  </div>
-</div></nav>
-{merged_body}
-<div class="nexa-footer">Bu sayfa <b>NEXA.OS</b> tarafından otomatik üretilmiştir · {len(details)} ilan · Gayrimenkul Mühendisi</div>
-<div class="lightbox" id="lightbox" onclick="if(event.target===this) closeLightbox()">
-  <span class="close" onclick="closeLightbox()">&times;</span>
-  <span class="nav prev" onclick="lbStep(-1)">‹</span>
-  <img id="lb-img" src="">
-  <span class="nav next" onclick="lbStep(1)">›</span>
-  <span class="count" id="lb-count"></span>
-</div>
-<div class="toast" id="nexa-toast"></div>
-<script>{_LUX_LIGHTBOX_JS}</script>
-</body></html>"""
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        // 1. GALLERIES DATA
+        const GALLERY_PHOTOS = {{}};
+        {all_lightboxes_js}
+
+        // 2. LIGHTBOX HANDLER
+        let activeGallery = null;
+        let currentIdx = 0;
+        const modal = document.getElementById('lightboxModal');
+        const imgEl = document.getElementById('lightboxImg');
+        const counterEl = document.getElementById('lightboxCounter');
+
+        function openLightbox(lid, idx) {{
+            activeGallery = GALLERY_PHOTOS[lid] || [];
+            if (!activeGallery.length) return;
+            currentIdx = idx;
+            showPhoto(currentIdx);
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }}
+
+        function closeLightbox() {{
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }}
+
+        function showPhoto(idx) {{
+            if (!activeGallery || !activeGallery.length) return;
+            currentIdx = (idx + activeGallery.length) % activeGallery.length;
+            imgEl.src = activeGallery[currentIdx];
+            counterEl.innerText = `${{currentIdx + 1}} / ${{activeGallery.length}}`;
+        }}
+
+        function nextPhoto() {{ showPhoto(currentIdx + 1); }}
+        function prevPhoto() {{ showPhoto(currentIdx - 1); }}
+
+        document.addEventListener('keydown', (e) => {{
+            if (!modal.classList.contains('active')) return;
+            if (e.key === 'ArrowRight') nextPhoto();
+            if (e.key === 'ArrowLeft') prevPhoto();
+            if (e.key === 'Escape') closeLightbox();
+        }});
+
+        // 3. LEAFLET MAP INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {{
+            {all_maps_js}
+        }});
+    </script>
+</body>
+</html>
+"""
+    return full_page
+
+print("Template builder function defined.")
+
+def build_luxury_cards_page(details: List[Dict]) -> str:
+    """Tüm ilanları Bento Grid, Leaflet GIS Haritası ve Lightbox ile Ultra Luxury Elite formatında üretir."""
+    if not details:
+        return "<html><body style='background:#060911;color:#8f8e8a;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;'>Hiç ilan üretilmedi.</body></html>"
+    return build_elite_luxury_html(details)
 def main() -> None:
     ap = argparse.ArgumentParser(
         description="Sahibinden İlan Detay Pipeline (tüm sayfalar PageSpeed üzerinden)"
@@ -4653,6 +5230,9 @@ def main() -> None:
     ap.add_argument("--no-ai",          dest="no_ai",  action="store_true", help="Ollama analizini atla")
     ap.add_argument("--skip-pagespeed", dest="skip_ps", action="store_true",help="Adım 1'i atla (mevcut HTML kullan)")
     ap.add_argument("--skip-details",   dest="skip_det",action="store_true",help="Adım 3'ü atla (mevcut detay HTML'leri kullan)")
+    ap.add_argument("--single", "--tekil", dest="is_single", action="store_true", help="Tekil ilan modunu zorla (mağaza taramasını atla, doğrudan detay kartını üret)")
+    ap.add_argument("--prefer-uc", "--uc", dest="prefer_uc", action="store_true", default=True, help="Tekil ilanlarda önce SeleniumBase UC ile ham DOM (#gmap bina pini) dene, geçemezse PageSpeed'e dön (varsayılan: açık)")
+    ap.add_argument("--no-uc", dest="prefer_uc", action="store_false", help="SeleniumBase UC'yi kapat, doğrudan PageSpeed bulut motorunu kullan")
     args = ap.parse_args()
 
     # ── Kısa modlar: sadece HTML parse ───────────────────────────────
@@ -4789,7 +5369,9 @@ def main() -> None:
 
     # ── Senaryo ayrımı: tekil ilan linki mi, mağaza/arama sonucu linki mi? ──
     # (web_app.py ile aynı tek doğruluk kaynağı: detect_single_listing_id)
-    single_id = detect_single_listing_id(args.url) if not args.skip_ps else ""
+    single_id = detect_single_listing_id(args.url) if not args.skip_ps else ("single_listing" if getattr(args, "is_single", False) else "")
+    if getattr(args, "is_single", False) and not single_id:
+        single_id = "single_listing"
 
     if single_id:
         # ── SENARYO 1: TEKİL İLAN MODU ────────────────────────────────────
@@ -4838,6 +5420,7 @@ def main() -> None:
             delay=args.delay,
             headless=args.headless,
             skip=args.skip_det,
+            prefer_uc=getattr(args, "prefer_uc", False),
         )
     except Exception as e:
         print(f"\n✗ Adım 3 hatası: {e}")
@@ -4873,7 +5456,10 @@ def main() -> None:
 # ── ListingDetail → luxury dict eşlemesi (step6_luxury_adapter.py birleşti) ──
 
 def _lux_to_dict(d: "ListingDetail", model_name: str = "") -> dict:
-    photos = list(getattr(d, "photos", []) or [])
+    raw_photos = list(getattr(d, "photos", []) or [])
+    clean_photos = [p.replace(".avif", ".jpg") for p in raw_photos if p and "blank" not in p]
+    if not clean_photos and raw_photos:
+        clean_photos = raw_photos
 
     ai = None
     analysis_text = (getattr(d, "analysis", "") or "").strip()
@@ -4882,10 +5468,34 @@ def _lux_to_dict(d: "ListingDetail", model_name: str = "") -> dict:
 
     specs = getattr(d, "specs", {}) or {}
     location = {
-        "il": specs.get("Şehir") or specs.get("il"),
-        "ilce": specs.get("İlçe") or specs.get("ilce"),
-        "mahalle": specs.get("Mahalle (detay)") or specs.get("Mahalle") or specs.get("mahalle"),
+        "il": specs.get("Şehir") or specs.get("il") or specs.get("İl", ""),
+        "ilce": specs.get("İlçe") or specs.get("ilce", ""),
+        "mahalle": specs.get("Mahalle (detay)") or specs.get("Mahalle") or specs.get("mahalle", ""),
     }
+
+    coords = None
+    lat = 39.92077
+    lon = 32.85411
+
+    if "Koordinat" in specs:
+        try:
+            sp_c = specs["Koordinat"].split(",")
+            lat = float(sp_c[0].strip())
+            lon = float(sp_c[1].strip())
+            coords = {"lat": lat, "lon": lon}
+        except Exception:
+            pass
+
+    if not coords and getattr(d, "coordinates", None):
+        c_obj = getattr(d, "coordinates")
+        if isinstance(c_obj, dict) and "lat" in c_obj:
+            lat = float(c_obj["lat"])
+            lon = float(c_obj["lon"])
+            coords = {"lat": lat, "lon": lon}
+
+    loc_str = " / ".join([v for v in [location.get("il"), location.get("ilce"), location.get("mahalle")] if v])
+    if not loc_str:
+        loc_str = specs.get("Tam Konum", "Ankara")
 
     audits = getattr(d, "audits", []) or []
     lighthouse = {
@@ -4899,11 +5509,19 @@ def _lux_to_dict(d: "ListingDetail", model_name: str = "") -> dict:
         "listing_id": getattr(d, "listing_id", ""),
         "title": getattr(d, "title", ""),
         "price": getattr(d, "price", ""),
-        "photos": photos,
+        "photos": clean_photos,
         "raw_description": getattr(d, "description", "") or "",
         "description_source": getattr(d, "description_source", "") or "",
         "ai_analysis": ai,
         "location": location,
+        "loc_str": loc_str,
+        "specs": specs,
+        "coordinates": coords,
+        "lat": lat,
+        "lon": lon,
+        "google_maps_url": f"https://www.google.com/maps/search/?api=1&query={lat},{lon}",
+        "directions_url": f"https://www.google.com/maps/dir/Current+Location/{lat},{lon}",
+        "street_view_url": f"http://maps.google.com/maps?q=&layer=c&cbll={lat},{lon}&cbp=11,0,0,0,0",
         "lighthouse": lighthouse,
     }
 
@@ -4925,8 +5543,24 @@ def step6_build_html_luxury(
                 dd["ai_analysis"] = None
         html_out = build_luxury_cards_page(dict_details)
         p = Path(out_path)
+        p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(html_out, encoding="utf-8")
-        print(f"  [OK] {len(details)} ilan (Ultra Luxury v3) → {p.resolve()}")
+        print(f"  [OK] {len(details)} ilan (Ultra Luxury Elite) → {p.resolve()}")
+
+        # Tekil ilan modunda masaüstüne de doğrudan kopyala
+        if len(details) == 1:
+            try:
+                desk = Path.home() / "Desktop"
+                if desk.exists():
+                    lid = getattr(details[0], "listing_id", "ilan")
+                    t = getattr(details[0], "title", "")
+                    clean_t = re.sub(r'[\/:*?"<>|\s]+', '_', t[:25]).strip('_')
+                    desk_file = desk / f"ILAN_{lid}_{clean_t}_LUXURY.html"
+                    desk_file.write_text(html_out, encoding="utf-8")
+                    print(f"  ✓ [DESKTOP] Masaüstüne elit lüks vitrin kartı oluşturuldu: {desk_file.name}")
+            except Exception as de:
+                pass
+
         return p
     except Exception as exc:
         print(f"  [WARN] Lüks şablon üretilemedi ({exc}), klasik şablona düşülüyor...")
@@ -6077,8 +6711,11 @@ def _run_pipeline(job: "Job"):
             out_html = job.dir / "ilan_detay_karti.html"
 
             single_id = detect_single_listing_id(p["url"])
+            is_single_mode = bool(p.get("is_single")) or bool(single_id)
 
-            if single_id:
+            if is_single_mode:
+                if not single_id:
+                    single_id = detect_single_listing_id(p["url"]) or "single_listing"
                 job.set_step(0)
                 print(f"  ℹ Tekil ilan linki algılandı (İlan No: {single_id}).")
                 print("  ⏭ Bu bir mağaza/liste linki değil, mağaza taraması atlanıyor.")
@@ -6114,10 +6751,13 @@ def _run_pipeline(job: "Job"):
                 raise _StoppedByUser()
 
             job.set_step(2)
+            # Tekil ilanda prefer_uc varsayılan olarak açıktır (geçemezse PageSpeed'e düşer)
+            prefer_uc_active = p.get("prefer_uc", True if is_single_mode else False)
             detail_paths = step3_pagespeed_details(
                 summaries=summaries, detail_dir=str(detail_dir), wait_sec=p["det_wait"],
                 delay=p["delay"], headless=p["headless"], skip=False,
                 stop_event=job.stop_event, cd_fallback=p["cd_fallback"],
+                prefer_uc=prefer_uc_active,
             )
             if not detail_paths:
                 raise RuntimeError("Hiç detay sayfası indirilemedi.")
@@ -6526,6 +7166,8 @@ def _route_start():
             "ai_delay": _num("ai_delay", 0.5, float),
             "limit": int(_num("limit", 0, float)),
             "cd_fallback": bool(data.get("cd_fallback", True)),
+            "is_single": bool(data.get("is_single", False)),
+            "prefer_uc": bool(data.get("prefer_uc", True)),
             "gemini_api_key": (data.get("gemini_api_key") or os.environ.get("GEMINI_API_KEY", "")).strip(),
         }
     elif job_type == "cb":
@@ -8431,6 +9073,250 @@ async def _scrape_via_pagespeed_async(url: str) -> dict:
         "screenshot": "",
     }
 
+_GEOCODE_CACHE: Dict[str, Tuple[float, float]] = {}
+
+def _extract_location_details(
+    raw_html: Optional[str] = None,
+    soup: Optional[Any] = None,
+    psi_json: Optional[dict] = None,
+    url: str = ""
+) -> Dict[str, Any]:
+    """
+    Sahibinden ilan sayfasından '#classified-location' (Konumu ve Bölge Bilgisi)
+    verilerini eksiksiz çıkarır.
+    """
+    from urllib.parse import unquote, quote
+    import urllib.request
+    import urllib.parse
+
+    loc_data: Dict[str, Any] = {
+        "ok": True,
+        "fragment": "classified-location",
+        "has_location": False,
+        "coordinates": None,
+        "lat": None,
+        "lon": None,
+        "city": "",
+        "town": "",
+        "quarter": "",
+        "semt": "",
+        "full_address": "",
+        "google_maps_url": "",
+        "directions_url": "",
+        "street_view_url": "",
+        "poi_categories": {},
+        "nearby_landmarks": [],
+        "category_path": "",
+        "category_id": "",
+        "heatmap_legend": "",
+        "heatmap_label": "",
+        "heatmap_filter": "",
+        "pin_icon_url": ""
+    }
+
+    # 1. Doğrudan HTML / BeautifulSoup İncelemesi
+    if soup or raw_html:
+        if not soup and raw_html:
+            try:
+                soup = BeautifulSoup(raw_html, "lxml")
+            except Exception:
+                try:
+                    soup = BeautifulSoup(raw_html, "html.parser")
+                except Exception:
+                    soup = None
+
+        if soup:
+            gmap = soup.find(id="gmap")
+            if gmap:
+                lat_val = gmap.get("data-lat")
+                lon_val = gmap.get("data-lon")
+                if lat_val and lon_val:
+                    try:
+                        lat_f = float(lat_val)
+                        lon_f = float(lon_val)
+                        loc_data["coordinates"] = {"lat": lat_f, "lon": lon_f}
+                        loc_data["lat"] = lat_f
+                        loc_data["lon"] = lon_f
+                        loc_data["has_location"] = True
+                    except (ValueError, TypeError):
+                        pass
+
+                loc_data["city"] = gmap.get("data-city-name") or gmap.get("data-city") or loc_data["city"]
+                loc_data["town"] = gmap.get("data-town-name") or loc_data["town"]
+                loc_data["quarter"] = gmap.get("data-quarter-name") or loc_data["quarter"]
+                loc_data["category_path"] = gmap.get("data-category-path") or ""
+                loc_data["category_id"] = gmap.get("data-category") or ""
+                loc_data["heatmap_legend"] = gmap.get("data-price-heatmap-legend-info") or ""
+                loc_data["heatmap_label"] = gmap.get("data-price-heatmap-avg-label") or ""
+                loc_data["heatmap_filter"] = gmap.get("data-price-heatmap-ga-map-filter-label") or ""
+
+            # Pin ikonu
+            pin_img = soup.select_one("img[src*='ilan_konum_pin']")
+            if pin_img and pin_img.get("src"):
+                loc_data["pin_icon_url"] = pin_img.get("src")
+
+            # Google maps direkt api linki
+            gm_a = soup.select_one("a[href*='maps.google.com/maps']")
+            if gm_a and gm_a.get("href"):
+                loc_data["google_maps_url"] = gm_a.get("href")
+
+            # Yol tarifi linki
+            dir_el = soup.select_one("a.map-detail-directions-link")
+            if dir_el and dir_el.get("href"):
+                loc_data["directions_url"] = dir_el.get("href")
+
+            # Street view linki
+            sv_el = soup.select_one(".streetViewButton a")
+            if sv_el and sv_el.get("href"):
+                loc_data["street_view_url"] = sv_el.get("href")
+
+            # Breadcrumbs
+            bc_links = soup.select(".classified-breadcrumb a, .breadcrumb a, p.classifiedLocation a")
+            bc_texts = [b.get_text(strip=True) for b in bc_links if b.get_text(strip=True)]
+            if bc_texts:
+                if len(bc_texts) >= 3:
+                    if not loc_data["city"]: loc_data["city"] = bc_texts[-3]
+                    if not loc_data["town"]: loc_data["town"] = bc_texts[-2]
+                    if not loc_data["quarter"]: loc_data["quarter"] = bc_texts[-1]
+                loc_data["full_address"] = " / ".join(bc_texts[-4:] if len(bc_texts) >= 4 else bc_texts)
+
+            # POI Grupları (Çevre Bilgisi)
+            for grp in soup.select(".poi-group"):
+                lbl = grp.select_one(".poi-group-label, .poi-info-title")
+                lbl_name = lbl.get_text(strip=True) if lbl else "Genel"
+                items = [it.get_text(strip=True) for it in grp.select(".poi-item, .form-check") if it.get_text(strip=True)]
+                if items:
+                    loc_data["poi_categories"][lbl_name] = items
+
+    # 2. PSI JSON / Network Requests / Analytics İncelemesi
+    psi_text = ""
+    if psi_json:
+        try:
+            psi_text = json.dumps(psi_json, ensure_ascii=False)
+        except Exception:
+            psi_text = str(psi_json)
+    elif raw_html and "ep.yer_" in raw_html:
+        psi_text = raw_html
+
+    if psi_text:
+        # data-lat ve data-lon
+        if not loc_data["coordinates"]:
+            lat_m = re.search(r"""data-lat=['"]([0-9.]+)['"]""", psi_text)
+            lon_m = re.search(r"""data-lon=['"]([0-9.]+)['"]""", psi_text)
+            if lat_m and lon_m:
+                try:
+                    lat_f = float(lat_m.group(1))
+                    lon_f = float(lon_m.group(1))
+                    loc_data["coordinates"] = {"lat": lat_f, "lon": lon_f}
+                    loc_data["lat"] = lat_f
+                    loc_data["lon"] = lon_f
+                    loc_data["has_location"] = True
+                except (ValueError, TypeError):
+                    pass
+
+        # GA4 ep.yer_ hiyerarsisi
+        ga_map = {
+            "yer_2": "city", "yer_3": "town", "yer_4": "semt", "yer_5": "quarter",
+            "CD_Yer2": "city", "CD_Yer3": "town", "CD_Yer4": "semt", "CD_Yer5": "quarter"
+        }
+        for k, target_field in ga_map.items():
+            if not loc_data.get(target_field):
+                pattern = r"ep\." + k + r"=([^&\"\'\\<>\s]+)"
+                m = re.search(pattern, psi_text)
+                if m:
+                    cleaned_val = unquote(m.group(1).replace("+", " ")).strip()
+                    cleaned_val = re.sub(r'[\"\'\}\]\s]+$', "", cleaned_val).strip()
+                    loc_data[target_field] = cleaned_val
+        # Directions URL regex
+        if not loc_data["directions_url"]:
+            dir_m = re.search(r"""href=['"](https://www\.google\.com/maps/dir/[^'"]+)['"]""", psi_text)
+            if dir_m:
+                loc_data["directions_url"] = dir_m.group(1)
+    # 3. Tam Adres Sentezlenmesi
+    addr_parts = [p for p in [loc_data["quarter"], loc_data["semt"], loc_data["town"], loc_data["city"]] if p]
+    if addr_parts and not loc_data["full_address"]:
+        loc_data["full_address"] = " / ".join(addr_parts)
+
+    # Koordinat Fallback: Eğer koordinat henüz yoksa Nominatim OSM ile akıllı jeokodlama yap
+    if not loc_data["coordinates"] and (loc_data["quarter"] or loc_data["semt"] or loc_data["town"] or loc_data["city"]):
+        q_name = loc_data.get("quarter", "")
+        q_clean = re.sub(r'\s*(?:Mah\.|Mh\.|Mahallesi|Mah)\s*$', '', q_name, flags=re.IGNORECASE).strip()
+        q_full = f"{q_clean} Mahallesi" if q_clean else ""
+        semt = loc_data.get("semt", "")
+        town = loc_data.get("town", "")
+        city = loc_data.get("city", "")
+
+        geo_queries = []
+        if q_full and semt and town and city:
+            geo_queries.append(f"{q_full}, {semt}, {town}, {city}, Türkiye")
+        if q_full and town and city:
+            geo_queries.append(f"{q_full}, {town}, {city}, Türkiye")
+        if semt and town and city:
+            geo_queries.append(f"{semt}, {town}, {city}, Türkiye")
+        if q_full and city:
+            geo_queries.append(f"{q_full}, {city}, Türkiye")
+        if town and city:
+            geo_queries.append(f"{town}, {city}, Türkiye")
+        if city:
+            geo_queries.append(f"{city}, Türkiye")
+
+        for gq in geo_queries:
+            if gq in _GEOCODE_CACHE:
+                cached_lat, cached_lon = _GEOCODE_CACHE[gq]
+                loc_data["coordinates"] = {"lat": cached_lat, "lon": cached_lon}
+                loc_data["lat"] = cached_lat
+                loc_data["lon"] = cached_lon
+                loc_data["has_location"] = True
+                break
+            try:
+                geo_url = f"https://nominatim.openstreetmap.org/search?q={urllib.parse.quote(gq)}&format=json&limit=1"
+                req = urllib.request.Request(geo_url, headers={"User-Agent": "NexaOS_RealEstate_Geocoding/1.0"})
+                with urllib.request.urlopen(req, timeout=3) as resp:
+                    geo_json = json.loads(resp.read().decode("utf-8"))
+                    if geo_json and len(geo_json) > 0:
+                        lat_val = float(geo_json[0]["lat"])
+                        lon_val = float(geo_json[0]["lon"])
+                        _GEOCODE_CACHE[gq] = (lat_val, lon_val)
+                        loc_data["coordinates"] = {"lat": lat_val, "lon": lon_val}
+                        loc_data["lat"] = lat_val
+                        loc_data["lon"] = lon_val
+                        loc_data["has_location"] = True
+                        break
+            except Exception:
+                pass
+
+    if loc_data["coordinates"]:
+        lat = loc_data["lat"]
+        lon = loc_data["lon"]
+        loc_data["google_maps_url"] = f"https://www.google.com/maps/search/?api=1&query={lat},{lon}"
+        if not loc_data["directions_url"]:
+            loc_data["directions_url"] = f"https://www.google.com/maps/dir/Current+Location/{lat},{lon}"
+        if not loc_data["street_view_url"]:
+            loc_data["street_view_url"] = f"http://maps.google.com/maps?q=&layer=c&cbll={lat},{lon}&cbp=11,0,0,0,0"
+    elif loc_data["full_address"]:
+        q_encoded = quote(loc_data["full_address"])
+        loc_data["google_maps_url"] = f"https://www.google.com/maps/search/?api=1&query={q_encoded}"
+        if not loc_data["directions_url"]:
+            loc_data["directions_url"] = f"https://www.google.com/maps/dir/?api=1&destination={q_encoded}"
+
+    # 4. İlan Metninden Yakın Çevre Referansları (Landmarks)
+    KNOWN_LANDMARKS = [
+        "Metro", "Metrobüs", "Marmaray", "Tramvay", "Otobüs Durağı", "Dolmuş", "Eskişehir Yolu",
+        "Konya Yolu", "İstanbul Yolu", "Turan Güneş", "Cinnah", "Tunalı", "Tunalı Hilmi",
+        "Kızılay", "Bilkent", "ODTÜ", "Hacettepe", "Çayyolu", "Ümitköy", "İncek", "Beytepe",
+        "Kentpark", "Cepa", "Armada", "Maidan", "Mahall", "Vega Center", "Next Level", "Taurus",
+        "Panora", "Atakule", "Karakusunlar", "Balgat", "Söğütözü", "Çukurambar", "Yıldızevler"
+    ]
+    search_corpus = (raw_html or "") + " " + psi_text
+    found_landmarks = []
+    for lm in KNOWN_LANDMARKS:
+        if re.search(r'\b' + re.escape(lm) + r'\b', search_corpus, re.IGNORECASE):
+            if lm not in found_landmarks:
+                found_landmarks.append(lm)
+    loc_data["nearby_landmarks"] = found_landmarks
+
+    return loc_data
+
 def _scrape_via_psi_api(url: str) -> dict:
     """
     Google PageSpeed Insights v5 REST API kullanarak tekil ilanı çeker.
@@ -8491,6 +9377,28 @@ def _scrape_via_psi_api(url: str) -> dict:
         if k not in specs:
             specs[k] = v
 
+    loc_details = _extract_location_details(psi_json=psi_json, url=url)
+    if loc_details.get("full_address") and not loc_str:
+        loc_str = loc_details["full_address"]
+    if loc_details.get("coordinates") and "Koordinat" not in specs:
+        specs["Koordinat"] = f"{loc_details['lat']:.5f}, {loc_details['lon']:.5f}"
+    if loc_details.get("full_address") and "Tam Konum" not in specs:
+        specs["Tam Konum"] = loc_details["full_address"]
+    if loc_details.get("city") and "İl" not in specs:
+        specs["İl"] = loc_details["city"]
+    if loc_details.get("town") and "İlçe" not in specs:
+        specs["İlçe"] = loc_details["town"]
+    if loc_details.get("quarter") and "Mahalle" not in specs:
+        specs["Mahalle"] = loc_details["quarter"]
+    if loc_details.get("semt") and "Semt" not in specs:
+        specs["Semt"] = loc_details["semt"]
+    if loc_details.get("google_maps_url") and "Harita" not in specs:
+        specs["Harita"] = loc_details["google_maps_url"]
+    if loc_details.get("directions_url") and "Yol Tarifi" not in specs:
+        specs["Yol Tarifi"] = loc_details["directions_url"]
+    if loc_details.get("nearby_landmarks") and "Çevre Merkezler" not in specs:
+        specs["Çevre Merkezler"] = ", ".join(loc_details["nearby_landmarks"])
+
     return {
         "ok": True,
         "source": "psi_api",
@@ -8503,6 +9411,13 @@ def _scrape_via_psi_api(url: str) -> dict:
         "images": photos,
         "photo_count": len(photos),
         "description": desc,
+        "location_details": loc_details,
+        "coordinates": loc_details.get("coordinates"),
+        "google_maps_url": loc_details.get("google_maps_url", ""),
+        "directions_url": loc_details.get("directions_url", ""),
+        "street_view_url": loc_details.get("street_view_url", ""),
+        "nearby_poi": loc_details.get("poi_categories", {}),
+        "nearby_landmarks": loc_details.get("nearby_landmarks", []),
     }
 
 
@@ -8620,7 +9535,7 @@ def _parse_sahibinden_direct_html(html: str, url: str, listing_id: Optional[str]
         title = h1.get_text(strip=True) if h1 else ""
 
         price = "—"
-        for sel in [".classified-price-wrapper", ".sticky-header-attribute.price"]:
+        for sel in [".classifiedPriceValue", ".classified-price-wrapper", ".sticky-header-attribute.price"]:
             el = soup.select_one(sel)
             if el:
                 txt = el.get_text(strip=True)
@@ -8629,11 +9544,15 @@ def _parse_sahibinden_direct_html(html: str, url: str, listing_id: Optional[str]
                     break
 
         loc = ""
-        breadcrumbs = soup.select(".classified-breadcrumb a, .breadcrumb a")
-        if len(breadcrumbs) >= 3:
-            loc = " / ".join(b.get_text(strip=True) for b in breadcrumbs[-3:] if b.get_text(strip=True))
-        elif soup.select_one(".sticky-header-attribute.location"):
-            loc = soup.select_one(".sticky-header-attribute.location").get_text(strip=True)
+        loc_el = soup.select_one("p.classifiedLocation")
+        if loc_el:
+            loc = " / ".join(a.get_text(strip=True) for a in loc_el.select("a") if a.get_text(strip=True))
+        if not loc:
+            breadcrumbs = soup.select(".classified-breadcrumb a, .breadcrumb a")
+            if len(breadcrumbs) >= 3:
+                loc = " / ".join(b.get_text(strip=True) for b in breadcrumbs[-3:] if b.get_text(strip=True))
+            elif soup.select_one(".sticky-header-attribute.location"):
+                loc = soup.select_one(".sticky-header-attribute.location").get_text(strip=True)
 
         specs = _parse_specs(soup)
         photos = _parse_photos(soup)
@@ -8645,6 +9564,14 @@ def _parse_sahibinden_direct_html(html: str, url: str, listing_id: Optional[str]
 
         if not title and not price and not all_photos:
             return {"ok": False, "error": "Yetersiz içerik"}
+
+        loc_details = _extract_location_details(raw_html=html, soup=soup, url=url)
+        if loc_details.get("full_address") and not loc:
+            loc = loc_details["full_address"]
+        if loc_details.get("coordinates") and "Koordinat" not in specs:
+            specs["Koordinat"] = f"{loc_details['lat']:.5f}, {loc_details['lon']:.5f}"
+        if loc_details.get("full_address") and "Tam Konum" not in specs:
+            specs["Tam Konum"] = loc_details["full_address"]
 
         return {
             "ok": True,
@@ -8658,6 +9585,13 @@ def _parse_sahibinden_direct_html(html: str, url: str, listing_id: Optional[str]
             "photo_count": len(all_photos),
             "description": desc[:1500] if desc else "",
             "listing_id": listing_id,
+            "location_details": loc_details,
+            "coordinates": loc_details.get("coordinates"),
+            "google_maps_url": loc_details.get("google_maps_url", ""),
+            "directions_url": loc_details.get("directions_url", ""),
+            "street_view_url": loc_details.get("street_view_url", ""),
+            "nearby_poi": loc_details.get("poi_categories", {}),
+            "nearby_landmarks": loc_details.get("nearby_landmarks", []),
         }
     except Exception as exc:
         return {"ok": False, "error": str(exc)}
@@ -8725,32 +9659,69 @@ def _scrape_via_seleniumbase_uc(url: str) -> dict:
         return {"ok": False, "error": str(e)}
 
 
-def _scrape_via_pagespeed(url: str) -> dict:
+def _scrape_via_pagespeed(url: str, prefer_uc: Optional[bool] = None) -> dict:
     """
-    Sahibinden Scraper Ana Mantığı (4 Kademeli Dayanıklı Altyapı):
-    1. Kademe: SeleniumBase UC & Disk Önbelleği (Yerel makine veya GUI/Proxy ile tam zengin veri, 80+ foto).
-    2. Kademe: Google PageSpeed Insights REST API ile cloud render (3-5 sn, ultra hızlı).
-    3. Kademe: Playwright headless PageSpeed ile dinamik tarama.
-    4. Kademe: Akıllı 81 İl ve Emlak Terim Slug Fallback'i (PDF üretimini asla kırmaz).
+    Sahibinden Scraper Ana Mantığı (Dayanıklı Hibrit Altyapı):
+    - prefer_uc=True ise: Önce SeleniumBase UC ile ham DOM ve birebir #gmap koordinatı denenir;
+      geçemezse ana sistem olan Google PageSpeed REST API'ye fallback yapar.
+    - prefer_uc=False/None ise: Ana sistem olan Google PageSpeed REST API önceliklidir;
+      başarısız olursa SeleniumBase UC devreye girer.
     """
-    # 1. Kademe: SeleniumBase UC & Önbellek
-    if _SELENIUMBASE:
+    use_uc_first = prefer_uc if prefer_uc is not None else (os.getenv("PREFER_SELENIUM_UC", "0").lower() in ("1", "true", "yes"))
+
+    # 0. Ön Kontrol: Disk Önbelleği
+    import re
+    m = re.search(r"-(\d{8,12})(?:/|$|\?)", url)
+    listing_id = m.group(1) if m else None
+    if listing_id:
+        try:
+            candidate_files = [
+                BASE_DIR / "detay_html" / f"{listing_id}.html",
+                JOBS_DIR / "local_cache" / "detay_html" / f"{listing_id}.html",
+                *JOBS_DIR.glob(f"*/detay_html/{listing_id}.html")
+            ]
+            for h_file in candidate_files:
+                if h_file.exists() and h_file.stat().st_size > 5000:
+                    raw_html = h_file.read_text(encoding="utf-8", errors="ignore")
+                    if not any(s in raw_html[:3000] for s in CF_SIGNALS):
+                        res = _parse_sahibinden_direct_html(raw_html, url, listing_id)
+                        if res.get("ok"):
+                            print(f"    ✓ [CACHE] Diskteki detay HTML'i kullanıldı ({h_file.name})")
+                            res["source"] = "disk_cache"
+                            return res
+        except Exception:
+            pass
+
+    # A) prefer_uc Aktifse: Önce SeleniumBase UC Modu
+    if use_uc_first and _SELENIUMBASE:
+        print(f"    [UC-FIRST] Tekil ilan için SeleniumBase UC deneniyor (Ham DOM & #gmap)...")
         try:
             res_uc = _scrape_via_seleniumbase_uc(url)
-            if res_uc and res_uc.get("ok"):
+            if res_uc and res_uc.get("ok") and (res_uc.get("images") or res_uc.get("coordinates") or res_uc.get("title")):
+                print("    ✓ [UC SUCCESS] SeleniumBase UC ile ham DOM ve birebir koordinatlar başarıyla çekildi.")
                 return res_uc
-            print(f"    ⚠ SeleniumBase UC atlandı/başarısız ({res_uc.get('error')}), PSI deneniyor...")
+            print(f"    ⚠ [FALLBACK] SeleniumBase UC geçemedi ({res_uc.get('error', 'eksik içerik')}). Ana sistemimiz PageSpeed API devreye alınıyor...")
         except Exception as e:
-            print(f"    ✗ SeleniumBase hatası: {e}, PSI deneniyor...")
+            print(f"    ✗ [FALLBACK] SeleniumBase hatası: {e}. Ana sistemimiz PageSpeed API devreye alınıyor...")
 
-    # 2. Kademe: Google PageSpeed REST API (3-5 sn, ultra hızlı)
+    # B) Ana Sistem: Google PageSpeed REST API (3-5 sn, ultra hızlı, sıfır bot/login engeli)
     try:
         res_psi = _scrape_via_psi_api(url)
         if res_psi and res_psi.get("ok") and (res_psi.get("images") or res_psi.get("title")):
             return res_psi
-        print("    ⚠ PSI API yetersiz veri döndü, Playwright deneniyor...")
+        print("    ⚠ PSI API yetersiz veri döndü, fallback deneniyor...")
     except Exception as e:
-        print(f"    ✗ PSI API hatası: {e}, Playwright deneniyor...")
+        print(f"    ✗ PSI API hatası: {e}, fallback deneniyor...")
+
+    # C) İkincil Fallback: Eğer use_uc_first çalıştırılmadıysa SeleniumBase UC dene
+    if not use_uc_first and _SELENIUMBASE:
+        try:
+            res_uc = _scrape_via_seleniumbase_uc(url)
+            if res_uc and res_uc.get("ok"):
+                return res_uc
+            print(f"    ⚠ SeleniumBase UC başarısız ({res_uc.get('error')}), Playwright deneniyor...")
+        except Exception as e:
+            print(f"    ✗ SeleniumBase hatası: {e}, Playwright deneniyor...")
 
     # 3. Kademe: Playwright (async) PageSpeed
     if _PLAYWRIGHT:
@@ -8919,18 +9890,19 @@ def _scrape_generic(url: str) -> dict:
     except Exception as e:
         return {"ok": False, "error": str(e)}
 
-def scrape_listing(url: str) -> dict:
+def scrape_listing(url: str, prefer_uc: Optional[bool] = None) -> dict:
     """
     URL'ye göre uygun scraper'ı seç, ilan verilerini çek ve döndür.
     Sahibinden ve Coldwell Banker (Cloudflare korumalı) için PageSpeed altyapısı kullanılır.
+    prefer_uc=True ise tekil ilanlarda önce SeleniumBase UC dener, geçemezse PageSpeed'e döner.
     """
     domain = urlparse(url).netloc.lower()
 
     if "sahibinden.com" in domain:
-        return _scrape_via_pagespeed(url)
+        return _scrape_via_pagespeed(url, prefer_uc=prefer_uc)
     elif "cb.com.tr" in domain or "coldwellbanker" in domain:
         # CB bot korumalı (403) olduğu için Sahibinden scraper mantığıyla PageSpeed üzerinden çekilir
-        return _scrape_via_pagespeed(url)
+        return _scrape_via_pagespeed(url, prefer_uc=prefer_uc)
     elif "hepsiemlak.com" in domain:
         return _scrape_hepsiemlak(url)
     elif "zingat.com" in domain:
@@ -14640,7 +15612,8 @@ def api_ai_scrape():
     if not url.startswith(("http://", "https://")):
         url = "https://" + url
     try:
-        result = scrape_listing(url)
+        prefer_uc = body.get("prefer_uc")
+        result = scrape_listing(url, prefer_uc=prefer_uc)
         if not result.get("ok"):
             err = result.get("error", "Scrape başarısız")
             print(f"⚠️  Scrape başarısız [{url}]: {err}")
