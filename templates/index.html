@@ -357,6 +357,16 @@ footer b{color:var(--gold-soft);}
             <label class="switch"><input type="checkbox" id="sh_prefer_uc" checked><span class="slider"></span></label>
           </div>
         </div>
+        <div class="field">
+          <div class="toggle-row">
+            <span style="font-weight:600;color:var(--gold-light);">Tüm Sayfaları Tara (Otomatik Pagination)</span>
+            <label class="switch"><input type="checkbox" id="sh_crawl_all" checked><span class="slider"></span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label style="font-weight:600;color:var(--gold-light);">Maksimum Sayfa Sayısı (0 = Sınırsız)</label>
+          <input type="number" id="sh_max_pages" value="10" min="0" placeholder="Örn: 10">
+        </div>
       </div>
     </div>
   </div>
@@ -988,6 +998,8 @@ function startJob(jobType) {
     payload.cd_fallback = document.getElementById('sh_cd_fallback').checked;
     payload.is_single = document.getElementById('sh_is_single') ? document.getElementById('sh_is_single').checked : false;
     payload.prefer_uc = document.getElementById('sh_prefer_uc') ? document.getElementById('sh_prefer_uc').checked : true;
+    payload.crawl_all = document.getElementById('sh_crawl_all') ? document.getElementById('sh_crawl_all').checked : true;
+    payload.max_pages = document.getElementById('sh_max_pages') ? (parseInt(document.getElementById('sh_max_pages').value) || 10) : 10;
     payload.ollama = "{{ default_ollama }}";
     payload.model = "{{ default_model }}";
     payload.gemini_api_key = document.getElementById('sh_gemini_api_key').value.trim();
@@ -1565,6 +1577,10 @@ document.addEventListener("DOMContentLoaded", function() {
             if (v.includes('/ilan/') && (v.includes('/detay') || v.match(/-\d{7,12}/))) {
                 if (singleToggle) singleToggle.checked = true;
                 if (ucToggle) ucToggle.checked = true;
+            } else if (v.includes('.sahibinden.com')) {
+                if (singleToggle) singleToggle.checked = false;
+                const crawlToggle = document.getElementById('sh_crawl_all');
+                if (crawlToggle) crawlToggle.checked = true;
             }
         }
         shUrl.addEventListener('input', checkUrlSingle);

@@ -1155,6 +1155,232 @@ def step1_pagespeed_store(
     return out_path
 
 
+def build_paged_url(target_url: str, offset: int, default_sorting: str = "storeShowcase") -> str:
+    """
+    Verilen Sahibinden mağaza veya arama listesi URL'sine sayfalama parametresi ekler/günceller.
+    Örn:
+      https://coldwellbankervip.sahibinden.com/satilik-daire
+      -> https://coldwellbankervip.sahibinden.com/satilik-daire?pagingOffset=20&sorting=storeShowcase
+    """
+    parts = urllib.parse.urlsplit(target_url)
+    qs = urllib.parse.parse_qs(parts.query)
+    qs["pagingOffset"] = [str(offset)]
+    if "sorting" not in qs and default_sorting:
+        qs["sorting"] = [default_sorting]
+    new_query = urllib.parse.urlencode(qs, doseq=True)
+    return urllib.parse.urlunsplit((parts.scheme, parts.netloc, parts.path, new_query, parts.fragment))
+
+
+def _extract_psi_summaries(psi_data: dict) -> Dict[str, ListingSummary]:
+    """
+    Tek bir Lighthouse JSON sonucundan ilanları ayıklar.
+    Hızlı linear regex + network requests kullanır.
+    """
+    items: Dict[str, ListingSummary] = {}
+    if not psi_data or "lighthouseResult" not in psi_data:
+        return items
+
+    lr = psi_data.get("lighthouseResult", {})
+    net_items = lr.get("audits", {}).get("network-requests", {}).get("details", {}).get("items", [])
+    for item in net_items:
+        u = item.get("url", "")
+        m_standard = re.search(r"photos/\d+/\d+/\d+/lthmb_(\d{6,})", u)
+        if m_standard:
+            lid = m_standard.group(1)
+            if len(lid) > 10:
+                lid = lid[:10]
+            if lid not in items:
+                items[lid] = ListingSummary(
+                    listing_id=lid,
+                    title=f"İlan #{lid}",
+                    thumb_url=u,
+                    detail_url=f"https://www.sahibinden.com/ilan/{lid}/detay",
+                )
+        m_proj = re.search(r"projects/(\d+/\d+/\d+)/", u)
+        if m_proj:
+            pid = m_proj.group(1).replace("/", "").lstrip("0")
+            if pid and pid not in items:
+                items[pid] = ListingSummary(
+                    listing_id=pid,
+                    title=f"Proje #{pid}",
+                    thumb_url=u,
+                    detail_url=f"https://www.sahibinden.com/emlak-projeler/{pid}/detay",
+                )
+
+    psi_text = json.dumps(lr, ensure_ascii=False)
+    fast_title_re = re.compile(r'([a-zA-Z0-9çğıöşüÇĞİÖŞÜ\s\.,\-\(\)]{4,80})\s*#(\d{6,})')
+    for m_nl in fast_title_re.finditer(psi_text):
+        t_cand, lid_cand = m_nl.group(1).strip(), m_nl.group(2)
+        if lid_cand in items and len(t_cand) > 3 and not t_cand.startswith("http"):
+            items[lid_cand].title = t_cand
+
+    for m_url in re.finditer(r'https?://(?:www\.)?sahibinden\.com/ilan/([a-zA-Z0-9_\-]+?)-(\d{6,})/detay', psi_text):
+        slug, lid_cand = m_url.group(1), m_url.group(2)
+        if lid_cand in items:
+            items[lid_cand].detail_url = f"https://www.sahibinden.com/ilan/{slug}-{lid_cand}/detay"
+            if items[lid_cand].title.startswith("İlan #"):
+                items[lid_cand].title = slug.replace("-", " ").title()
+        elif lid_cand not in items:
+            items[lid_cand] = ListingSummary(
+                listing_id=lid_cand,
+                title=slug.replace("-", " ").title(),
+                thumb_url="",
+                detail_url=f"https://www.sahibinden.com/ilan/{slug}-{lid_cand}/detay",
+            )
+    return items
+
+
+def step1_crawl_store_all_pages(
+    target_url: str,
+    out_html: str,
+    wait_sec: int,
+    headless: bool,
+    crawl_all: bool = True,
+    max_pages: int = 10,
+    stop_event=None,
+) -> Tuple[Path, List[ListingSummary]]:
+    """
+    Mağaza/kategori sayfalarını otomatik olarak sayfalayarak (pagingOffset=0, 20, 40...)
+    tüm ilanları çeker.
+    crawl_all=False ise sadece verilen tek sayfayı çeker (klasik mod).
+    """
+    out_path = Path(out_html)
+    out_dir = out_path.parent
+    out_dir.mkdir(parents=True, exist_ok=True)
+    json_path = out_dir / "pagespeed_result.json"
+
+    # Eğer tek sayfa istenmişse ya da mağaza/liste linki değilse
+    if not crawl_all or max_pages <= 1:
+        step1_pagespeed_store(
+            target_url=target_url,
+            out_html=out_html,
+            wait_sec=wait_sec,
+            headless=headless,
+            stop_event=stop_event,
+        )
+        summaries = step2_extract_summaries(out_path)
+        return out_path, summaries
+
+    _sep("ADIM 1 & 2 — Mağaza Tüm Sayfalar Otomatik Taranıyor (Pagination)")
+    print(f"  Ana Hedef  : {target_url}")
+    print(f"  Maks Sayfa : {max_pages if max_pages > 0 else 'Sınırsız (Tüm Mağaza)'}")
+    print(f"  [MOTOR] Google PageSpeed Insights REST API v5 (Cloud)")
+
+    all_items: Dict[str, ListingSummary] = {}
+
+    parsed_qs = urllib.parse.parse_qs(urllib.parse.urlsplit(target_url).query)
+    start_offset = 0
+    if "pagingOffset" in parsed_qs:
+        try:
+            start_offset = int(parsed_qs["pagingOffset"][0])
+        except Exception:
+            start_offset = 0
+
+    page_limit = max_pages if max_pages > 0 else 50
+    all_pages_data = []
+
+    for page_idx in range(page_limit):
+        if stop_event and stop_event.is_set():
+            print("  [DURDURULDU] Kullanıcı işlemi durdurdu.")
+            break
+
+        offset = start_offset + (page_idx * 20)
+        page_url = build_paged_url(target_url, offset)
+        print(f"\n  [SAYFALAMA {page_idx + 1}] Offset {offset} taranıyor...")
+        print(f"  URL: {page_url}")
+
+        psi_data = _psi_api_fetch(page_url, timeout=max(wait_sec, 60))
+        if not psi_data or "lighthouseResult" not in psi_data:
+            print(f"  [WARN] Offset {offset} için PageSpeed yanıt vermedi veya bitti.")
+            if page_idx == 0:
+                print("  [FALLBACK] İlk sayfa için Selenium PageSpeed fallback devrede...")
+                step1_pagespeed_store(
+                    target_url=page_url,
+                    out_html=out_html,
+                    wait_sec=wait_sec,
+                    headless=headless,
+                    stop_event=stop_event,
+                )
+                summaries = step2_extract_summaries(out_path)
+                return out_path, summaries
+            else:
+                break
+
+        page_items = _extract_psi_summaries(psi_data)
+        new_items = {lid: s for lid, s in page_items.items() if lid not in all_items}
+
+        print(f"  -> Bulundu: {len(page_items)} ilan, Yeni: {len(new_items)}. (Toplam Birikim: {len(all_items) + len(new_items)})")
+
+        if len(new_items) == 0:
+            print(f"  [TAMAMLANDI] Sayfa {page_idx + 1}'de yeni ilan kalmadı. Katalog taraması sona erdi.")
+            break
+
+        all_items.update(new_items)
+        all_pages_data.append({
+            "page": page_idx + 1,
+            "offset": offset,
+            "url": page_url,
+            "count": len(page_items),
+            "new": len(new_items),
+        })
+
+        if page_idx < page_limit - 1:
+            time.sleep(1.0)
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    summary_list = list(all_items.values())
+
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "target_url": target_url,
+            "total_listings": len(summary_list),
+            "pages_crawled": len(all_pages_data),
+            "listings": [
+                {"id": s.listing_id, "title": s.title, "thumb": s.thumb_url, "url": s.detail_url}
+                for s in summary_list
+            ],
+        }, f, ensure_ascii=False, indent=2)
+
+    html_cards = "\n".join([
+        f'<tr><td>{i}</td><td><b>{s.listing_id}</b></td><td>{s.title}</td><td><a href="{s.detail_url}" target="_blank">İlana Git</a></td></tr>'
+        for i, s in enumerate(summary_list, 1)
+    ])
+    html_content = f"""<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <title>NEXA.OS - Mağaza Tarama Özeti ({len(summary_list)} İlan)</title>
+  <style>
+    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0c0e14; color: #e2e8f0; margin: 0; padding: 24px; }}
+    h1 {{ color: #d4af37; margin-bottom: 8px; }}
+    .badge {{ display: inline-block; padding: 4px 12px; background: rgba(212,175,55,0.15); border: 1px solid #d4af37; border-radius: 999px; color: #d4af37; font-size: 13px; font-weight: 600; margin-bottom: 20px; }}
+    table {{ width: 100%; border-collapse: collapse; margin-top: 16px; background: #141824; border-radius: 8px; overflow: hidden; }}
+    th, td {{ padding: 12px 16px; text-align: left; border-bottom: 1px solid #1f293d; }}
+    th {{ background: #1a2234; color: #d4af37; font-size: 13px; text-transform: uppercase; }}
+    a {{ color: #38bdf8; text-decoration: none; }}
+    a:hover {{ text-decoration: underline; }}
+  </style>
+</head>
+<body>
+  <h1>NEXA.OS Mağaza / Katalog Tarama Sonucu</h1>
+  <div class="badge">Toplam {len(summary_list)} İlan Yakalandı ({len(all_pages_data)} Sayfa Tarandı)</div>
+  <p><b>Hedef:</b> <a href="{target_url}" target="_blank">{target_url}</a></p>
+  <table>
+    <thead>
+      <tr><th>#</th><th>İlan No</th><th>Başlık</th><th>Link</th></tr>
+    </thead>
+    <tbody>
+      {html_cards}
+    </tbody>
+  </table>
+</body>
+</html>"""
+    out_path.write_text(html_content, encoding="utf-8")
+
+    print(f"\n  [BAŞARILI] Toplam {len(summary_list)} adet tekil ilan başarıyla toplandı!")
+    return out_path, summary_list
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # ADIM 2 — Mağaza HTML'inden ilan özetlerini çıkar
 # ─────────────────────────────────────────────────────────────────────────────
@@ -1251,7 +1477,8 @@ def step2_extract_summaries(html_path: Path) -> List[ListingSummary]:
                         )
             # Node labels ve alt metinlerden başlıkları ve box URL'lerini yakala
             psi_text = json.dumps(lr, ensure_ascii=False)
-            for m_nl in re.finditer(r'([^\n\r"\'<>]+?)\s*#(\d{6,})', psi_text):
+            fast_title_re = re.compile(r'([a-zA-Z0-9çğıöşüÇĞİÖŞÜ\s\.,\-\(\)]{4,80})\s*#(\d{6,})')
+            for m_nl in fast_title_re.finditer(psi_text):
                 t_cand, lid_cand = m_nl.group(1).strip(), m_nl.group(2)
                 if lid_cand in items and t_cand and len(t_cand) > 3 and not t_cand.startswith("http"):
                     items[lid_cand].title = t_cand
@@ -5231,6 +5458,9 @@ def main() -> None:
     ap.add_argument("--skip-pagespeed", dest="skip_ps", action="store_true",help="Adım 1'i atla (mevcut HTML kullan)")
     ap.add_argument("--skip-details",   dest="skip_det",action="store_true",help="Adım 3'ü atla (mevcut detay HTML'leri kullan)")
     ap.add_argument("--single", "--tekil", dest="is_single", action="store_true", help="Tekil ilan modunu zorla (mağaza taramasını atla, doğrudan detay kartını üret)")
+    ap.add_argument("--crawl-all", dest="crawl_all", action="store_true", default=True, help="Mağaza/kategori sayfalarında tüm sayfaları otomatik tara (offset=0, 20, 40...) (varsayılan: açık)")
+    ap.add_argument("--no-crawl-all", dest="crawl_all", action="store_false", help="Sadece verilen tek sayfayı tara")
+    ap.add_argument("--max-pages", type=int, default=10, help="Maksimum taranacak sayfa sayısı (varsayılan: 10, 0=sınırsız)")
     ap.add_argument("--prefer-uc", "--uc", dest="prefer_uc", action="store_true", default=True, help="Tekil ilanlarda önce SeleniumBase UC ile ham DOM (#gmap bina pini) dene, geçemezse PageSpeed'e dön (varsayılan: açık)")
     ap.add_argument("--no-uc", dest="prefer_uc", action="store_false", help="SeleniumBase UC'yi kapat, doğrudan PageSpeed bulut motorunu kullan")
     args = ap.parse_args()
@@ -5401,12 +5631,17 @@ def main() -> None:
             print(f"\n⏭  Adım 1 atlandı → {ps_path}")
         else:
             try:
-                ps_path = step1_pagespeed_store(args.url, args.ps_html, args.ps_wait, args.headless)
+                ps_path, summaries = step1_crawl_store_all_pages(
+                    target_url=args.url,
+                    out_html=args.ps_html,
+                    wait_sec=args.ps_wait,
+                    headless=args.headless,
+                    crawl_all=getattr(args, "crawl_all", True),
+                    max_pages=getattr(args, "max_pages", 10),
+                )
             except Exception as e:
                 print(f"\n✗ Adım 1 hatası: {e}")
                 sys.exit(1)
-
-        summaries = step2_extract_summaries(ps_path)
         if not summaries:
             print("\n✗ İlan bulunamadı, çıkılıyor.")
             sys.exit(1)
@@ -6731,15 +6966,21 @@ def _run_pipeline(job: "Job"):
                 )]
             else:
                 job.set_step(0)
-                step1_pagespeed_store(
-                    target_url=p["url"], out_html=str(ps_html), wait_sec=p["ps_wait"],
-                    headless=p["headless"], stop_event=job.stop_event,
+                crawl_all = p.get("crawl_all", True)
+                max_pages = p.get("max_pages", 10)
+                ps_html, summaries = step1_crawl_store_all_pages(
+                    target_url=p["url"],
+                    out_html=str(ps_html),
+                    wait_sec=p["ps_wait"],
+                    headless=p["headless"],
+                    crawl_all=crawl_all,
+                    max_pages=max_pages,
+                    stop_event=job.stop_event,
                 )
                 if job.stop_event.is_set():
                     raise _StoppedByUser()
 
                 job.set_step(1)
-                summaries = step2_extract_summaries(ps_html)
                 if not summaries:
                     raise RuntimeError("Bu linkte hiç ilan bulunamadı.")
                 if p.get("limit") and p["limit"] > 0:
